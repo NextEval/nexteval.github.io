@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="NextEval is an agentic solver and benchmark for budget-limited black-box optimization.">
+  <meta name="theme-color" content="#101516">
+  <title>NextEval — Solver and Bench</title>
+  <link rel="icon" type="image/svg+xml" href="site-assets/brand/nexteval-on-dark.svg">
+  <link rel="stylesheet" href="site.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="site-brand" href="./" aria-label="NextEval home">
+      <img src="site-assets/brand/nexteval-on-dark.svg" alt="" width="30" height="30">
+      <span>NextEval</span>
+    </a>
+    <nav class="site-nav" aria-label="Primary navigation">
+      <a class="active" href="./">Overview</a>
+      <a href="solver/">Solver</a>
+      <a href="bench/">Bench</a>
+      <a href="https://github.com/NextEval" target="_blank" rel="noopener">GitHub <span aria-hidden="true">↗</span></a>
+    </nav>
+    <div class="header-mark" aria-label="Solver and Bench are one system">
+      <span class="header-mark-line"></span>
+      <span>one system / two views</span>
+    </div>
+  </header>
+  <main>
+    <section class="hero shell">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="eyebrow-dot"></span>AGENTIC DERIVATIVE-FREE OPTIMIZATION</p>
+        <h1>NextEval<br><em>decides what to evaluate next.</em></h1>
+        <p class="hero-lede">A persistent agent, a trusted numerical environment, and a benchmark that makes every evaluation count.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="solver/">Explore Solver <span aria-hidden="true">↗</span></a>
+          <a class="button button-quiet" href="bench/">Open Bench <span aria-hidden="true">↗</span></a>
+        </div>
+        <p class="hero-footnote">Opaque objectives · finite evaluation budgets · auditable trajectories</p>
+      </div>
+      <div class="hero-visual" aria-label="A sequential optimization trajectory crossing an objective landscape">
+        <div class="visual-caption"><span>THE DECISION FIELD</span><span>HISTORY → STATE → QUERY</span></div>
+        <div class="field-frame">
+          <img src="site-assets/brand/decision-field.png" alt="Two optimization paths crossing a contour field">
+          <span class="field-tag field-tag-top">persistent session</span>
+          <span class="field-tag field-tag-bottom">evaluation ledger</span>
+          <span class="field-crosshair" aria-hidden="true"></span>
+        </div>
+        <div class="visual-status"><span><i class="status-light"></i>objective access: opaque</span><span>nfev is the clock</span></div>
+      </div>
+    </section>
+    <section class="statement shell">
+      <p class="section-index">01 / THE IDEA</p>
+      <div class="statement-grid">
+        <h2>One loop.<br><span>Two public surfaces.</span></h2>
+        <p>Solver and Bench are not two unrelated products. The Solver produces a decision trace under a shared function-evaluation budget; the Bench turns those traces into comparable evidence across problems, features, and participants.</p>
+      </div>
+    </section>
+    <section class="duality shell" aria-label="NextEval Solver and NextEval Bench">
+      <a class="product-panel product-solver" href="solver/">
+        <div class="panel-top"><span class="panel-number">01</span><span class="panel-route">/solver</span></div>
+        <div class="panel-symbol" aria-hidden="true">↗</div>
+        <h2>NextEval <strong>Solver</strong></h2>
+        <p>An agentic derivative-free optimizer for black-box objectives. The agent chooses tools and the next query; the environment owns validation, accounting, history, and state.</p>
+        <span class="panel-link">Read the solver overview <span aria-hidden="true">→</span></span>
+      </a>
+      <a class="product-panel product-bench" href="bench/">
+        <div class="panel-top"><span class="panel-number">02</span><span class="panel-route">/bench</span></div>
+        <div class="panel-symbol" aria-hidden="true">◫</div>
+        <h2>NextEval <strong>Bench</strong></h2>
+        <p>A reproducible evaluation layer for agentic and traditional solvers. Inspect task histories, compare profiles, and trace every result back to its source evidence.</p>
+        <span class="panel-link">Enter the benchmark <span aria-hidden="true">→</span></span>
+      </a>
+    </section>
+    <section class="pipeline shell">
+      <div class="pipeline-heading">
+        <p class="section-index">02 / THE RELATION</p>
+        <h2>From a query<br><span>to evidence.</span></h2>
+      </div>
+      <div class="pipeline-track">
+        <div class="pipeline-step"><span>01</span><strong>Observe</strong><p>The agent reads the immutable history and diagnostic state.</p></div>
+        <div class="pipeline-rule" aria-hidden="true"></div>
+        <div class="pipeline-step"><span>02</span><strong>Choose</strong><p>Tools propose the next numerical action without exposing the oracle.</p></div>
+        <div class="pipeline-rule" aria-hidden="true"></div>
+        <div class="pipeline-step"><span>03</span><strong>Record</strong><p>Every objective call becomes a ledger event under the same budget.</p></div>
+        <div class="pipeline-rule" aria-hidden="true"></div>
+        <div class="pipeline-step"><span>04</span><strong>Compare</strong><p>Bench profiles the resulting trajectories across a task family.</p></div>
+      </div>
+    </section>
+    <section class="principles shell">
+      <p class="section-index">03 / THE BOUNDARY</p>
+      <div class="principle-grid">
+        <article><span class="principle-mark">A</span><h3>Opaque by default</h3><p>The solver receives an objective, not its identity, implementation, or known optimum.</p></article>
+        <article><span class="principle-mark">B</span><h3>Budget is the clock</h3><p>Progress is measured in real function evaluations, not wall-clock speed.</p></article>
+        <article><span class="principle-mark">C</span><h3>Evidence stays attached</h3><p>Profiles are derived views; source-local histories and provenance remain inspectable.</p></article>
+      </div>
+    </section>
+    <section class="closing shell">
+      <div><p class="eyebrow">NEXT EVAL / OPEN RESEARCH</p><h2>The solver acts.<br><em>The bench explains.</em></h2></div>
+      <div class="closing-links"><a class="button button-primary" href="solver/">Start with Solver <span aria-hidden="true">↗</span></a><a class="button button-quiet" href="bench/">Inspect results <span aria-hidden="true">↗</span></a></div>
+    </section>
+  </main>
+  <footer class="site-footer shell"><span>© 2026 NextEval</span><span>Solver + Bench · built for reproducible black-box optimization</span><a href="https://github.com/NextEval/nexteval.github.io" target="_blank" rel="noopener">Source <span aria-hidden="true">↗</span></a></footer>
+  <script src="site.js"></script>
+</body>
+</html>

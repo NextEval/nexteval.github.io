@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <style>:root{color:#174e49}@media(prefers-color-scheme:dark){:root{color:#75e2d8}}</style>
+  <path d="M7 27V6l18 21V15" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/>
+  <circle cx="25" cy="6" r="3.5" fill="currentColor"/>
+</svg>

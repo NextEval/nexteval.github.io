@@ -1,0 +1,39 @@
+{
+  "status": "research-archive-not-current-task-results",
+  "new_evaluations": 0,
+  "source_commit": "001a7070a999501875547a0cd9d40640cd041ead",
+  "figures": [
+    {
+      "source": "paper/figures/r2/perturbed-CLIFF.pdf",
+      "destination": "perturbed-CLIFF.pdf",
+      "sha256": "cf6148ea81badab83decf3bb278f476cab6973db3737e8dde6508d4c39d9870b",
+      "png_sha256": "a3e1b077ef5910a32d13742a6d205aa4987fab15619c3a3f64c1fc44a1d389ec",
+      "problem": "CLIFF",
+      "feature": "perturbed_x0"
+    },
+    {
+      "source": "paper/figures/r2/perturbed-ROSENBR.pdf",
+      "destination": "perturbed-ROSENBR.pdf",
+      "sha256": "7db017f026c772fa3599c0bb3b25bff8b335192ce83cb3ffbbf4d3a784fe052c",
+      "png_sha256": "188047932d3b1b13d04ddd312460d0dfeb8eece6c9c754ebe6218df7a0592121",
+      "problem": "ROSENBR",
+      "feature": "perturbed_x0"
+    },
+    {
+      "source": "paper/figures/r2/noisy-CLIFF.pdf",
+      "destination": "noisy-CLIFF.pdf",
+      "sha256": "bfb5d3989646948dfba547082ed0a78ab7cd1e35c7dc983aefb99220f5256666",
+      "png_sha256": "d737ade9463b584bd0d49810c7960c3894820d3e3d3461722a9a1434e2277c00",
+      "problem": "CLIFF",
+      "feature": "perturbed_x0+noisy"
+    },
+    {
+      "source": "paper/figures/r2/noisy-ROSENBR.pdf",
+      "destination": "noisy-ROSENBR.pdf",
+      "sha256": "5de6c74106919568184a86a2138ff2d115631edb9998695f44382fcd1be8f670",
+      "png_sha256": "80cbfe0e09d4fe46388bd63689efc03a17d5c530e2a0129b3adfe453928c7262",
+      "problem": "ROSENBR",
+      "feature": "perturbed_x0+noisy"
+    }
+  ]
+}

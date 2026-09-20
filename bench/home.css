@@ -1,0 +1,116 @@
+.home-page { padding: 0 0 24px; }
+.home-hero { position: relative; display: grid; grid-template-columns: minmax(0,.95fr) minmax(450px,1.05fr); grid-template-areas: "copy equation"; gap: 54px; align-items: center; isolation: isolate; min-height: 510px; padding: 48px 0 42px; overflow: hidden; border-bottom: 1px solid var(--line); }
+.home-copy { grid-area: copy; max-width: 700px; position: relative; z-index: 1; }
+.home-kicker { font-size: 11px; line-height: 1.35; letter-spacing: .03em; color: #aeb8b5; }
+.home-copy h1 { font-family: var(--display-font); font-size: clamp(64px,6vw,88px); line-height: .98; max-width: none; margin: 19px 0 18px; letter-spacing: 0; font-weight: 650; }
+.home-copy h1 span { color: var(--accent); font-weight: 400; }
+.home-question { font-family: var(--display-font); font-size: 24px; line-height: 1.25; margin-bottom: 12px; }
+.home-lede { max-width: 640px; font-size: 16px; line-height: 1.52; }
+.home-actions { margin: 20px 0 15px; }
+.home-button { display: inline-flex; align-items: center; gap: 8px; border-radius: 3px; font-size: 14px; }
+.home-note { font-size: 12px; gap: 12px; flex-wrap: wrap; }
+.home-equation { grid-area: equation; position: relative; min-width: 0; width: 100%; min-height: 360px; padding: 20px 22px 17px; border: 1px solid #3b4745; border-left: 3px solid var(--accent); background: #131718; overflow: hidden; }
+.home-equation::before { content: ''; position: absolute; inset: 14px; border: 1px solid rgba(115,136,130,.16); pointer-events: none; }
+.trajectory-head,.trajectory-foot { position: relative; z-index: 1; display: flex; min-width: 0; justify-content: space-between; gap: 12px; color: var(--accent); font: 10px/1.4 ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .02em; }
+.trajectory-head { padding-bottom: 12px; border-bottom: 1px solid #34403e; }
+.trajectory-head span:last-child,.trajectory-foot span:last-child { color: #899691; }
+.decision-field { position: relative; z-index: 1; height: 202px; margin: 12px 0 2px; overflow: hidden; border-bottom: 1px solid #34403e; }
+.decision-field-art { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; opacity: .88; }
+.field-label { position: absolute; display: inline-flex; align-items: center; gap: 6px; color: #dce6e1; font: 10px/1.3 var(--display-font); letter-spacing: .04em; text-transform: uppercase; }
+.field-math { font-family: "Baskerville", "Iowan Old Style", "STIX Two Math", "Cambria Math", "Times New Roman", serif; font-size: 13px; font-style: italic; font-weight: 500; letter-spacing: 0; text-transform: none; }
+.field-math sub { font-size: .7em; font-style: normal; vertical-align: -.2em; }
+.field-divider { color: #87948f; font-weight: 400; }
+.field-history { left: 4%; bottom: 12%; color: #edc37d; }
+.field-next { right: 4%; top: 6%; color: var(--accent); }
+.path-annotation { position: absolute; z-index: 2; display: inline-flex; align-items: center; gap: 6px; padding: 5px 7px; border: 1px solid rgba(232,240,235,.18); background: rgba(16,21,22,.86); color: #dfe8e3; font: 10px/1.2 var(--display-font); white-space: nowrap; }
+.path-annotation strong { font-weight: 650; }
+.path-swatch { width: 18px; height: 2px; display: inline-block; flex: none; }
+.path-traditional { right: 18%; bottom: 18%; color: #edc37d; }
+.path-traditional .path-swatch { background: #edb63f; }
+.path-nexteval { right: 17%; top: 28%; color: #7de4dc; }
+.path-nexteval .path-swatch { background: #5ed5cd; }
+.agent-checkpoint { position: absolute; z-index: 2; left: 56%; top: 53%; display: flex; align-items: center; gap: 7px; color: #eef5ef; }
+.agent-checkpoint::before { content: ''; position: absolute; left: 7px; top: 18px; height: 38px; border-left: 1px dashed rgba(94,213,205,.72); }
+.checkpoint-ring { width: 13px; height: 13px; display: block; border: 2px solid var(--accent); border-radius: 50%; box-shadow: 0 0 0 4px rgba(94,213,205,.12); }
+.checkpoint-copy { display: grid; gap: 1px; padding: 4px 6px; background: rgba(16,21,22,.82); border-left: 1px solid var(--accent); }
+.checkpoint-copy strong { font: 600 10px/1.2 var(--display-font); }
+.checkpoint-copy small { color: #9aa7a2; font: 9px/1.2 ui-monospace,SFMono-Regular,Consolas,monospace; }
+.trajectory-formula { position: relative; z-index: 1; display: flex; min-width: 0; align-items: center; justify-content: center; min-height: 56px; overflow: hidden; color: #d7e0dc; }
+.trajectory-math { font-size: 28px; }
+.trajectory-foot { padding-top: 10px; color: #9aa7a2; }
+.home-visual { border: 0; border-bottom: 1px solid var(--line); background: #181c1d; box-shadow: none; padding: 30px 26px 26px; }
+.visual-topline { border: 0; align-items: center; padding: 0; font-size: 12px; }
+.visual-topline h2 { color: var(--ink); font: 500 22px/1.25 var(--display-font); }
+.flow-map { display: grid; grid-template-columns: minmax(0,1fr) 35px minmax(0,1fr) 35px minmax(0,1fr); gap: 12px; padding: 20px 0; }
+.flow-node { display: grid; grid-template-columns: 24px 1fr 24px; gap: 10px; align-items: start; }
+.flow-node strong { display: block; font-size: 17px; font-weight: 500; }
+.flow-node small { display: block; font-size: 13px; line-height: 1.42; color: var(--muted); margin-top: 6px; }
+.flow-number { color: var(--accent); font: 12px/25px monospace; }
+.flow-oracle .flow-number,.flow-oracle > svg { color: #edb871; }
+.flow-trace .flow-number,.flow-trace > svg { color: #a3b9f0; }
+.flow-node > svg { width: 21px; height: 21px; color: var(--accent); }
+.flow-connector { display: flex; align-items: start; padding-top: 4px; color: #697773; }
+.flow-connector > span { display: none; }
+.flow-connector svg { width: 20px; height: 20px; transform: rotate(-90deg); }
+.visual-foot { font-size: 12px; border: 0; padding: 0; }
+.home-archive-label { display: flex; gap: 20px; flex-wrap: wrap; margin: 42px 0 0; font: 12px/1.5 monospace; color: var(--accent); }
+.home-archive-label span { color: var(--muted); }
+.home-stats span:last-child { font-size: 13px; }
+.home-card p { font-size: 14px; }
+.home-card-index { font-size: 12px; }
+.home-footer-line { font-size: 12px; }
+@media (max-width: 1000px) {
+  .home-hero { grid-template-columns: 1fr; grid-template-areas: "copy" "equation"; gap: 32px; min-height: 0; }
+  .home-copy h1 { font-size: 70px; }
+  .home-brand-image { display: none; }
+  .home-equation { min-height: 300px; max-width: 700px; }
+  .flow-map { gap: 8px; grid-template-columns: minmax(0,1fr) 18px minmax(0,1fr) 18px minmax(0,1fr); }
+  .flow-node { grid-template-columns: 22px 1fr; }
+  .flow-node > svg { display: none; }
+}
+@media (max-width: 620px) {
+  .home-hero { gap: 24px; padding-top: 28px; padding-bottom: 32px; }
+  .home-kicker { font-size: 11px; max-width: 290px; line-height: 1.6; }
+  .home-copy h1 { font-size: 48px; margin-top: 21px; max-width: 100%; }
+  .home-copy h1 span { display: block; }
+  .home-question { font-size: 20px; max-width: 310px; }
+  .home-lede { font-size: 16px; }
+  .home-brand-image { width: 250px; height: 250px; right: -78px; top: 58px; opacity: .12; }
+  .home-actions { gap: 8px; }
+  .home-button { font-size: 13px; padding: 10px 12px; }
+  .home-equation { min-width: 0; max-width: 100%; min-height: 255px; padding: 14px 14px 12px; box-shadow: 7px 7px 0 #101212; }
+  .trajectory-head,.trajectory-foot { font-size: 8px; }
+  .trajectory-head { flex-wrap: wrap; row-gap: 3px; }
+  .trajectory-head span:last-child,.trajectory-foot span:last-child { margin-left: auto; }
+  .decision-field { height: 124px; margin-top: 8px; }
+  .field-label { font-size: 8px; gap: 4px; }
+  .field-math { font-size: 11px; }
+  .path-annotation { font-size: 8px; padding: 4px 5px; gap: 4px; }
+  .path-traditional { right: 7%; bottom: 15%; }
+  .path-nexteval { right: 5%; top: 24%; }
+  .agent-checkpoint { left: 40%; top: 51%; }
+  .checkpoint-copy small { display: none; }
+  .trajectory-formula { min-height: 46px; }
+  .trajectory-math { font-size: 17px; }
+  .trajectory-foot { padding-top: 7px; }
+  .home-visual { padding: 22px 14px 20px; }
+  .visual-topline { display: block; }
+  .visual-topline h2 { font-size: 21px; margin-bottom: 8px; }
+  .visual-topline > span { font-size: 10px; }
+  .flow-map { display: flex; flex-direction: column; gap: 16px; }
+  .flow-node { grid-template-columns: 24px 1fr 24px; }
+  .flow-node > svg { display: block; }
+  .flow-connector { padding-left: 34px; }
+  .flow-connector svg { transform: none; }
+  .visual-foot { flex-direction: column; gap: 8px; }
+}
+@media (max-width: 420px) {
+  .home-copy h1 { font-size: 43px; }
+  .home-question { font-size: 18px; }
+  .home-lede { max-width: 100%; overflow-wrap: anywhere; }
+  .home-equation { width: 100%; min-width: 0; }
+  .path-annotation { max-width: 43%; white-space: normal; }
+  .path-traditional { right: 5%; bottom: 12%; }
+  .path-nexteval { right: 3%; top: 20%; }
+  .agent-checkpoint { left: 34%; }
+}

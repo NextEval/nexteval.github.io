@@ -1,0 +1,82 @@
+{
+  "new_evaluations": 0,
+  "benchmark_load_cases": [
+    {
+      "scope": "r2-p",
+      "indices": [
+        0,
+        1
+      ],
+      "score_max_abs_error": 0.0,
+      "native_curve_arrays_match": true
+    },
+    {
+      "scope": "r2-n",
+      "indices": [
+        0,
+        1,
+        2,
+        3
+      ],
+      "score_max_abs_error": 0.0,
+      "native_curve_arrays_match": true
+    },
+    {
+      "scope": "gpt",
+      "indices": [
+        2,
+        1,
+        0,
+        3
+      ],
+      "score_max_abs_error": 1.1102230246251565e-16,
+      "native_curve_arrays_match": true
+    },
+    {
+      "scope": "gpt",
+      "indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "score_max_abs_error": 2.220446049250313e-16,
+      "native_curve_arrays_match": true
+    },
+    {
+      "scope": "deepseek",
+      "indices": [
+        0,
+        1
+      ],
+      "score_max_abs_error": 0.0,
+      "native_curve_arrays_match": true
+    },
+    {
+      "scope": "qwen",
+      "indices": [
+        0,
+        1
+      ],
+      "score_max_abs_error": 0.0,
+      "native_curve_arrays_match": true
+    },
+    {
+      "scope": "combined-noisy",
+      "indices": [
+        0,
+        1,
+        5,
+        7,
+        9,
+        10,
+        11
+      ],
+      "score_max_abs_error": 2.220446049250313e-16,
+      "native_curve_arrays_match": true
+    }
+  ]
+}

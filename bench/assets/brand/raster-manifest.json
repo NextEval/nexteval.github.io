@@ -1,0 +1,90 @@
+{
+  "approved": "C / Open N",
+  "geometry_changed": false,
+  "exports": [
+    {
+      "name": "nexteval-on-light-16.png",
+      "width": 16,
+      "height": 16,
+      "sha256": "91cc9025e8a81d7a1e9294864f37db61dd57c6405011dfc8dac35159dabcc473"
+    },
+    {
+      "name": "nexteval-on-light-32.png",
+      "width": 32,
+      "height": 32,
+      "sha256": "cbbeeffbf5fdb5063b2b19370e11060d907871d9def3b86545a9beddee2ddd8f"
+    },
+    {
+      "name": "nexteval-on-light-48.png",
+      "width": 48,
+      "height": 48,
+      "sha256": "feccd96730a31ddacb0b89779efdb49edd2d8e276b4d93376565165d4e2ea688"
+    },
+    {
+      "name": "nexteval-on-light-64.png",
+      "width": 64,
+      "height": 64,
+      "sha256": "6904264c5ef50f2a550729b6091d480ce26491ddc78779c7ee9f10585a438996"
+    },
+    {
+      "name": "nexteval-on-light-180.png",
+      "width": 180,
+      "height": 180,
+      "sha256": "5c1b093d69440facffb7e1c982dc33346dcac934d77b9ca387d391372b68063b"
+    },
+    {
+      "name": "nexteval-on-light-192.png",
+      "width": 192,
+      "height": 192,
+      "sha256": "81994b24ee40b790574f811b4d469aba263d1f629ec48b4b7c0a99721c1bb889"
+    },
+    {
+      "name": "nexteval-on-light-512.png",
+      "width": 512,
+      "height": 512,
+      "sha256": "3ecdcd19d5cde9116cdecf1408501a5bb6d8ccabd4675a019bb85ee3465bb30c"
+    },
+    {
+      "name": "nexteval-on-dark-16.png",
+      "width": 16,
+      "height": 16,
+      "sha256": "bb9095cccffc46147d398ba42113b934610548b7ab39ef0eb45e703fb9ecec28"
+    },
+    {
+      "name": "nexteval-on-dark-32.png",
+      "width": 32,
+      "height": 32,
+      "sha256": "d3de75e68d247b538f1333801c75e27bf7f3d37862b2dc90a20bd38b53bb1b8d"
+    },
+    {
+      "name": "nexteval-on-dark-48.png",
+      "width": 48,
+      "height": 48,
+      "sha256": "8b9b11b8b790f0b7d9ba20953090ddca2d3d57e4e28965a9939969ea253c7f86"
+    },
+    {
+      "name": "nexteval-on-dark-64.png",
+      "width": 64,
+      "height": 64,
+      "sha256": "309b988035edf7aff7a7a585882156b97ee31739e95031e940b2eabe0cdbbce2"
+    },
+    {
+      "name": "nexteval-on-dark-180.png",
+      "width": 180,
+      "height": 180,
+      "sha256": "012542b51cc95b4833a9a78bf882aa888eabee45c7c3dbaadf2937ac73abcc3c"
+    },
+    {
+      "name": "nexteval-on-dark-192.png",
+      "width": 192,
+      "height": 192,
+      "sha256": "fda5cda25f7868737976775ea641a76be3f35ea1841f1c0ef849752307648f66"
+    },
+    {
+      "name": "nexteval-on-dark-512.png",
+      "width": 512,
+      "height": 512,
+      "sha256": "4dee6eb5d184ec31e183cb1ca57fb9a8988cbe79dae798d9153e2591549052bd"
+    }
+  ]
+}

@@ -1,0 +1,119 @@
+{
+  "r2-p": {
+    "title": "R2 default agent / traditional solvers",
+    "asset": "r2-p",
+    "problems": 92,
+    "repeats": 3,
+    "source": "https://github.com/NextEval/nexteval-research/tree/001a7070a999501875547a0cd9d40640cd041ead/benchmarks/results/feature-matrix-maxdim5-20260905",
+    "scores": [
+      {
+        "label": "NextEval \u00b7 default agent",
+        "score": 1
+      },
+      {
+        "label": "COBYQA",
+        "score": 0.7809
+      },
+      {
+        "label": "PDFO NEWUOA",
+        "score": 0.822
+      },
+      {
+        "label": "BDS",
+        "score": 0.581
+      }
+    ],
+    "caveat": "Full 92-problem research set; 27/276 native runs have provider, time-limit or invalid-start anomalies. Default model: DeepSeek V4 Flash. Scores are rounded archive values, not a new Harbor ranking."
+  },
+  "r2-n": {
+    "title": "R2 default agent / traditional solvers",
+    "asset": "r2-n",
+    "problems": 92,
+    "repeats": 3,
+    "source": "https://github.com/NextEval/nexteval-research/tree/001a7070a999501875547a0cd9d40640cd041ead/benchmarks/results/feature-matrix-maxdim5-20260905",
+    "scores": [
+      {
+        "label": "NextEval \u00b7 default agent",
+        "score": 1
+      },
+      {
+        "label": "COBYQA",
+        "score": 0.5317
+      },
+      {
+        "label": "PDFO NEWUOA",
+        "score": 0.5339
+      },
+      {
+        "label": "BDS",
+        "score": 0.7413
+      }
+    ],
+    "caveat": "Full 92-problem research set; 61/276 native runs have provider, time-limit or invalid-start anomalies. Default model: DeepSeek V4 Flash. Scores are rounded archive values, not a new Harbor ranking."
+  },
+  "gpt": {
+    "title": "GPT within-study comparison",
+    "asset": "gpt",
+    "problems": 91,
+    "repeats": 3,
+    "scores": [
+      {
+        "label": "GPT-5.6 Sol",
+        "score": 1.0
+      },
+      {
+        "label": "GPT-5.6 Terra",
+        "score": 0.946472167325369
+      },
+      {
+        "label": "GPT-5.6 Luna",
+        "score": 0.9284055521108439
+      },
+      {
+        "label": "GPT-5.5",
+        "score": 0.36558807943975546
+      }
+    ],
+    "source": "https://github.com/NextEval/nexteval-research/blob/b4c556c883faa48f4dd7dfd85154879c49528d41/benchmarks/results/benchgpt-codex-noisy-maxdim5-20260909/data/optiprofiler/test_log/data_for_loading.h5",
+    "caveat": "Windows/WSL2 archive. Same Codex harness, medium effort; GPT-5.5 has substantial early stopping. This is not a cross-platform or causal intelligence ranking.",
+    "evidence_sha256": "8f789f01653c37fc81db92640119e495c003e98ba154d0eb8ea5a6bffebe5ed0"
+  },
+  "deepseek": {
+    "title": "DEEPSEEK within-study comparison",
+    "asset": "deepseek",
+    "problems": 91,
+    "repeats": 3,
+    "scores": [
+      {
+        "label": "DeepSeek V4 Pro",
+        "score": 0.9396288742292143
+      },
+      {
+        "label": "DeepSeek V4 Flash",
+        "score": 0.9971634785113348
+      }
+    ],
+    "source": "https://github.com/NextEval/nexteval-research/blob/b4c556c883faa48f4dd7dfd85154879c49528d41/benchmarks/results/ntvl-deepseek-v4-noisy-maxdim5-20260910/data/optiprofiler/test_log/data_for_loading.h5",
+    "caveat": "Claude Code, thinking off. Both provider routes appear in the archive; Flash scores above Pro in this fixed two-model view. Model tiers alone do not establish an optimization advantage.",
+    "evidence_sha256": "f8eca6b73b110a64d09b455db7aa9a433be5869cfa6af6ba3b68cf67195f4714"
+  },
+  "qwen": {
+    "title": "QWEN within-study comparison",
+    "asset": "qwen",
+    "problems": 92,
+    "repeats": 5,
+    "scores": [
+      {
+        "label": "Qwen 3.8 Flash (off)",
+        "score": 1.0
+      },
+      {
+        "label": "Qwen 3.8 Flash (medium)",
+        "score": 0.9798803104312217
+      }
+    ],
+    "source": "https://github.com/NextEval/nexteval-research/blob/ac597546ac837f876a43efc20f3e0bb23baeb8da/benchmarks/results/ntvl-qwen-thinking-ab-dim5-20260911/comparison/all92/u_1_5_perturbed_x0_0.001_spherical_plus_noisy_0.001_mixed_gaussian_20260911_222410/test_log/data_for_loading.h5",
+    "caveat": "Codex, 92 problems, five repeats. This two-model view puts off slightly ahead; the five-solver reference set reverses the order. Tool-feedback and termination issues remain confounds.",
+    "evidence_sha256": "557611385625477d9bb5824085a4536ad242c9cdb93f14d940710e8fbe145f67"
+  }
+}

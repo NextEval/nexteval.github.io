@@ -1,0 +1,68 @@
+{
+  "status": "research-preview-not-harbor-submissions",
+  "new_evaluations": 0,
+  "profile_source": "OptiProfiler",
+  "image_conversion": "pdftoppm, page 1, 140 dpi",
+  "figures": [
+    {
+      "source": "paper/figures/r2/perturbed-performance.pdf",
+      "destination": "r2-p-performance.pdf",
+      "sha256": "a66fbcbe46e29077828d798c1143b04f0bdf8faaef1b0950297a4de89696a6d3",
+      "png_sha256": "8583bea6fa59de35946facc2999fa277383b9d6fbfe382561c1ebadbcf09bd2c"
+    },
+    {
+      "source": "paper/figures/r2/perturbed-data.pdf",
+      "destination": "r2-p-data.pdf",
+      "sha256": "a5ca81bc845e55bc5b93879afced6f11ab8fd0031bccc92814c5d76a63a19881",
+      "png_sha256": "76ac7776cb4c3f6de90a99ada195b09c8a8786f3753fab96d25f9567e3ecdd17"
+    },
+    {
+      "source": "paper/figures/r2/noisy-performance.pdf",
+      "destination": "r2-n-performance.pdf",
+      "sha256": "21df6eda908adbd61089e93b056fa0fefa6f2899f42b885cc120da960f01964e",
+      "png_sha256": "a5cac6a3a29375ad9e548abff8198a9333083881742de01a34297ad999983db2"
+    },
+    {
+      "source": "paper/figures/r2/noisy-data.pdf",
+      "destination": "r2-n-data.pdf",
+      "sha256": "22a26db86f20ba592b6b0227f1d749fc965e486def1a4a5cc713fd0de8bd23f8",
+      "png_sha256": "6432af21d5ae46b16f2eae8937a973193662c1fe6c40cc90e6ac04b856dd5fd0"
+    },
+    {
+      "source": "paper/figures/model-legends-20260911/gpt-performance.pdf",
+      "destination": "gpt-performance.pdf",
+      "sha256": "0778163759652aefdfb40cf5d24868c52f0cfc661ad1de4e4c27ec53eb7202b4",
+      "png_sha256": "3454929a16c4fb479b4000562978c02f39661f6b22ceaddd36bde8c2563b8efd"
+    },
+    {
+      "source": "paper/figures/model-legends-20260911/gpt-data.pdf",
+      "destination": "gpt-data.pdf",
+      "sha256": "ce1701308f3a08672b11aeab650dac76cdf8e46fbe643aebc5db9cae6e6a1a93",
+      "png_sha256": "28da8ad54993c1fe8fecd2e6bab0b4911a04c4a3c497df636b5abfe136e7523f"
+    },
+    {
+      "source": "paper/figures/model-legends-20260911/deepseek-performance.pdf",
+      "destination": "deepseek-performance.pdf",
+      "sha256": "8c8c890bc9aec30ade18608946be2b5febe8cc50b4062ecbb792636474c70013",
+      "png_sha256": "881f9466649212808ecd23b0d31e49a23a35e2fe19a00cb4b0e9901d3f738353"
+    },
+    {
+      "source": "paper/figures/model-legends-20260911/deepseek-data.pdf",
+      "destination": "deepseek-data.pdf",
+      "sha256": "efba94b91359868533497c384bddd8d284d5bfb799aea3f637c71c638148d47b",
+      "png_sha256": "e9444b66afbd0713a79158f6c1244f37719fbd90030c8f3ece6a91219aa15dbb"
+    },
+    {
+      "source": "paper/figures/model-legends-20260911/qwen-performance.pdf",
+      "destination": "qwen-performance.pdf",
+      "sha256": "36653fbfc38e9b6dac43714cae64577b1db572756146910848a6f1a18cdaac10",
+      "png_sha256": "0c3c8217100cd8943ae8db150b3dabe4d3054748fb2418e4111c05550f48a5e2"
+    },
+    {
+      "source": "paper/figures/model-legends-20260911/qwen-data.pdf",
+      "destination": "qwen-data.pdf",
+      "sha256": "c863d83795661601529fd9ddd3f98c7907f26aaffa86664773123c19aa89fb4d",
+      "png_sha256": "b35e00795f7f69326b1eae61c685e73c8a19892367ef90c0f7ab2426f098d832"
+    }
+  ]
+}
