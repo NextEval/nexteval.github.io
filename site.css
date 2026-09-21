@@ -53,15 +53,29 @@ h2 span { color: var(--cyan); font-weight: 400; }
 .button-quiet { color: var(--ink); background: var(--surface); }
 .button-quiet:hover { border-color: var(--cyan); }
 .hero-footnote { margin: 0; color: var(--faint); font: 10px/1.5 var(--mono); }
-.hero.brand-hero { display: block; padding-top: 42px; padding-bottom: 30px; }
-.brand-hero .hero-summary { display: grid; grid-template-columns: minmax(0, 1fr) 370px; align-items: center; gap: 52px; margin-top: 25px; }
+.hero.brand-hero { position: relative; isolation: isolate; display: block; overflow: hidden; padding: 0; border: 0; }
+.brand-hero .hero-content { position: relative; z-index: 1; padding-top: 42px; padding-bottom: 48px; border-bottom: 1px solid var(--line); }
+.brand-hero .hero-field { position: absolute; z-index: 0; inset: 0; pointer-events: none; user-select: none; mix-blend-mode: lighten; }
+.brand-hero .hero-field img {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: min(100%, 1600px);
+  height: 100%;
+  object-fit: cover;
+  object-position: center 45%;
+  opacity: .85;
+  /* Fade the existing artwork into the page without introducing a visible frame. */
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 65%, #000 88%, transparent), linear-gradient(to bottom, transparent, #000 18%, #000 72%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 65%, #000 88%, transparent), linear-gradient(to bottom, transparent, #000 18%, #000 72%, transparent);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+.brand-hero .hero-summary { max-width: 620px; margin-top: 38px; }
 .brand-hero .hero-copy .brand-title { margin: 0 0 24px; font-size: 36px; line-height: 1.15; }
 .brand-hero .hero-lede { max-width: 620px; margin-top: 0; }
 .brand-hero .hero-footnote { max-width: 100%; }
 .brand-hero .hero-actions { margin-top: 22px; }
-.brand-hero .hero-visual { width: 100%; border: 0; box-shadow: none; background: none; }
-.brand-hero .visual-caption, .brand-hero .visual-status { padding: 8px 0; border: 0; font-size: 8px; }
-.brand-hero .field-tag, .brand-hero .field-crosshair { display: none; }
 .solver-hero-copy .evaluation-slogan { margin: 0 0 23px; }
 .solver-hero-copy h1.solver-title { font-size: 46px; }
 .hero-visual { min-width: 0; border: 1px solid var(--line-strong); background: var(--surface); box-shadow: 12px 12px 0 #080b0b; }
@@ -156,8 +170,7 @@ h2 span { color: var(--cyan); font-weight: 400; }
 .solver-duality h2 { margin: 20px 0 0; font-size: 42px; line-height: 1.08; }
 .duality-copy { max-width: 560px; margin: 18px 0 0; color: var(--muted); font-size: 15px; line-height: 1.6; }
 @media (max-width: 980px) {
-  .brand-hero .hero-summary { grid-template-columns: minmax(0, 1fr); gap: 28px; }
-  .brand-hero .hero-visual { max-width: 500px; }
+  .brand-hero .hero-field img { object-position: 68% center; opacity: .55; }
   .hero, .solver-hero { grid-template-columns: 1fr; gap: 48px; }
   .hero-visual, .solver-console { max-width: 760px; }
   .pipeline { grid-template-columns: 1fr; gap: 35px; }
@@ -167,6 +180,9 @@ h2 span { color: var(--cyan); font-weight: 400; }
   .capability-grid { grid-template-columns: repeat(2, 1fr); }
 }
 @media (max-width: 700px) {
+  .brand-hero .hero-content { padding-top: 36px; padding-bottom: 36px; }
+  .brand-hero .hero-summary { margin-top: 28px; }
+  .brand-hero .hero-field img { object-position: 78% center; opacity: .32; }
   .brand-hero .hero-copy .brand-title { font-size: 32px; margin-bottom: 20px; }
   .solver-hero-copy h1.solver-title { font-size: 38px; }
   .shell { width: min(100% - 36px, 1220px); }

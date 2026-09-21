@@ -51,7 +51,21 @@ async function main() {
           const wordInk = range.getBoundingClientRect();
           return {
             width: innerWidth, scroll: document.documentElement.scrollWidth,
-            artwork: document.querySelector('.brand-hero .hero-visual') ? rect('.brand-hero .hero-visual') : null,
+            hero: document.querySelector('.brand-hero') ? (() => {
+              const field = document.querySelector('.hero-field');
+              const content = document.querySelector('.hero-content');
+              return {
+                bounds: rect('.brand-hero'), field: rect('.hero-field'),
+                decorative: field.getAttribute('aria-hidden') === 'true',
+                noninteractive: getComputedStyle(field).pointerEvents === 'none',
+                behindText: Number(getComputedStyle(field).zIndex) < Number(getComputedStyle(content).zIndex),
+                captions: document.querySelectorAll('.brand-hero .visual-caption, .brand-hero .visual-status').length,
+                linkReachable: [...content.querySelectorAll('a')].every(link => {
+                  const r = link.getBoundingClientRect();
+                  return link.contains(document.elementFromPoint(r.x + r.width / 2, r.y + r.height / 2));
+                }),
+              };
+            })() : null,
             slogan: rect('.evaluation-slogan'), word: rect('.slogan-word'), endings: rect('.slogan-meanings'),
             inkRight: wordInk.right,
             images: [...document.images].every(image => image.complete && image.naturalWidth > 0),
@@ -61,7 +75,11 @@ async function main() {
         const prefix = `${name} ${width}`;
         if (metrics.scroll > width + 1) faults.push(`${prefix}: horizontal overflow ${JSON.stringify(metrics.overflow)}`);
         if (metrics.slogan.right > width || metrics.inkRight > metrics.endings.x - 2) faults.push(`${prefix}: slogan collision ${JSON.stringify(metrics)}`);
-        if (metrics.artwork && metrics.slogan.right > metrics.artwork.x && metrics.slogan.bottom > metrics.artwork.y && metrics.slogan.y < metrics.artwork.bottom) faults.push(`${prefix}: slogan overlaps artwork`);
+        if (metrics.hero) {
+          const hero = metrics.hero;
+          if (!hero.decorative || !hero.noninteractive || !hero.behindText || hero.captions || !hero.linkReachable) faults.push(`${prefix}: invalid hero background layering ${JSON.stringify(hero)}`);
+          if (hero.field.width < width || hero.field.y > metrics.slogan.y || hero.field.bottom < metrics.slogan.bottom) faults.push(`${prefix}: artwork does not span the hero`);
+        }
         if (!metrics.images) faults.push(`${prefix}: image did not load`);
         const text = await page.locator('body').innerText();
         if (/One loop|Two public surfaces|THE OTHER SIDE OF THE LOOP/.test(text)) faults.push(`${prefix}: stale copy`);

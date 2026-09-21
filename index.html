@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#101516">
   <title>NextEval — Solver and Bench</title>
   <link rel="icon" type="image/svg+xml" href="site-assets/brand/nexteval-on-dark.svg">
-  <link rel="stylesheet" href="site.css?v=slogan-1">
+  <link rel="stylesheet" href="site.css?v=hero-field-1">
   <link rel="stylesheet" href="slogan.css?v=1">
 </head>
 <body>
@@ -28,33 +28,29 @@
     </div>
   </header>
   <main>
-    <section class="hero brand-hero shell">
-      <div class="hero-copy">
-        <h1 class="brand-title">NextEval</h1>
-        <h2 class="evaluation-slogan" aria-label="Next evaluation for solvers. Next evaluation of agents.">
-          <span class="slogan-next">NEXT</span>
-          <span class="slogan-word">EVALUATION</span>
-          <span class="slogan-meanings">
-            <span class="slogan-meaning slogan-solver"><span class="slogan-preposition">for</span><strong>solvers.</strong></span>
-            <span class="slogan-meaning slogan-bench"><span class="slogan-preposition">of</span><strong>agents.</strong></span>
-          </span>
-        </h2>
+    <section class="hero brand-hero">
+      <div class="hero-field" aria-hidden="true">
+        <img src="site-assets/brand/decision-field.png" alt="" width="1672" height="941" fetchpriority="high">
       </div>
-      <div class="hero-summary">
-        <div>
+      <div class="hero-content shell">
+        <div class="hero-copy">
+          <h1 class="brand-title">NextEval</h1>
+          <h2 class="evaluation-slogan" aria-label="Next evaluation for solvers. Next evaluation of agents.">
+            <span class="slogan-next">NEXT</span>
+            <span class="slogan-word">EVALUATION</span>
+            <span class="slogan-meanings">
+              <span class="slogan-meaning slogan-solver"><span class="slogan-preposition">for</span><strong>solvers.</strong></span>
+              <span class="slogan-meaning slogan-bench"><span class="slogan-preposition">of</span><strong>agents.</strong></span>
+            </span>
+          </h2>
+        </div>
+        <div class="hero-summary">
           <p class="hero-lede">An agentic optimizer that chooses the next function evaluation. A benchmark that tests how agents turn evaluations into progress.</p>
           <div class="hero-actions">
             <a class="button button-primary" href="solver/">Explore Solver <span aria-hidden="true">↗</span></a>
             <a class="button button-quiet" href="bench/">Open Bench <span aria-hidden="true">↗</span></a>
           </div>
           <p class="hero-footnote">Opaque objectives · finite evaluation budgets · auditable trajectories</p>
-        </div>
-        <div class="hero-visual" aria-label="A sequential optimization trajectory crossing an objective landscape">
-          <div class="visual-caption"><span>THE DECISION FIELD</span><span>HISTORY → STATE → QUERY</span></div>
-          <div class="field-frame">
-            <img src="site-assets/brand/decision-field.png" alt="Two optimization paths crossing a contour field">
-          </div>
-          <div class="visual-status"><span><i class="status-light"></i>objective access: opaque</span><span>nfev is the clock</span></div>
         </div>
       </div>
     </section>
