@@ -70,6 +70,17 @@ h2 span { color: var(--cyan); font-weight: 400; }
   mask-composite: intersect;
 }
 .brand-hero .hero-summary { max-width: 620px; margin-top: 38px; }
+.brand-hero .evaluation-slogan { isolation: isolate; }
+.brand-hero .slogan-meanings { position: relative; }
+.brand-hero .slogan-meanings::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  background: var(--bg);
+  box-shadow: 0 0 20px 30px var(--bg);
+  pointer-events: none;
+}
 .brand-hero .hero-copy .brand-title { margin: 0 0 24px; font-size: 36px; line-height: 1.15; }
 .brand-hero .hero-lede { max-width: 620px; margin-top: 0; }
 .brand-hero .hero-footnote { max-width: 100%; }
