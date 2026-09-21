@@ -23,6 +23,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Verify published profile assets
+        run: node test/assets.cjs
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact

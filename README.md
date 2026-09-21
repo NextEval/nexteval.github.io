@@ -28,6 +28,11 @@ Open http://127.0.0.1:8797/.
 
 ## Browser checks
 
+Run `node test/assets.cjs` to check that every profile in the comparison
+manifest is tracked by Git and matches its archived SHA-256 hash. Pages
+deployment runs this check before uploading the site. Compressed comparison
+files are explicitly included even when a global Git ignore excludes `*.gz`.
+
 With Playwright available to Node, run `node test/site.cjs`. The check starts
 and closes its own static server, checks responsive slogan layout and image
 loading, and exercises the existing history and profile views. Set
