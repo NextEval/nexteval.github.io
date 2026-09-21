@@ -57,7 +57,7 @@
 .evaluation-slogan--compact .slogan-next,
 .evaluation-slogan--compact .slogan-word { font-size: 36px; }
 .evaluation-slogan--compact .slogan-meanings { font-size: 17px; row-gap: 1px; }
-.evaluation-slogan--compact .slogan-preposition { font-size: 13px; }
+.evaluation-slogan--compact .slogan-preposition { font-size: 14px; }
 .evaluation-slogan--compact .slogan-meaning { column-gap: 4px; }
 .evaluation-slogan--solver .slogan-bench,
 .evaluation-slogan--bench .slogan-solver { color: var(--slogan-muted); }
@@ -72,7 +72,7 @@
   .evaluation-slogan:not(.evaluation-slogan--compact) .slogan-next,
   .evaluation-slogan:not(.evaluation-slogan--compact) .slogan-word { font-size: 38px; }
   .evaluation-slogan .slogan-meanings { font-size: 17px; row-gap: 1px; }
-  .evaluation-slogan .slogan-preposition { font-size: 12px; }
+  .evaluation-slogan .slogan-preposition { font-size: 14px; }
   .evaluation-slogan .slogan-meaning { column-gap: 3px; }
   .evaluation-slogan--compact .slogan-next,
   .evaluation-slogan--compact .slogan-word { font-size: 32px; }

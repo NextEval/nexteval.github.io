@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="NextEval Python API: installation, model configuration, solve arguments, evaluation budgets, results, and custom agent integration.">
+  <meta name="theme-color" content="#101516">
+  <title>Python API | NextEval Solver</title>
+  <link rel="icon" type="image/svg+xml" href="../../site-assets/brand/nexteval-on-dark.svg">
+  <link rel="stylesheet" href="../../site.css?v=readable-api-1">
+</head>
+<body class="api-page">
+  <header class="site-header">
+    <a class="site-brand" href="../../" aria-label="NextEval home"><img src="../../site-assets/brand/nexteval-on-dark.svg" alt="" width="30" height="30"><span>NextEval</span></a>
+    <nav class="site-nav" aria-label="Primary navigation"><a href="../../">Overview</a><a href="../">Solver</a><a href="../../bench/">Bench</a><a class="active" href="./" aria-current="page">API</a><a href="https://github.com/NextEval/nexteval">GitHub <span aria-hidden="true">&#8599;</span></a></nav>
+  </header>
+  <main class="api-shell shell">
+    <header class="api-heading">
+      <p class="eyebrow">NEXTEVAL SOLVER / PYTHON</p>
+      <h1>API reference</h1>
+      <p>An objective, a starting point, and an evaluation budget. One agent session chooses the next numerical action.</p>
+    </header>
+    <div class="api-layout">
+      <nav class="api-toc" aria-label="API sections">
+        <a href="#quick-start">Quick start</a>
+        <a href="#model">Model configuration</a>
+        <a href="#solve">solve</a>
+        <a href="#options">Options</a>
+        <a href="#result">DFOResult</a>
+        <a href="#integration">Custom agents</a>
+      </nav>
+      <div class="api-body">
+        <section id="quick-start">
+          <h2>Quick start</h2>
+          <p>Install from the public repository into your Python environment. The runtime dependency is NumPy.</p>
+          <pre tabindex="0" aria-label="Install NextEval"><code>python -m pip install \
+  "git+https://github.com/NextEval/nexteval.git"</code></pre>
+          <p>Configure a tool-calling model as described <a href="#model">below</a>, then run:</p>
+          <pre data-language="python" tabindex="0" aria-label="Python quick start"><code>import numpy as np
+from nexteval import solve
+
+result = solve(
+    lambda x: float(x @ x),
+    np.array([2.0, -1.0, 0.5]),
+    options={
+        "execution_mode": "task",
+        "model": "env",
+        "maxfev": 80,
+        "seed": 7,
+        "trace": "off",
+    },
+)
+
+print(result.x, result.fun, result.nfev)
+print(result.status, result.message)</code></pre>
+        </section>
+        <section id="model">
+          <h2>Model configuration</h2>
+          <p><code>model="env"</code> uses an Anthropic-compatible provider. Set your endpoint, model ID, and token in the local environment; the values below are placeholders.</p>
+          <pre tabindex="0" aria-label="Provider environment variables"><code>export ANTHROPIC_BASE_URL="https://your-compatible-endpoint/v1"
+export ANTHROPIC_MODEL="your-model-id"
+export ANTHROPIC_AUTH_TOKEN="your-token"</code></pre>
+          <p>The endpoint must support tool calls. Keep credentials out of code and trace files. This website does not receive your credentials or run the solver.</p>
+          <p>OpenAI-compatible and Azure providers use their own configurations. External harnesses may manage their own authentication. See <a href="https://github.com/NextEval/nexteval/blob/main/docs/usage.md#provider-configuration">provider configuration</a> and the <a href="https://github.com/NextEval/nexteval/blob/main/docs/support-matrix.md">harness support matrix</a>.</p>
+        </section>
+        <section id="solve">
+          <h2>solve</h2>
+          <pre tabindex="0" aria-label="Solve signature"><code>solve(fun, x0, options=None) -&gt; DFOResult</code></pre>
+          <dl class="api-definitions">
+            <div><dt><code>fun</code></dt><dd>A callable accepting a one-dimensional NumPy array and returning a scalar objective value. The solver minimizes it as an opaque oracle.</dd></div>
+            <div><dt><code>x0</code></dt><dd>A nonempty, finite, one-dimensional starting point.</dd></div>
+            <div><dt><code>options</code></dt><dd>A mapping or <code>SolverOptions</code>. The default execution mode is <code>task</code>; a model configuration is required.</dd></div>
+          </dl>
+          <p>Task mode preserves one runner session across model and tool turns. It is not a fresh agent launch per function evaluation.</p>
+        </section>
+        <section id="options">
+          <h2>Common options</h2>
+          <dl class="api-definitions">
+            <div><dt><code>maxfev</code></dt><dd>The total function-evaluation ceiling, including the initial point and failed objective calls. This is separate from the model-token budget.</dd></div>
+            <div><dt><code>model</code></dt><dd><code>"env"</code>, a provider specification, or a compatible model client.</dd></div>
+            <div><dt><code>execution_mode</code></dt><dd><code>"task"</code> for a whole-session runner; <code>"stepwise"</code> for a policy invoked at each decision boundary.</dd></div>
+            <div><dt><code>seed</code></dt><dd>The solver's random seed. It does not guarantee deterministic model-provider responses.</dd></div>
+            <div><dt><code>trace</code></dt><dd><code>"off"</code>, <code>"summary"</code>, <code>"trajectory"</code>, <code>"debug"</code>, or <code>"develop"</code>. Persistent tracing is opt-in.</dd></div>
+            <div><dt><code>runner_options</code></dt><dd>Settings for the built-in task runner, such as token limits, compaction, and retries.</dd></div>
+          </dl>
+          <p><a href="https://github.com/NextEval/nexteval/blob/main/docs/options.md">All solver options <span aria-hidden="true">&#8599;</span></a></p>
+        </section>
+        <section id="result">
+          <h2>DFOResult</h2>
+          <p>A dictionary with attribute access, similar to SciPy's <code>OptimizeResult</code>.</p>
+          <dl class="api-definitions">
+            <div><dt><code>x</code> / <code>fun</code></dt><dd>The best valid recorded point and its objective value.</dd></div>
+            <div><dt><code>nfev</code></dt><dd>The actual objective-call count recorded in the evaluation ledger.</dd></div>
+            <div><dt><code>status</code> / <code>message</code></dt><dd>The numeric termination status and its human-readable explanation.</dd></div>
+            <div><dt><code>success</code></dt><dd>The solver completion flag. It does not, by itself, establish a valid benchmark trial.</dd></div>
+            <div><dt><code>completion_quality</code></dt><dd>Completion and protocol quality. Inspect this together with <code>comparable_under_budget</code> before pooling results.</dd></div>
+            <div><dt><code>trace_path</code></dt><dd>The trace location when persistent tracing is enabled.</dd></div>
+          </dl>
+        </section>
+        <section id="integration">
+          <h2>Custom agents</h2>
+          <p>Use the lower-level <code>minimize</code> entry point to supply a runner, policy, model, or toolset.</p>
+          <pre tabindex="0" aria-label="Minimize signature"><code>minimize(
+    fun, x0, args=(), *,
+    policy=None, advisor=None, model=None,
+    toolset=None, callback=None, runner=None,
+    options=None,
+) -&gt; DFOResult</code></pre>
+          <p>A <code>runner.run(task, gateway)</code> owns a complete task. A <code>policy.decide(observation, context)</code> owns a stepwise decision. Both use the same protected objective ledger and budget accounting.</p>
+          <div class="api-resources"><a href="https://github.com/NextEval/nexteval/blob/main/docs/interop.md">Interoperability</a><a href="https://github.com/NextEval/nexteval/blob/main/docs/execution-modes.md">Execution modes</a><a href="https://github.com/NextEval/nexteval/blob/main/docs/trace-contract.md">Trace contract</a></div>
+        </section>
+        <p class="api-provenance">Reference checked against <a href="https://github.com/NextEval/nexteval/blob/cb58fd74901de2476fe15b60ee4cfc993ca04095/src/nexteval/api.py">Solver cb58fd7</a>. <a href="https://github.com/NextEval/nexteval/blob/main/docs/api.md">Latest source reference <span aria-hidden="true">&#8599;</span></a></p>
+      </div>
+    </div>
+  </main>
+  <footer class="site-footer shell"><span>&copy; 2026 NextEval Solver</span><a href="../">Solver overview <span aria-hidden="true">&#8599;</span></a></footer>
+  <script src="../../site.js"></script>
+</body>
+</html>

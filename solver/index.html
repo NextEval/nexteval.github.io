@@ -7,14 +7,13 @@
   <meta name="theme-color" content="#101516">
   <title>NextEval Solver</title>
   <link rel="icon" type="image/svg+xml" href="../site-assets/brand/nexteval-on-dark.svg">
-  <link rel="stylesheet" href="../site.css?v=slogan-1">
-  <link rel="stylesheet" href="../slogan.css?v=1">
+  <link rel="stylesheet" href="../site.css?v=readable-api-1">
+  <link rel="stylesheet" href="../slogan.css?v=2">
 </head>
 <body class="solver-page">
   <header class="site-header">
     <a class="site-brand" href="../" aria-label="NextEval home"><img src="../site-assets/brand/nexteval-on-dark.svg" alt="" width="30" height="30"><span>NextEval</span></a>
-    <nav class="site-nav" aria-label="Primary navigation"><a href="../">Overview</a><a class="active" href="./">Solver</a><a href="../bench/">Bench</a><a href="https://github.com/NextEval/nexteval" target="_blank" rel="noopener">GitHub <span aria-hidden="true">↗</span></a></nav>
-    <div class="header-mark"><span class="header-mark-line"></span><span>for solvers. / of agents.</span></div>
+    <nav class="site-nav" aria-label="Primary navigation"><a href="../">Overview</a><a class="active" href="./">Solver</a><a href="../bench/">Bench</a><a href="api/">API</a><a href="https://github.com/NextEval/nexteval" target="_blank" rel="noopener">GitHub <span aria-hidden="true">↗</span></a></nav>
   </header>
   <main>
     <section class="solver-hero shell">
@@ -30,22 +29,24 @@
           </span>
         </h2>
         <p class="hero-lede">An agent-based derivative-free optimizer for budget-limited black-box minimization. Give it an opaque objective and a starting point; it adapts its numerical strategy through one continuous session.</p>
-        <div class="hero-actions"><a class="button button-primary" href="https://github.com/NextEval/nexteval#quick-start" target="_blank" rel="noopener">Read the Quick Start <span aria-hidden="true">↗</span></a><a class="button button-quiet" href="../bench/">Explore agent evaluation <span aria-hidden="true">↗</span></a></div>
+        <div class="hero-actions"><a class="button button-primary" href="api/#quick-start">Quick start <span aria-hidden="true">↗</span></a><a class="button button-quiet" href="api/">API reference <span aria-hidden="true">↗</span></a></div>
       </div>
       <div class="solver-console">
         <div class="console-head"><span><i class="status-light"></i>nexteval / session</span><span>opaque objective</span></div>
-        <pre><code><span class="code-muted">from</span> nexteval <span class="code-muted">import</span> solve
+        <pre data-language="python"><code><span class="code-muted">import</span> numpy <span class="code-muted">as</span> np
+<span class="code-muted">from</span> nexteval <span class="code-muted">import</span> solve
 
 result = solve(
-    <span class="code-key">lambda</span> x: objective(x),
-    x0,
+    <span class="code-key">lambda</span> x: float(x @ x),
+    np.array([<span class="code-number">2.0</span>, <span class="code-number">-1.0</span>, <span class="code-number">0.5</span>]),
     options={
         <span class="code-string">"execution_mode"</span>: <span class="code-string">"task"</span>,
+        <span class="code-string">"model"</span>: <span class="code-string">"env"</span>,
         <span class="code-string">"maxfev"</span>: <span class="code-number">80</span>,
         <span class="code-string">"trace"</span>: <span class="code-string">"trajectory"</span>,
     },
 )</code></pre>
-        <div class="console-foot"><span>history[k] → decision[k] → x[k + 1]</span><span>nfev: 37 / 80</span></div>
+        <div class="console-foot"><span>Requires a configured model.</span><a href="api/#model">Model setup <span aria-hidden="true">↗</span></a></div>
       </div>
     </section>
     <section class="solver-intro shell">
