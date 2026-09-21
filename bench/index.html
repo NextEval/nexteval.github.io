@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="robots" content="index,follow">
-  <meta name="description" content="Configure reproducible agentic optimization tasks. Run with Harbor and compare evaluation efficiency with OptiProfiler.">
+  <meta name="description" content="Next evaluation of agents. NextEval Bench evaluates agents through black-box optimization, with reproducible tasks, evaluation histories and profiles.">
   <title>NextEval Bench</title>
   <link rel="icon" type="image/svg+xml" href="assets/brand/nexteval.svg">
   <link rel="alternate icon" href="assets/brand/favicon.ico">
@@ -11,7 +11,8 @@
   <link rel="stylesheet" href="style.css?v=home-1">
   <link rel="stylesheet" href="history.css?v=clarity-5">
   <link rel="stylesheet" href="home.css?v=home-4">
-  <link rel="stylesheet" href="suite.css?v=1">
+  <link rel="stylesheet" href="suite.css?v=slogan-1">
+  <link rel="stylesheet" href="../slogan.css?v=1">
   <script src="vendor/lucide.min.js" defer></script>
   <script src="app.js?v=home-1" type="module"></script>
 </head>
@@ -38,10 +39,17 @@
     <section id="home" class="page home-page">
       <div class="home-hero">
         <div class="home-copy">
-          <div class="home-kicker">A BENCHMARK FOR AGENTIC BLACK-BOX OPTIMIZATION</div>
+          <div class="home-kicker">AGENT EVALUATION THROUGH BLACK-BOX OPTIMIZATION</div>
           <h1>NextEval <span>Bench</span></h1>
-          <p class="home-question">What should an agent evaluate next?</p>
-          <p class="home-lede">One objective. A finite evaluation budget. Compare how agents choose, observe and adapt when the function is accessible only through evaluations.</p>
+          <h2 class="evaluation-slogan evaluation-slogan--compact evaluation-slogan--bench" aria-label="Next evaluation for solvers. Next evaluation of agents.">
+            <span class="slogan-next">NEXT</span>
+            <span class="slogan-word">EVALUATION</span>
+            <span class="slogan-meanings">
+              <span class="slogan-meaning slogan-solver"><span class="slogan-preposition">for</span><strong>solvers.</strong></span>
+              <span class="slogan-meaning slogan-bench"><span class="slogan-preposition">of</span><strong>agents.</strong></span>
+            </span>
+          </h2>
+          <p class="home-lede">Optimization is the task. The agent is what we evaluate. Compare how agents choose, observe and adapt under a finite function-evaluation budget.</p>
           <div class="home-actions"><a class="primary home-button" href="#profiles"><i data-lucide="bar-chart-3" aria-hidden="true"></i> Explore results</a><a class="secondary home-button" href="#tasks"><i data-lucide="terminal" aria-hidden="true"></i> Configure a task</a></div>
           <p class="home-note">Research preview <span aria-hidden="true">/</span> S2MPJ tasks <span aria-hidden="true">/</span> OptiProfiler evaluation</p>
         </div>
@@ -80,7 +88,7 @@
       <p class="home-archive-label">FEATURED ARCHIVE / R2 <span>Experimental settings, not limits of the benchmark.</span></p>
       <div class="home-stats"><div><span class="home-stat-value">92</span><span>unconstrained S2MPJ problems</span></div><div><span class="home-stat-value">2</span><span>feature conditions</span></div><div><span class="home-stat-value">3</span><span>archived repetitions</span></div><div><span class="home-stat-value">50 × n</span><span>evaluation budget</span></div></div>
       <div class="home-grid"><a class="home-card" href="#profiles"><span class="home-card-index">01 / RESULTS</span><h2>Evaluation profiles</h2><p>Compare performance and data profiles under a fixed, auditable comparison set. Membership and visual visibility are separate.</p><span class="home-card-link">Open profiles <i data-lucide="arrow-up-right" aria-hidden="true"></i></span></a><a class="home-card" href="#profiles?feature=perturbed_x0%2Bnoisy"><span class="home-card-index">02 / EVIDENCE</span><h2>Problem histories</h2><p>Inspect the actual best-so-far trajectory, repetition, termination status and source-local evidence for each problem.</p><span class="home-card-link">Inspect histories <i data-lucide="arrow-up-right" aria-hidden="true"></i></span></a><a class="home-card" href="#tasks"><span class="home-card-index">03 / REPRODUCE</span><h2>Run a task</h2><p>Generate a standard task and participant configuration for a local Harbor session. The site never starts paid jobs.</p><span class="home-card-link">Build a run plan <i data-lucide="arrow-up-right" aria-hidden="true"></i></span></a></div>
-      <div class="home-footer-line"><span>Built around finite evaluations, structured trajectories and reproducible task definitions.</span><span><a href="#profiles">Research archive</a> · <a href="https://github.com/NextEval/nexteval-bench" target="_blank" rel="noopener">Source protocol</a></span></div>
+      <div class="home-footer-line"><span>Next evaluation. For solvers. Of agents.</span><span><a href="../solver/">NextEval Solver</a> · <a href="#profiles">Research archive</a> · <a href="https://github.com/NextEval/nexteval-bench" target="_blank" rel="noopener">Source protocol</a></span></div>
     </section>
     <section id="tasks" class="page" hidden>
       <div class="section-heading task-heading"><div><h1>Tasks</h1><p class="muted">Development protocol · one independent Harbor session per instance.</p></div><button class="icon-button" id="share-config" title="Copy configuration link" aria-label="Copy configuration link"><i data-lucide="link" aria-hidden="true"></i></button></div>

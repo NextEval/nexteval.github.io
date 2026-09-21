@@ -1,0 +1,87 @@
+.slogan-specimen { padding: 28px 0; }
+.evaluation-slogan {
+  --slogan-ink: #edf2ef;
+  --slogan-muted: #9aa7a3;
+  --slogan-solver: #68e1d5;
+  --slogan-bench: #efb34f;
+  display: grid;
+  grid-template-columns: max-content max-content;
+  grid-template-rows: auto auto;
+  align-items: center;
+  column-gap: 32px;
+  width: fit-content;
+  max-width: 100%;
+  margin: 0;
+  color: var(--slogan-ink);
+  font-family: "Avenir Next", "Helvetica Neue", ui-sans-serif, system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-align: left;
+}
+.evaluation-slogan .slogan-next,
+.evaluation-slogan .slogan-word {
+  display: block;
+  color: var(--slogan-ink);
+  font-size: 80px;
+  font-weight: 600;
+  line-height: 1.06;
+  letter-spacing: 0;
+}
+.evaluation-slogan .slogan-next { grid-area: 1 / 1; }
+.evaluation-slogan .slogan-word { grid-area: 2 / 1; }
+.evaluation-slogan .slogan-meanings {
+  grid-area: 2 / 2;
+  display: grid;
+  row-gap: 3px;
+  font-size: 27px;
+  font-weight: 500;
+  line-height: 1.22;
+}
+.evaluation-slogan .slogan-meaning {
+  display: grid;
+  grid-template-columns: 1.65em auto;
+  column-gap: 8px;
+  align-items: baseline;
+  white-space: nowrap;
+}
+.evaluation-slogan .slogan-preposition {
+  color: var(--slogan-muted);
+  font-size: 17px;
+  font-weight: 400;
+  text-transform: lowercase;
+}
+.evaluation-slogan .slogan-solver { color: var(--slogan-solver); }
+.evaluation-slogan .slogan-bench { color: var(--slogan-bench); }
+.evaluation-slogan .slogan-meaning strong { font-weight: 500; }
+.evaluation-slogan--compact { column-gap: 18px; }
+.evaluation-slogan--compact .slogan-next,
+.evaluation-slogan--compact .slogan-word { font-size: 36px; }
+.evaluation-slogan--compact .slogan-meanings { font-size: 17px; row-gap: 1px; }
+.evaluation-slogan--compact .slogan-preposition { font-size: 13px; }
+.evaluation-slogan--compact .slogan-meaning { column-gap: 4px; }
+.evaluation-slogan--solver .slogan-bench,
+.evaluation-slogan--bench .slogan-solver { color: var(--slogan-muted); }
+.evaluation-slogan--solver .slogan-solver strong,
+.evaluation-slogan--bench .slogan-bench strong { font-weight: 650; }
+@media (max-width: 980px) {
+  .evaluation-slogan:not(.evaluation-slogan--compact) .slogan-next,
+  .evaluation-slogan:not(.evaluation-slogan--compact) .slogan-word { font-size: 64px; }
+}
+@media (max-width: 700px) {
+  .evaluation-slogan { column-gap: 14px; }
+  .evaluation-slogan:not(.evaluation-slogan--compact) .slogan-next,
+  .evaluation-slogan:not(.evaluation-slogan--compact) .slogan-word { font-size: 38px; }
+  .evaluation-slogan .slogan-meanings { font-size: 17px; row-gap: 1px; }
+  .evaluation-slogan .slogan-preposition { font-size: 12px; }
+  .evaluation-slogan .slogan-meaning { column-gap: 3px; }
+  .evaluation-slogan--compact .slogan-next,
+  .evaluation-slogan--compact .slogan-word { font-size: 32px; }
+}
+@media (max-width: 380px) {
+  .evaluation-slogan { column-gap: 10px; }
+  .evaluation-slogan .slogan-next,
+  .evaluation-slogan .slogan-word,
+  .evaluation-slogan:not(.evaluation-slogan--compact) .slogan-next,
+  .evaluation-slogan:not(.evaluation-slogan--compact) .slogan-word { font-size: 28px; }
+  .evaluation-slogan .slogan-meanings { font-size: 15px; }
+}

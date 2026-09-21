@@ -3,25 +3,34 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="NextEval Solver — an agentic derivative-free optimizer for budget-limited black-box objectives.">
+  <meta name="description" content="Next evaluation for solvers. NextEval Solver uses a persistent agent to choose numerical actions and function evaluations for black-box optimization.">
   <meta name="theme-color" content="#101516">
   <title>NextEval Solver</title>
   <link rel="icon" type="image/svg+xml" href="../site-assets/brand/nexteval-on-dark.svg">
-  <link rel="stylesheet" href="../site.css">
+  <link rel="stylesheet" href="../site.css?v=slogan-1">
+  <link rel="stylesheet" href="../slogan.css?v=1">
 </head>
 <body class="solver-page">
   <header class="site-header">
     <a class="site-brand" href="../" aria-label="NextEval home"><img src="../site-assets/brand/nexteval-on-dark.svg" alt="" width="30" height="30"><span>NextEval</span></a>
     <nav class="site-nav" aria-label="Primary navigation"><a href="../">Overview</a><a class="active" href="./">Solver</a><a href="../bench/">Bench</a><a href="https://github.com/NextEval/nexteval" target="_blank" rel="noopener">GitHub <span aria-hidden="true">↗</span></a></nav>
-    <div class="header-mark"><span class="header-mark-line"></span><span>one system / two views</span></div>
+    <div class="header-mark"><span class="header-mark-line"></span><span>for solvers. / of agents.</span></div>
   </header>
   <main>
     <section class="solver-hero shell">
       <div class="solver-hero-copy">
-        <p class="eyebrow"><span class="eyebrow-dot"></span>NEXTEVAL SOLVER / 0.7</p>
-        <h1>The optimizer<br><em>chooses the next query.</em></h1>
+        <p class="eyebrow"><span class="eyebrow-dot"></span>AGENTIC DERIVATIVE-FREE OPTIMIZATION</p>
+        <h1 class="solver-title">NextEval <em>Solver</em></h1>
+        <h2 class="evaluation-slogan evaluation-slogan--compact evaluation-slogan--solver" aria-label="Next evaluation for solvers. Next evaluation of agents.">
+          <span class="slogan-next">NEXT</span>
+          <span class="slogan-word">EVALUATION</span>
+          <span class="slogan-meanings">
+            <span class="slogan-meaning slogan-solver"><span class="slogan-preposition">for</span><strong>solvers.</strong></span>
+            <span class="slogan-meaning slogan-bench"><span class="slogan-preposition">of</span><strong>agents.</strong></span>
+          </span>
+        </h2>
         <p class="hero-lede">An agent-based derivative-free optimizer for budget-limited black-box minimization. Give it an opaque objective and a starting point; it adapts its numerical strategy through one continuous session.</p>
-        <div class="hero-actions"><a class="button button-primary" href="https://github.com/NextEval/nexteval#quick-start" target="_blank" rel="noopener">Read the Quick Start <span aria-hidden="true">↗</span></a><a class="button button-quiet" href="../bench/">See it measured <span aria-hidden="true">↗</span></a></div>
+        <div class="hero-actions"><a class="button button-primary" href="https://github.com/NextEval/nexteval#quick-start" target="_blank" rel="noopener">Read the Quick Start <span aria-hidden="true">↗</span></a><a class="button button-quiet" href="../bench/">Explore agent evaluation <span aria-hidden="true">↗</span></a></div>
       </div>
       <div class="solver-console">
         <div class="console-head"><span><i class="status-light"></i>nexteval / session</span><span>opaque objective</span></div>
@@ -45,15 +54,15 @@ result = solve(
     </section>
     <section class="solver-loop shell">
       <div class="loop-visual"><img src="../site-assets/brand/decision-field.png" alt="A cyan path adapting across a contour field"><div class="loop-label loop-label-a">history</div><div class="loop-label loop-label-b">tool call</div><div class="loop-label loop-label-c">next point</div></div>
-      <div class="loop-copy"><p class="section-index">02 / THE LOOP</p><h2>Persistent by design.</h2><p>A task-mode run is one complete agent task. The conversation, numerical state, and evaluation ledger remain connected while the agent decides whether to continue, switch methods, or finish.</p><ol class="number-list"><li><span>01</span><div><strong>Read</strong><small>Inspect progress, geometry, history, and method state.</small></div></li><li><span>02</span><div><strong>Act</strong><small>Request a bounded numerical action through the gateway.</small></div></li><li><span>03</span><div><strong>Adapt</strong><small>Use the new observation to choose the next operation.</small></div></li></ol></div>
+      <div class="loop-copy"><p class="section-index">02 / THE SESSION</p><h2>Persistent by design.</h2><p>A task-mode run is one complete agent task. The conversation, numerical state, and evaluation ledger remain connected while the agent decides whether to continue, switch methods, or finish.</p><ol class="number-list"><li><span>01</span><div><strong>Read</strong><small>Inspect progress, geometry, history, and method state.</small></div></li><li><span>02</span><div><strong>Act</strong><small>Request a bounded numerical action through the gateway.</small></div></li><li><span>03</span><div><strong>Adapt</strong><small>Use the new observation to choose the next operation.</small></div></li></ol></div>
     </section>
     <section class="solver-capabilities shell">
       <p class="section-index">03 / THE CONTRACT</p>
       <div class="capability-grid"><article><span>01</span><h3>Opaque oracle</h3><p>No problem name, source code, known optimum, or verifier is handed to the agent.</p></article><article><span>02</span><h3>Numerical tools</h3><p>Trust-region models, polling, line search, coordinate search, Newton steps, and geometry repair are exposed through bounded calls.</p></article><article><span>03</span><h3>Harness boundary</h3><p>Provider clients and external harnesses can own authentication and transport without changing the kernel contract.</p></article><article><span>04</span><h3>Traceable result</h3><p>Evaluation history, model activity, tool calls, and termination state stay separate and auditable.</p></article></div>
     </section>
-    <section class="solver-duality shell"><div><p class="eyebrow">THE OTHER SIDE OF THE LOOP</p><h2>Every run becomes<br><em>evidence in the Bench.</em></h2></div><a class="button button-primary" href="../bench/">Open NextEval Bench <span aria-hidden="true">↗</span></a></section>
+    <section class="solver-duality shell"><div><p class="eyebrow">EVALUATION / OF AGENTS</p><h2>Optimize a function.<br><em>Evaluate an agent.</em></h2><p class="duality-copy">NextEval Bench compares how different agents use their observations and evaluation budgets to optimize.</p></div><a class="button button-primary" href="../bench/">Open NextEval Bench <span aria-hidden="true">↗</span></a></section>
   </main>
-  <footer class="site-footer shell"><span>© 2026 NextEval</span><span>Solver source and documentation</span><a href="https://github.com/NextEval/nexteval" target="_blank" rel="noopener">GitHub <span aria-hidden="true">↗</span></a></footer>
+  <footer class="site-footer shell"><span>© 2026 NextEval Solver</span><span>Next evaluation · for solvers. / of agents.</span><a href="https://github.com/NextEval/nexteval" target="_blank" rel="noopener">GitHub <span aria-hidden="true">↗</span></a></footer>
   <script src="../site.js"></script>
 </body>
 </html>
