@@ -8,28 +8,32 @@
   <link rel="icon" type="image/svg+xml" href="assets/brand/nexteval.svg">
   <link rel="alternate icon" href="assets/brand/favicon.ico">
   <link rel="apple-touch-icon" sizes="180x180" href="assets/brand/apple-touch-icon.png">
-  <link rel="stylesheet" href="style.css?v=home-1">
-  <link rel="stylesheet" href="history.css?v=clarity-5">
-  <link rel="stylesheet" href="home.css?v=home-4">
-  <link rel="stylesheet" href="suite.css?v=slogan-1">
+  <link rel="stylesheet" href="../site.css?v=bench-1">
   <link rel="stylesheet" href="../slogan.css?v=2">
+  <link rel="stylesheet" href="bench.css?v=1">
   <script src="vendor/lucide.min.js" defer></script>
-  <script src="app.js?v=home-1" type="module"></script>
+  <script src="app.js?v=bench-1" type="module"></script>
 </head>
 <body>
-  <header class="topbar"><a class="brand" href="../"><img class="brand-mark" src="assets/brand/nexteval-on-dark.svg" width="24" height="24" alt=""> NextEval <span>Bench</span></a><div class="product-switch" aria-label="NextEval products"><a href="../solver/">Solver</a><a class="active" href="./">Bench</a></div><nav aria-label="Main"><a href="#home" data-route="home">Home</a><a href="#ranking" data-route="ranking">Ranking</a><a href="#profiles" data-route="profiles">Profiles</a><a href="#tasks" data-route="tasks">Tasks</a></nav><a class="run-command" href="#tasks"><i data-lucide="terminal" aria-hidden="true"></i> Run</a></header>
-  <main>
-    <div id="archive-controls">
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <a class="site-brand" href="../"><img src="assets/brand/nexteval-on-dark.svg" width="28" height="28" alt="">NextEval</a>
+    <nav class="site-nav" aria-label="NextEval"><a href="../">Overview</a><a href="../solver/">Solver</a><a class="active" href="./" aria-current="page">Bench</a><a href="https://github.com/NextEval" target="_blank" rel="noopener">GitHub <span aria-hidden="true">↗</span></a></nav>
+  </header>
+  <div class="bench-nav-band"><div class="bench-nav shell"><a class="bench-wordmark" href="#home">Bench</a><nav aria-label="Bench"><a href="#home" data-route="home">Home</a><a href="#ranking" data-route="ranking">Ranking</a><a href="#profiles" data-route="profiles">Profiles</a><a href="#tasks" data-route="tasks">Tasks</a></nav></div></div>
+  <main id="main" class="shell" tabindex="-1">
+    <div id="archive-controls" hidden>
+      <div class="archive-heading"><p class="eyebrow">NEXTEVAL BENCH / RESEARCH ARCHIVE</p><h1 id="archive-title">Evaluation profiles</h1><p id="archive-description">From a single problem to a shared comparison.</p></div>
       <div class="archive-caption"><span class="status-tag">TASK CATALOG</span><span>S2MPJ numerical evidence · not a live Harbor leaderboard.</span></div>
       <div class="filter-bar">
         <div class="field archive-feature-field"><label for="archive-feature">Feature</label><select id="archive-feature"><option value="perturbed_x0">Perturbed start</option><option value="perturbed_x0+noisy">Perturbed start + noise</option></select></div>
-        <div class="field"><label for="archive-version">Version</label><select id="archive-version" disabled><option>2026-09 archive</option></select></div>
+        <div class="field"><label for="archive-version">Archive</label><output id="archive-version">2026-09</output></div>
         <div class="field study-field"><label for="study">Aggregate comparison</label><select id="study"></select></div>
-        <div class="field"><label for="archive-dimension">Dimension</label><select id="archive-dimension" disabled><option>1–5</option></select></div>
-        <div class="field"><label for="archive-budget">Budget</label><select id="archive-budget" disabled><option>50 × n</option></select></div>
+        <div class="field"><label for="archive-dimension">Dimension</label><output id="archive-dimension">1–5</output></div>
+        <div class="field"><label for="archive-budget">Budget</label><output id="archive-budget">50 × n</output></div>
       </div>
       <div class="result-meta"><span id="result-facts"></span><a class="text-link" href="assets/catalog/index.json" download>Catalog JSON <i data-lucide="download" aria-hidden="true"></i></a></div>
-      <details class="participant-picker comparison-picker" open><summary>Comparison solvers <span id="comparison-count"></span></summary>
+      <details class="participant-picker comparison-picker"><summary>Comparison solvers <span id="comparison-count"></span></summary>
         <fieldset id="comparison-solvers" aria-label="Comparison solvers"></fieldset>
         <p class="selection-help">Membership changes the reference, targets, profiles and scores after applying. Clicking a chart legend only hides or shows a curve; it never changes the comparison.</p>
         <div class="comparison-actions"><button class="primary" id="comparison-apply" title="Apply solver membership and recompute the reference, profiles and scores"><i data-lucide="check" aria-hidden="true"></i> Apply comparison</button><button class="icon-button" id="comparison-all" title="Select all solvers" aria-label="Select all solvers"><i data-lucide="list-checks" aria-hidden="true"></i></button><button class="icon-button" id="comparison-default" title="Reset solver selection" aria-label="Reset solver selection"><i data-lucide="rotate-ccw" aria-hidden="true"></i></button><button class="icon-button" id="share-view" title="Copy reproducible view link" aria-label="Copy reproducible view link"><i data-lucide="link" aria-hidden="true"></i></button><span id="comparison-status" role="status" aria-live="polite"></span></div>
@@ -38,8 +42,9 @@
     </div>
     <section id="home" class="page home-page">
       <div class="home-hero">
+        <div class="bench-hero-art" aria-hidden="true"><img src="assets/brand/decision-field.png" alt="" width="1672" height="941"></div>
         <div class="home-copy">
-          <div class="home-kicker">AGENT EVALUATION THROUGH BLACK-BOX OPTIMIZATION</div>
+          <div class="home-kicker">BLACK-BOX OPTIMIZATION / AGENT EVALUATION</div>
           <h1>NextEval <span>Bench</span></h1>
           <h2 class="evaluation-slogan evaluation-slogan--compact evaluation-slogan--bench" aria-label="Next evaluation for solvers. Next evaluation of agents.">
             <span class="slogan-next">NEXT</span>
@@ -53,16 +58,11 @@
           <div class="home-actions"><a class="primary home-button" href="#profiles"><i data-lucide="bar-chart-3" aria-hidden="true"></i> Explore results</a><a class="secondary home-button" href="#tasks"><i data-lucide="terminal" aria-hidden="true"></i> Configure a task</a></div>
           <p class="home-note">Research preview <span aria-hidden="true">/</span> S2MPJ tasks <span aria-hidden="true">/</span> OptiProfiler evaluation</p>
         </div>
-        <div class="home-equation" aria-label="A sequential agent observes evaluated points and chooses the next point">
-          <div class="trajectory-head"><span>SEQUENTIAL DECISION FIELD</span><span>STATE k → k + 1</span></div>
-          <div class="decision-field" aria-hidden="true">
-            <img class="decision-field-art" src="assets/brand/decision-field.png" alt="" width="1672" height="941">
-            <span class="field-label field-history"><span class="field-math">H<sub>k</sub></span><span class="field-divider">/</span><span>OBSERVATIONS</span></span>
-            <span class="field-label field-next">NEW QUERY</span>
-            <div class="path-annotation path-traditional"><span class="path-swatch"></span><span>Traditional search</span><strong>stalls</strong></div>
-            <div class="path-annotation path-nexteval"><span class="path-swatch"></span><span>NextEval</span><strong>re-plans</strong></div>
-            <div class="agent-checkpoint"><span class="checkpoint-ring"></span><span class="checkpoint-copy"><strong>agent checkpoint</strong><small>history → strategy shift</small></span></div>
-          </div>
+      </div>
+      <p class="home-archive-label">FEATURED ARCHIVE / R2 <span>Experimental settings, not limits of the benchmark.</span></p>
+      <div class="home-stats"><div><span class="home-stat-value">92</span><span>unconstrained S2MPJ problems</span></div><div><span class="home-stat-value">2</span><span>feature conditions</span></div><div><span class="home-stat-value">3</span><span>archived repetitions</span></div><div><span class="home-stat-value">50 × n</span><span>evaluation budget</span></div></div>
+      <section class="home-visual" aria-label="The NextEval Bench evaluation environment">
+        <div class="visual-topline"><div><p class="eyebrow">01 / THE EVALUATION</p><h2>From a decision<br><em>to evidence.</em></h2></div>
           <div class="trajectory-formula" aria-label="The evaluated history maps to the next query">
             <math class="trajectory-math" display="block">
               <semantics>
@@ -71,11 +71,7 @@
               </semantics>
             </math>
           </div>
-          <div class="trajectory-foot"><span>HISTORY → STATE → NEXT QUERY</span><span>one continuous session</span></div>
         </div>
-      </div>
-        <div class="home-visual" aria-label="The NextEval Bench evaluation environment">
-          <div class="visual-topline"><h2>From a decision to evidence.</h2><span>ONE CONTINUOUS AGENT SESSION</span></div>
           <div class="flow-map">
             <div class="flow-node flow-agent"><span class="flow-number">01</span><div><strong>Agent</strong><small>A harness and model select tools and sampling actions.</small></div><i data-lucide="bot" aria-hidden="true"></i></div>
             <div class="flow-connector"><span>tool call</span><i data-lucide="arrow-down" aria-hidden="true"></i></div>
@@ -84,14 +80,12 @@
             <div class="flow-node flow-trace"><span class="flow-number">03</span><div><strong>Trajectory</strong><small>Record evaluated points and values, then compare evaluation efficiency.</small></div><i data-lucide="route" aria-hidden="true"></i></div>
           </div>
           <div class="visual-foot"><span>Observations return to the same agent session.</span><span>Problem × feature × participant × repetition</span></div>
-        </div>
-      <p class="home-archive-label">FEATURED ARCHIVE / R2 <span>Experimental settings, not limits of the benchmark.</span></p>
-      <div class="home-stats"><div><span class="home-stat-value">92</span><span>unconstrained S2MPJ problems</span></div><div><span class="home-stat-value">2</span><span>feature conditions</span></div><div><span class="home-stat-value">3</span><span>archived repetitions</span></div><div><span class="home-stat-value">50 × n</span><span>evaluation budget</span></div></div>
+      </section>
       <div class="home-grid"><a class="home-card" href="#profiles"><span class="home-card-index">01 / RESULTS</span><h2>Evaluation profiles</h2><p>Compare performance and data profiles under a fixed, auditable comparison set. Membership and visual visibility are separate.</p><span class="home-card-link">Open profiles <i data-lucide="arrow-up-right" aria-hidden="true"></i></span></a><a class="home-card" href="#profiles?feature=perturbed_x0%2Bnoisy"><span class="home-card-index">02 / EVIDENCE</span><h2>Problem histories</h2><p>Inspect the actual best-so-far trajectory, repetition, termination status and source-local evidence for each problem.</p><span class="home-card-link">Inspect histories <i data-lucide="arrow-up-right" aria-hidden="true"></i></span></a><a class="home-card" href="#tasks"><span class="home-card-index">03 / REPRODUCE</span><h2>Run a task</h2><p>Generate a standard task and participant configuration for a local Harbor session. The site never starts paid jobs.</p><span class="home-card-link">Build a run plan <i data-lucide="arrow-up-right" aria-hidden="true"></i></span></a></div>
       <div class="home-footer-line"><span>Next evaluation. For solvers. Of agents.</span><span><a href="../solver/">NextEval Solver</a> · <a href="#profiles">Research archive</a> · <a href="https://github.com/NextEval/nexteval-bench" target="_blank" rel="noopener">Source protocol</a></span></div>
     </section>
     <section id="tasks" class="page" hidden>
-      <div class="section-heading task-heading"><div><h1>Tasks</h1><p class="muted">Development protocol · one independent Harbor session per instance.</p></div><button class="icon-button" id="share-config" title="Copy configuration link" aria-label="Copy configuration link"><i data-lucide="link" aria-hidden="true"></i></button></div>
+      <div class="section-heading task-heading"><div><p class="eyebrow">NEXTEVAL BENCH / CONFIGURATION</p><h1>Tasks</h1><p class="muted">One problem or a problem suite. One independent Harbor session per instance.</p></div><button class="icon-button" id="share-config" title="Copy configuration link" aria-label="Copy configuration link"><i data-lucide="link" aria-hidden="true"></i></button></div>
       <div class="mode-tabs" role="tablist" aria-label="Task type"><button role="tab" aria-selected="true" data-mode="single"><span>01</span> Single function</button><button role="tab" aria-selected="false" data-mode="suite"><span>02</span> Problem suite</button></div>
       <div class="run-grid">
         <form id="configuration" novalidate>
@@ -124,15 +118,15 @@
       </div>
 
     </section>
-    <section id="ranking" class="page">
-      <div class="section-heading"><h1>Profile scores</h1><span class="small-label">HISTORY PERFORMANCE · HIGHER IS BETTER</span></div>
+    <section id="ranking" class="page" hidden>
+      <div class="section-heading"><h2>Profile scores</h2><span class="small-label">HISTORY PERFORMANCE · HIGHER IS BETTER</span></div>
       <div class="table-scroll"><table class="ranking-table"><thead><tr><th>Rank</th><th>Participant</th><th>Profile score</th></tr></thead><tbody id="score-rows"></tbody></table></div>
       <p id="result-caveat" class="caveat"></p>
       <div class="section-footer"><span>Scores belong to the named comparison, not a pooled cross-configuration leaderboard.</span><a class="text-link" href="#profiles">Profiles <i data-lucide="arrow-right" aria-hidden="true"></i></a></div>
     </section>
     <section id="profiles" class="page" hidden>
       <section id="problem-histories" class="history-section" aria-labelledby="history-title">
-        <div class="section-heading"><h1 id="history-title">Problem histories</h1><div class="chart-downloads"><a id="history-data" class="text-link" download hidden>Task JSON</a></div></div>
+        <div class="section-heading"><h2 id="history-title">Problem histories</h2><div class="chart-downloads"><a id="history-data" class="text-link" download hidden>Task JSON</a></div></div>
         <div class="history-filters">
           <div class="field"><label for="history-problem">Problem</label><select id="history-problem" aria-label="History problem"></select></div>
           <div class="field"><label for="history-run">Repetition</label><select id="history-run"><option value="0">1 of 3</option><option value="1">2 of 3</option><option value="2">3 of 3</option></select></div>
@@ -155,7 +149,7 @@
     </section>
     <p id="archive-error" role="alert" hidden>Research assets could not be loaded. No ranking is available.</p>
   </main>
-  <footer><span>NextEval Bench <span class="muted">/ Research preview</span></span><a href="identity.html">Brand assets</a><a href="https://github.com/NextEval/nexteval-bench/blob/main/docs/session-v1.md" target="_blank" rel="noopener">Protocol</a><a href="https://github.com/NextEval/nexteval-bench" target="_blank" rel="noopener">Bench</a><a href="https://github.com/NextEval/nexteval-bench-website" target="_blank" rel="noopener">Website <i data-lucide="github"></i></a></footer>
+  <footer class="bench-footer shell"><span>NextEval Bench <span class="muted">/ Research preview</span></span><nav aria-label="Resources"><a href="identity.html">Brand assets</a><a href="https://github.com/NextEval/nexteval-bench/blob/main/docs/session-v1.md" target="_blank" rel="noopener">Protocol</a><a href="https://github.com/NextEval/nexteval-bench" target="_blank" rel="noopener">Bench code</a><a href="https://github.com/NextEval/nexteval.github.io" target="_blank" rel="noopener">Site source <i data-lucide="arrow-up-right" aria-hidden="true"></i></a></nav></footer>
   <div id="toast" role="status" aria-live="polite"></div>
 </body>
 </html>

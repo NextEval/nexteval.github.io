@@ -40,6 +40,13 @@ loading, and exercises the existing history and profile views. Set
 `SITE_TEST_ARTIFACTS`, or a temporary directory when unset.
 Set `SITE_BROWSER_CHANNEL=chrome` to use an installed Chrome browser.
 
+Run `node test/bench.cjs` for the Bench-specific checks: all four views at five
+viewport widths, readable type and chart axes, both archived features, every
+comparison group, matching legend line styles, solver selection, and task JSON
+downloads. It accepts the same deployment and screenshot settings and uses an
+installed Chrome browser by default. Bench uses `site.css` for shared branding
+and `bench/bench.css` for its data and configuration views.
+
 ## Source repositories
 
 - Solver: https://github.com/NextEval/nexteval

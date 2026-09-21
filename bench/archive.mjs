@@ -1,4 +1,4 @@
-import {ScientificChart,formatNumber} from './charts.mjs?v=legend-3';
+import {ScientificChart,formatNumber} from './charts.mjs?v=bench-1';
 import {taskOptions,availableRuns,taskHistoryView,pairingStatus,participantLabel,participantGroups,participantEvidence} from './catalog.mjs?v=history-4';
 import {selectionMask,subsetPath,loadComparison,participantOrder} from './comparisons.mjs?v=comparison-1';
 
@@ -167,15 +167,22 @@ function updateProfileOptions(){
   chooseScope();
 }
 
-let initialization;
+let initialization,lastViewQuery;
 export async function renderArchive(){
   try{
-    readViewState();
     initialization??=(async()=>{catalog=await read('assets/catalog/index.json');studies=await read('assets/studies.json');comparisons=await read('assets/comparisons/index.json');
       if(!comparisons.complete)throw new Error('Incomplete profile export');
-      $('catalog-coverage').textContent=`${catalog.counts.problems} problems, ${catalog.counts.tasks} problem-feature tasks, ${catalog.counts.runs} runs from ${catalog.counts.sources} numeric archives. ${catalog.scope}.`;
-      updateTaskOptions();updateProfileOptions();if(viewState.run&&Number.isInteger(Number(viewState.run)))$('history-run').value=viewState.run;showTask();})();
+      $('catalog-coverage').textContent=`${catalog.counts.problems} problems, ${catalog.counts.tasks} problem-feature tasks, ${catalog.counts.runs} runs from ${catalog.counts.sources} numeric archives. ${catalog.scope}.`;})();
     await initialization;
+    const query=location.hash.split('?')[1]||'';
+    // Reapply explicit view links, while preserving manual selections between tabs.
+    if(lastViewQuery===undefined||(query&&query!==lastViewQuery)){
+      readViewState();updateTaskOptions();updateProfileOptions();
+      if(viewState.run&&Number.isInteger(Number(viewState.run)))$('history-run').value=viewState.run;
+      showTask();
+      document.querySelectorAll('[data-plot]').forEach(b=>b.setAttribute('aria-selected',String(b.dataset.plot===plot)));
+    }
+    lastViewQuery=query;
   }catch(error){
     initialization=null;
     $('archive-error').textContent=location.protocol==='file:'

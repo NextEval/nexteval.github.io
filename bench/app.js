@@ -1,5 +1,5 @@
 import {defaults,validate,documents,commandText} from './config.mjs';
-import {renderArchive} from './archive.mjs?v=home-1';
+import {renderArchive} from './archive.mjs?v=bench-1';
 let config={...defaults}, toastTimer;
 const $=id=>document.getElementById(id);
 function iconify(){window.lucide?.createIcons();}
@@ -27,7 +27,29 @@ function render(){
     $('commands').textContent=commandText(config);$('json-preview').textContent=JSON.stringify(docs.task,null,2);
   }catch(error){$('form-error').textContent=error.message;$('form-error').hidden=false;for(const id of ['download-task','download-agent','copy-command','share-config'])$(id).disabled=true;}
 }
-function route(){const name=location.hash.slice(1).split('?')[0]||'home';const alias={run:'tasks',results:'ranking',protocol:'tasks','problem-histories':'profiles'};const resolved=alias[name]||name;const selected=['home','ranking','profiles','tasks'].includes(resolved)?resolved:'home';document.querySelectorAll('.page').forEach(s=>s.hidden=s.id!==selected);document.querySelectorAll('[data-route]').forEach(a=>a.classList.toggle('active',a.dataset.route===selected));$('archive-controls').hidden=selected==='tasks'||selected==='home';$('archive-error').hidden=true;if(selected==='ranking'||selected==='profiles')renderArchive();if(name==='problem-histories')$('problem-histories').scrollIntoView();}
+function route(){
+  const name=location.hash.slice(1).split('?')[0]||'home';
+  const alias={run:'tasks',results:'ranking',protocol:'tasks','problem-histories':'profiles'};
+  const resolved=alias[name]||name;
+  const selected=['home','ranking','profiles','tasks'].includes(resolved)?resolved:'home';
+  document.querySelectorAll('.page').forEach(s=>s.hidden=s.id!==selected);
+  document.querySelectorAll('[data-route]').forEach(a=>{
+    const active=a.dataset.route===selected;
+    a.classList.toggle('active',active);
+    if(active)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');
+  });
+  $('archive-title').textContent=selected==='ranking'?'Ranking':'Evaluation profiles';
+  $('archive-description').textContent=selected==='ranking'
+    ?'Evaluation efficiency, ranked within a shared comparison.'
+    :'From a single problem to a shared comparison.';
+  $('archive-controls').hidden=selected==='tasks'||selected==='home';
+  $('archive-error').hidden=true;
+  if(selected==='ranking'||selected==='profiles')renderArchive();
+  if(name==='problem-histories')$('problem-histories').scrollIntoView();
+}
+document.querySelector('.skip-link').addEventListener('click',event=>{
+  event.preventDefault();$('main').focus();$('main').scrollIntoView();
+});
 $('configuration').addEventListener('input',render);$('configuration').addEventListener('submit',e=>e.preventDefault());
 $('harness').addEventListener('change',()=>{if($('harness').value==='codex')$('model').value='openai/gpt-5.6-sol';else if($('harness').value==='claude-code')$('model').value='anthropic/claude-opus-5';render();});
 document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>{if(config.mode===b.dataset.mode)return;config.mode=b.dataset.mode;$('budget').value=config.mode==='suite'?50:100;render();}));
