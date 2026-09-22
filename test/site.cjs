@@ -7,7 +7,7 @@ const { spawnSync } = require('node:child_process');
 const { chromium } = require('playwright');
 
 const root = path.resolve(__dirname, '..');
-const label = 'Next evaluation for solvers. Next evaluation of agents.';
+const label = 'Next evaluation for solvers; next evaluation of agents';
 const mime = { '.html': 'text/html', '.css': 'text/css', '.js': 'text/javascript', '.mjs': 'text/javascript', '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png', '.gz': 'application/gzip' };
 
 async function main() {
@@ -44,6 +44,9 @@ async function main() {
         const name = route === '/' ? 'overview' : route.includes('/api/') ? 'api' : route.includes('/guide/') ? 'guide' : route.includes('identity') ? 'brand' : route.split('/')[1];
         await page.screenshot({ path: path.join(output, `${name}-${width}.png`) });
         if (!['api', 'guide'].includes(name)) assert.equal(await page.locator('.evaluation-slogan').getAttribute('aria-label'), label);
+        const punctuatedHeadings = await page.locator('h1, h2, h3, h4, h5, h6, .site-footer > span, .home-footer-line > span:first-child').evaluateAll(elements =>
+          elements.filter(element => /[.\u3002]/.test(element.textContent)).map(element => element.textContent.trim()));
+        assert.deepEqual(punctuatedHeadings, [], `${name}: headings and slogans must not contain full stops`);
         assert.equal(await page.locator('h1').filter({ visible: true }).count(), 1);
         assert.equal(await page.locator('.product-switcher a[href*="/api"]').count(), 0);
         assert.equal(await page.locator('.product-nav-band, .bench-nav-band').count(), 0);
