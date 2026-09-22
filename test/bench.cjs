@@ -52,7 +52,8 @@ async function main() {
         if (['ranking', 'profiles'].includes(view)) await waitForResults();
         if (view === 'profiles') await page.locator('#history-chart .chart-frame svg').waitFor();
         assert.equal(await page.locator('h1:visible').count(), 1);
-        assert.equal(await page.locator('.bench-nav [aria-current="page"]').getAttribute('data-route'), view);
+        assert.equal(await page.locator('.context-switcher [aria-current="page"]').getAttribute('data-route'), view);
+        assert.equal((await page.locator('[data-current-view]').textContent()).toLowerCase(), view);
         const layout = await page.evaluate(() => {
           const small = [], clippedTicks = [];
           const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);

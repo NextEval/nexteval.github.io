@@ -8,19 +8,20 @@
   <link rel="icon" type="image/svg+xml" href="assets/brand/nexteval.svg">
   <link rel="alternate icon" href="assets/brand/favicon.ico">
   <link rel="apple-touch-icon" sizes="180x180" href="assets/brand/apple-touch-icon.png">
-  <link rel="stylesheet" href="../site.css?v=bench-1">
+  <link rel="stylesheet" href="../site.css?v=path-nav-1">
   <link rel="stylesheet" href="../slogan.css?v=2">
-  <link rel="stylesheet" href="bench.css?v=scoped-docs-1">
+  <link rel="stylesheet" href="bench.css?v=path-nav-1">
   <script src="vendor/lucide.min.js" defer></script>
+  <script src="../navigation.js?v=1" defer></script>
   <script src="app.js?v=bench-1" type="module"></script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
-  <header class="site-header">
-    <a class="site-brand" href="../"><img src="assets/brand/nexteval-on-dark.svg" width="28" height="28" alt="">NextEval</a>
-    <nav class="site-nav" aria-label="NextEval"><a href="../">Overview</a><a href="../solver/">Solver</a><a class="active" href="./" aria-current="page">Bench</a><a href="https://github.com/NextEval" target="_blank" rel="noopener">GitHub <span aria-hidden="true">↗</span></a></nav>
+  <header class="site-header" data-product="bench">
+    <a class="site-brand" href="../" aria-label="NextEval home"><img src="assets/brand/nexteval-on-dark.svg" width="30" height="30" alt=""><span>NextEval</span></a>
+    <div class="header-path"><span class="path-divider" aria-hidden="true">/</span><details class="nav-switcher product-switcher"><summary>Bench <i data-lucide="chevron-down" aria-hidden="true"></i></summary><nav class="switcher-panel" aria-label="Products"><a href="../">Overview</a><a href="../solver/">Solver</a><a href="./" aria-current="location">Bench</a><a class="menu-external" href="https://github.com/NextEval" target="_blank" rel="noopener">GitHub <i data-lucide="arrow-up-right" aria-hidden="true"></i></a></nav></details><span class="path-divider" aria-hidden="true">/</span><details class="nav-switcher context-switcher"><summary><span data-current-view>Home</span><i data-lucide="chevron-down" aria-hidden="true"></i></summary><nav class="switcher-panel" aria-label="Bench"><a href="#home" data-route="home" aria-current="page">Home</a><a href="#ranking" data-route="ranking">Ranking</a><a href="#profiles" data-route="profiles">Profiles</a><a href="#tasks" data-route="tasks">Tasks</a><a class="menu-external" href="https://github.com/NextEval/nexteval-bench/blob/main/docs/session-v1.md" target="_blank" rel="noopener">Task protocol <i data-lucide="arrow-up-right" aria-hidden="true"></i></a></nav></details></div>
+    <a class="header-source" href="https://github.com/NextEval" target="_blank" rel="noopener">GitHub <i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
   </header>
-  <div class="bench-nav-band"><div class="bench-nav shell"><a class="bench-wordmark" href="#home">Bench</a><nav aria-label="Bench"><a href="#home" data-route="home">Home</a><a href="#ranking" data-route="ranking">Ranking</a><a href="#profiles" data-route="profiles">Profiles</a><a href="#tasks" data-route="tasks">Tasks</a><a href="https://github.com/NextEval/nexteval-bench/blob/main/docs/session-v1.md" target="_blank" rel="noopener">Task protocol <span aria-hidden="true">&#8599;</span></a></nav></div></div>
   <main id="main" class="shell" tabindex="-1">
     <div id="archive-controls" hidden>
       <div class="archive-heading"><p class="eyebrow">NEXTEVAL BENCH / RESEARCH ARCHIVE</p><h1 id="archive-title">Evaluation profiles</h1><p id="archive-description">From a single problem to a shared comparison.</p></div>

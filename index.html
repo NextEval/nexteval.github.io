@@ -7,8 +7,10 @@
   <meta name="theme-color" content="#101516">
   <title>NextEval — Solver and Bench</title>
   <link rel="icon" type="image/svg+xml" href="site-assets/brand/nexteval-on-dark.svg">
-  <link rel="stylesheet" href="site.css?v=slogan-clear-1">
+  <link rel="stylesheet" href="site.css?v=path-nav-1">
   <link rel="stylesheet" href="slogan.css?v=2">
+  <script src="bench/vendor/lucide.min.js" defer></script>
+  <script src="navigation.js?v=1" defer></script>
 </head>
 <body>
   <header class="site-header">
@@ -16,12 +18,8 @@
       <img src="site-assets/brand/nexteval-on-dark.svg" alt="" width="30" height="30">
       <span>NextEval</span>
     </a>
-    <nav class="site-nav" aria-label="Primary navigation">
-      <a class="active" href="./">Overview</a>
-      <a href="solver/">Solver</a>
-      <a href="bench/">Bench</a>
-      <a href="https://github.com/NextEval" target="_blank" rel="noopener">GitHub <span aria-hidden="true">↗</span></a>
-    </nav>
+    <div class="header-path"><span class="path-divider" aria-hidden="true">/</span><details class="nav-switcher product-switcher"><summary>Overview <i data-lucide="chevron-down" aria-hidden="true"></i></summary><nav class="switcher-panel" aria-label="Products"><a href="./" aria-current="page">Overview</a><a href="solver/">Solver</a><a href="bench/">Bench</a><a class="menu-external" href="https://github.com/NextEval" target="_blank" rel="noopener">GitHub <i data-lucide="arrow-up-right" aria-hidden="true"></i></a></nav></details></div>
+    <a class="header-source" href="https://github.com/NextEval" target="_blank" rel="noopener">GitHub <i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
   </header>
   <main>
     <section class="hero brand-hero">

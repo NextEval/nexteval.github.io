@@ -17,10 +17,13 @@ own solver. The Solver page emphasizes cyan; the Bench emphasizes gold.
 - /solver/guide/ — Solver User Guide with runnable provider examples and explicit research-adapter boundaries.
 - /bench/ — the interactive benchmark explorer and archived evidence portal.
 
-The global navigation contains products, not a shared "API" entry. Solver's
-Python API belongs in Solver navigation. Bench's task setup and task protocol
-belong in Bench navigation. Model provider APIs are external inference services,
-not either product's public interface; their credentials stay on the runner host.
+The single-row header is a switchable path: NextEval / product / current page.
+Its first disclosure switches products; the second switches pages within the
+current product. Solver's Python API belongs in Solver navigation. Bench's task
+setup and task protocol belong in Bench navigation. Model provider APIs are
+external inference services, not either product's public interface; their
+credentials stay on the runner host. On small screens the wordmark becomes the
+NextEval symbol and GitHub remains available in the product menu.
 
 The Solver and Bench repositories remain independent. This repository is a
 static presentation layer only: it does not run agents, call providers, or

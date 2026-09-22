@@ -45,11 +45,12 @@ async function main() {
         await page.screenshot({ path: path.join(output, `${name}-${width}.png`) });
         if (!['api', 'guide'].includes(name)) assert.equal(await page.locator('.evaluation-slogan').getAttribute('aria-label'), label);
         assert.equal(await page.locator('h1').filter({ visible: true }).count(), 1);
-        assert.equal(await page.locator('.site-nav').getByRole('link', { name: /API/i }).count(), 0);
+        assert.equal(await page.locator('.product-switcher a[href*="/api"]').count(), 0);
+        assert.equal(await page.locator('.product-nav-band, .bench-nav-band').count(), 0);
         if (route.startsWith('/solver/')) {
-          assert.equal(await page.locator('.site-nav .active').textContent(), 'Solver');
-          const solverNav = page.getByRole('navigation', { name: 'Solver navigation', exact: true });
-          assert.equal(await solverNav.getByRole('link', { name: 'Python API', exact: true }).count(), 1);
+          assert.equal((await page.locator('.product-switcher summary').textContent()).trim(), 'Solver');
+          const solverNav = page.getByRole('navigation', { name: 'Solver navigation', exact: true, includeHidden: true });
+          assert.equal(await solverNav.getByRole('link', { name: 'Python API', exact: true, includeHidden: true }).count(), 1);
           assert.equal(await solverNav.locator('[aria-current="page"]').textContent(), name === 'api' ? 'Python API' : name === 'guide' ? 'User Guide' : 'Overview');
         }
         const metrics = await page.evaluate(() => {
@@ -67,16 +68,18 @@ async function main() {
             while (walker.nextNode()) {
               const text = walker.currentNode;
               const parent = text.parentElement;
-              if (!text.textContent.trim() || !parent.getClientRects().length || getComputedStyle(parent).visibility === 'hidden') continue;
+              if (!text.textContent.trim() || !parent.checkVisibility() || getComputedStyle(parent).visibility === 'hidden') continue;
               const size = parseFloat(getComputedStyle(parent).fontSize);
               if (size < 14) smallText.push({ text: text.textContent.trim().slice(0, 50), size });
             }
           }
           return {
             width: innerWidth, scroll: document.documentElement.scrollWidth,
-            navOverflow: [...document.querySelectorAll('.site-header a, .product-nav a, .bench-nav a')].some(link => {
+            headerHeight: document.querySelector('.site-header')?.getBoundingClientRect().height,
+            navOverflow: [...document.querySelectorAll('.site-header > a, .site-header summary')].some(link => {
+              if (!link.checkVisibility()) return false;
               const r = link.getBoundingClientRect();
-              return r.bottom > link.closest('.site-header, .product-nav, .bench-nav').getBoundingClientRect().bottom + 1;
+              return r.bottom > link.closest('.site-header').getBoundingClientRect().bottom + 1;
             }),
             hero: document.querySelector('.brand-hero') ? (() => {
               const field = document.querySelector('.hero-field');
@@ -104,6 +107,7 @@ async function main() {
         if (metrics.slogan && (metrics.slogan.right > width || metrics.inkRight > metrics.endings.x - 2)) faults.push(`${prefix}: slogan collision ${JSON.stringify(metrics)}`);
         if (metrics.smallText.length) faults.push(`${prefix}: text below 14px ${JSON.stringify(metrics.smallText)}`);
         if (metrics.navOverflow) faults.push(`${prefix}: navigation extends below its header`);
+        if (metrics.headerHeight && metrics.headerHeight > 75) faults.push(`${prefix}: header wraps to multiple rows`);
         assert.equal(await page.locator('.header-mark').count(), 0);
         if (metrics.hero) {
           const hero = metrics.hero;
@@ -114,10 +118,23 @@ async function main() {
         const text = await page.locator('body').innerText();
         if (/One loop|Two public surfaces|THE OTHER SIDE OF THE LOOP/.test(text)) faults.push(`${prefix}: stale copy`);
         results.push({ page: name, width, scrollWidth: metrics.scroll, sloganWidth: metrics.slogan?.width });
+        for (const switcher of await page.locator('.nav-switcher').all()) {
+          await switcher.locator('summary').click();
+          assert(await switcher.locator('nav').isVisible());
+          const bounds = await switcher.locator('nav').boundingBox();
+          assert(bounds.x >= 0 && bounds.x + bounds.width <= width, `${prefix}: dropdown overflow`);
+          if (name === 'api' && [390, 1440].includes(width) && await switcher.locator('[data-current-view]').count()) {
+            await page.screenshot({ path: path.join(output, `api-menu-${width}.png`) });
+          }
+          await page.keyboard.press('Escape');
+          assert.equal(await switcher.getAttribute('open'), null);
+          assert(await switcher.locator('summary').evaluate(el => el === document.activeElement));
+        }
       }
     }
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto(base + '/solver/');
+    await page.locator('.context-switcher summary').click();
     await page.getByRole('navigation', { name: 'Solver navigation', exact: true }).getByRole('link', { name: 'Python API', exact: true }).click();
     assert.match(page.url(), /\/solver\/api\/$/);
     assert.equal(await page.locator('h1').textContent(), 'Solver Python API');
@@ -157,11 +174,30 @@ async function main() {
     await page.goto(base + '/bench/#tasks');
     await page.locator('#configuration').waitFor();
     assert.equal(await page.locator('#task-badge').innerText(), 'ONE ORACLE INSTANCE');
-    assert.equal(await page.getByRole('navigation', { name: 'Bench', exact: true }).getByRole('link', { name: /Task protocol/ }).getAttribute('href'), 'https://github.com/NextEval/nexteval-bench/blob/main/docs/session-v1.md');
+    assert.equal(await page.locator('[data-current-view]').textContent(), 'Tasks');
+    assert.equal(await page.getByRole('navigation', { name: 'Bench', exact: true, includeHidden: true }).getByRole('link', { name: /Task protocol/, includeHidden: true }).getAttribute('href'), 'https://github.com/NextEval/nexteval-bench/blob/main/docs/session-v1.md');
     await page.locator('.advanced summary').click();
     assert.equal(await page.getByLabel('Model provider authentication', { exact: true }).inputValue(), 'api_key');
     await page.getByRole('link', { name: 'Solver Python API', exact: true }).click();
     assert.match(page.url(), /\/solver\/api\/$/);
+    // Keyboard opening, product switching, same-document views and browser history.
+    await page.locator('.product-switcher summary').focus();
+    await page.keyboard.press('ArrowDown');
+    assert.equal(await page.evaluate(() => document.activeElement.textContent), 'Overview');
+    await page.getByRole('navigation', { name: 'Products', exact: true }).getByRole('link', { name: 'Bench', exact: true }).click();
+    assert.match(page.url(), /\/bench\/$/);
+    await page.locator('.context-switcher summary').click();
+    await page.getByRole('navigation', { name: 'Bench', exact: true }).getByRole('link', { name: 'Ranking', exact: true }).click();
+    await page.waitForFunction(() => document.querySelector('[data-current-view]').textContent === 'Ranking');
+    assert.equal(await page.locator('.context-switcher').getAttribute('open'), null);
+    await page.locator('.context-switcher summary').click();
+    await page.getByRole('navigation', { name: 'Bench', exact: true }).getByRole('link', { name: 'Tasks', exact: true }).click();
+    await page.waitForFunction(() => document.querySelector('[data-current-view]').textContent === 'Tasks');
+    await page.goBack();
+    await page.waitForFunction(() => document.querySelector('[data-current-view]').textContent === 'Ranking');
+    await page.locator('.context-switcher summary').click();
+    await page.locator('h1:visible').click();
+    assert.equal(await page.locator('.context-switcher').getAttribute('open'), null);
     await fs.writeFile(path.join(output, 'results.json'), JSON.stringify({ base, results, faults }, null, 2));
     console.log(JSON.stringify({ base, output, responsiveChecks: results.length, faults }, null, 2));
     assert.deepEqual(faults, []);
