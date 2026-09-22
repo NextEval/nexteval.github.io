@@ -13,7 +13,14 @@ own solver. The Solver page emphasizes cyan; the Bench emphasizes gold.
 
 - / — unified overview: solver and benchmark as one system with two views.
 - /solver/ — product and architecture page for the agentic derivative-free optimizer.
+- /solver/api/ — Solver Python API, with model provider setup in its own section.
+- /solver/guide/ — Solver User Guide with runnable provider examples and explicit research-adapter boundaries.
 - /bench/ — the interactive benchmark explorer and archived evidence portal.
+
+The global navigation contains products, not a shared "API" entry. Solver's
+Python API belongs in Solver navigation. Bench's task setup and task protocol
+belong in Bench navigation. Model provider APIs are external inference services,
+not either product's public interface; their credentials stay on the runner host.
 
 The Solver and Bench repositories remain independent. This repository is a
 static presentation layer only: it does not run agents, call providers, or
@@ -46,6 +53,11 @@ comparison group, matching legend line styles, solver selection, and task JSON
 downloads. It accepts the same deployment and screenshot settings and uses an
 installed Chrome browser by default. Bench uses `site.css` for shared branding
 and `bench/bench.css` for its data and configuration views.
+
+The Solver User Guide has a pinned, paid-call-free check: install its documented
+Solver revision into a clean environment, then run `python test/guide.py`.
+It uses only loopback HTTP fixtures. See `solver/guide/validation.md` for the
+verified scope and external-runner limitations.
 
 ## Source repositories
 

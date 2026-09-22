@@ -36,15 +36,22 @@ async function main() {
     const page = await browser.newPage({ reducedMotion: 'reduce' });
     page.on('pageerror', error => faults.push(error.message));
     page.on('response', response => { if (response.url().startsWith(base) && response.status() >= 400) faults.push(`${response.status()} ${response.url()}`); });
-    for (const route of ['/', '/solver/', '/solver/api/', '/bench/', '/bench/identity.html']) {
+    for (const route of ['/', '/solver/', '/solver/api/', '/solver/guide/', '/bench/', '/bench/identity.html']) {
       for (const width of [320, 375, 390, 768, 1000, 1280, 1440, 1920]) {
         await page.setViewportSize({ width, height: width <= 390 ? 844 : 900 });
         await page.goto(base + route, { waitUntil: 'networkidle' });
         await page.evaluate(() => document.fonts.ready);
-        const name = route === '/' ? 'overview' : route.includes('/api/') ? 'api' : route.includes('identity') ? 'brand' : route.split('/')[1];
+        const name = route === '/' ? 'overview' : route.includes('/api/') ? 'api' : route.includes('/guide/') ? 'guide' : route.includes('identity') ? 'brand' : route.split('/')[1];
         await page.screenshot({ path: path.join(output, `${name}-${width}.png`) });
-        if (name !== 'api') assert.equal(await page.locator('.evaluation-slogan').getAttribute('aria-label'), label);
+        if (!['api', 'guide'].includes(name)) assert.equal(await page.locator('.evaluation-slogan').getAttribute('aria-label'), label);
         assert.equal(await page.locator('h1').filter({ visible: true }).count(), 1);
+        assert.equal(await page.locator('.site-nav').getByRole('link', { name: /API/i }).count(), 0);
+        if (route.startsWith('/solver/')) {
+          assert.equal(await page.locator('.site-nav .active').textContent(), 'Solver');
+          const solverNav = page.getByRole('navigation', { name: 'Solver navigation', exact: true });
+          assert.equal(await solverNav.getByRole('link', { name: 'Python API', exact: true }).count(), 1);
+          assert.equal(await solverNav.locator('[aria-current="page"]').textContent(), name === 'api' ? 'Python API' : name === 'guide' ? 'User Guide' : 'Overview');
+        }
         const metrics = await page.evaluate(() => {
           const rect = selector => { const r = document.querySelector(selector).getBoundingClientRect(); return { x: r.x, y: r.y, right: r.right, bottom: r.bottom, width: r.width, height: r.height }; };
           const slogan = document.querySelector('.evaluation-slogan');
@@ -67,9 +74,9 @@ async function main() {
           }
           return {
             width: innerWidth, scroll: document.documentElement.scrollWidth,
-            navOverflow: [...document.querySelectorAll('.site-header a')].some(link => {
+            navOverflow: [...document.querySelectorAll('.site-header a, .product-nav a, .bench-nav a')].some(link => {
               const r = link.getBoundingClientRect();
-              return r.bottom > document.querySelector('.site-header').getBoundingClientRect().bottom + 1;
+              return r.bottom > link.closest('.site-header, .product-nav, .bench-nav').getBoundingClientRect().bottom + 1;
             }),
             hero: document.querySelector('.brand-hero') ? (() => {
               const field = document.querySelector('.hero-field');
@@ -111,19 +118,32 @@ async function main() {
     }
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto(base + '/solver/');
-    await page.getByRole('link', { name: 'API reference', exact: false }).click();
+    await page.getByRole('navigation', { name: 'Solver navigation', exact: true }).getByRole('link', { name: 'Python API', exact: true }).click();
     assert.match(page.url(), /\/solver\/api\/$/);
+    assert.equal(await page.locator('h1').textContent(), 'Solver Python API');
+    assert.equal(await page.locator('#model h2').textContent(), 'Model provider setup');
+    assert.match(await page.locator('#model').textContent(), /separate from the Solver Python API/);
     for (const id of ['quick-start', 'model', 'solve', 'options', 'result', 'integration']) {
       assert.equal(await page.locator(`#${id}`).count(), 1);
     }
-    for (const route of ['/solver/', '/solver/api/']) {
+    for (const route of ['/solver/', '/solver/api/', '/solver/guide/']) {
       await page.goto(base + route);
       for (const snippet of await page.locator('pre[data-language="python"]').allTextContents()) {
         const checked = spawnSync('python3', ['-c', 'import ast, sys; ast.parse(sys.stdin.read())'], { input: snippet, encoding: 'utf8' });
         assert.equal(checked.status, 0, checked.stderr || String(checked.error));
-        assert.match(snippet, /"model": "env"/);
+        if (!route.includes('/guide/')) assert.match(snippet, /"model": "env"/);
       }
     }
+    const brokenLinks = await page.evaluate(() => [...document.querySelectorAll('a[href^="#"]')].filter(a => !document.querySelector(a.getAttribute('href'))).map(a => a.getAttribute('href')));
+    assert.deepEqual(brokenLinks, []);
+    await page.context().grantPermissions(['clipboard-read', 'clipboard-write'], { origin: base });
+    const firstCode = await page.locator('pre').first().textContent();
+    await page.getByRole('button', { name: 'Copy Installation commands', exact: true }).click();
+    assert.equal(await page.evaluate(() => navigator.clipboard.readText()), firstCode);
+    const example = await page.request.get(base + '/solver/guide/examples/optimize.py');
+    assert.equal(example.status(), 200);
+    assert.match(await example.text(), /def make_problem/);
+    assert.equal((await page.request.get(base + '/solver/guide/validation.md')).status(), 200);
     await page.goto(base + '/bench/#profiles');
     await page.locator('#history-chart .chart-frame svg').waitFor({ timeout: 60000 });
     await page.locator('#profile-chart .chart-frame svg').waitFor({ timeout: 60000 });
@@ -137,6 +157,11 @@ async function main() {
     await page.goto(base + '/bench/#tasks');
     await page.locator('#configuration').waitFor();
     assert.equal(await page.locator('#task-badge').innerText(), 'ONE ORACLE INSTANCE');
+    assert.equal(await page.getByRole('navigation', { name: 'Bench', exact: true }).getByRole('link', { name: /Task protocol/ }).getAttribute('href'), 'https://github.com/NextEval/nexteval-bench/blob/main/docs/session-v1.md');
+    await page.locator('.advanced summary').click();
+    assert.equal(await page.getByLabel('Model provider authentication', { exact: true }).inputValue(), 'api_key');
+    await page.getByRole('link', { name: 'Solver Python API', exact: true }).click();
+    assert.match(page.url(), /\/solver\/api\/$/);
     await fs.writeFile(path.join(output, 'results.json'), JSON.stringify({ base, results, faults }, null, 2));
     console.log(JSON.stringify({ base, output, responsiveChecks: results.length, faults }, null, 2));
     assert.deepEqual(faults, []);

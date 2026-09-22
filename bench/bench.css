@@ -34,10 +34,11 @@ main { min-height: calc(100vh - 220px); padding-bottom: 44px; }
 .bench-nav-band { border-bottom: 1px solid var(--line); }
 .bench-nav { display: flex; align-items: center; gap: 42px; min-height: 60px; }
 .bench-wordmark { font-weight: 600; color: var(--gold); font-size: 18px; }
-.bench-nav nav { display: flex; align-self: stretch; gap: 28px; }
+.bench-nav nav { display: flex; align-self: stretch; flex-wrap: wrap; gap: 0 28px; }
 .bench-nav nav a { display: flex; align-items: center; min-height: 60px; border-bottom: 2px solid transparent; color: var(--muted); font-size: 15px; }
 .bench-nav nav a.active { color: var(--ink); border-bottom-color: var(--gold); }
 .bench-nav nav a:hover { color: var(--ink); }
+.bench-nav nav a span { margin-left: 5px; }
 .bench-footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 18px 32px; padding: 24px 0; border-top: 1px solid var(--line); font-size: 14px; color: var(--muted); }
 .bench-footer nav { display: flex; gap: 16px 24px; flex-wrap: wrap; }
 .bench-footer a { display: inline-flex; align-items: center; gap: 5px; }
@@ -230,7 +231,7 @@ table tbody tr:hover { background: var(--surface); }
 }
 @media (max-width: 700px) {
   .bench-nav { gap: 26px; min-height: 52px; flex-wrap: wrap; }
-  .bench-nav nav { gap: 22px; }
+  .bench-nav nav { gap: 0 22px; }
   .bench-nav nav a { min-height: 52px; font-size: 14px; }
   .bench-wordmark { display: none; }
   .home-hero { padding: 30px 0; }

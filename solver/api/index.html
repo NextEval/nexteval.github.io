@@ -3,27 +3,30 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="NextEval Python API: installation, model configuration, solve arguments, evaluation budgets, results, and custom agent integration.">
+  <meta name="description" content="NextEval Solver's Python API: solve, minimize, options and results. Model provider connections are configured separately; Bench task protocols belong to NextEval Bench.">
   <meta name="theme-color" content="#101516">
   <title>Python API | NextEval Solver</title>
   <link rel="icon" type="image/svg+xml" href="../../site-assets/brand/nexteval-on-dark.svg">
-  <link rel="stylesheet" href="../../site.css?v=readable-api-1">
+  <link rel="stylesheet" href="../../site.css?v=scoped-docs-2">
+  <script src="../../bench/vendor/lucide.min.js" defer></script>
+  <script src="../docs.js" defer></script>
 </head>
 <body class="api-page">
   <header class="site-header">
     <a class="site-brand" href="../../" aria-label="NextEval home"><img src="../../site-assets/brand/nexteval-on-dark.svg" alt="" width="30" height="30"><span>NextEval</span></a>
-    <nav class="site-nav" aria-label="Primary navigation"><a href="../../">Overview</a><a href="../">Solver</a><a href="../../bench/">Bench</a><a class="active" href="./" aria-current="page">API</a><a href="https://github.com/NextEval/nexteval">GitHub <span aria-hidden="true">&#8599;</span></a></nav>
+    <nav class="site-nav" aria-label="Primary navigation"><a href="../../">Overview</a><a class="active" href="../" aria-current="location">Solver</a><a href="../../bench/">Bench</a><a href="https://github.com/NextEval/nexteval">GitHub <span aria-hidden="true">&#8599;</span></a></nav>
   </header>
+  <div class="product-nav-band"><div class="product-nav shell"><a class="product-wordmark" href="../">Solver</a><nav aria-label="Solver navigation"><a href="../">Overview</a><a href="../guide/">User Guide</a><a class="active" href="./" aria-current="page">Python API</a></nav></div></div>
   <main class="api-shell shell">
     <header class="api-heading">
       <p class="eyebrow">NEXTEVAL SOLVER / PYTHON</p>
-      <h1>API reference</h1>
-      <p>An objective, a starting point, and an evaluation budget. One agent session chooses the next numerical action.</p>
+      <h1>Solver Python API</h1>
+      <p>Call <code>solve</code> or <code>minimize</code> from Python to optimize an objective. This is the Solver library interface, not a model provider API or a hosted Bench service.</p>
     </header>
     <div class="api-layout">
-      <nav class="api-toc" aria-label="API sections">
+      <nav class="api-toc" aria-label="Solver Python API sections">
         <a href="#quick-start">Quick start</a>
-        <a href="#model">Model configuration</a>
+        <a href="#model">Model provider setup</a>
         <a href="#solve">solve</a>
         <a href="#options">Options</a>
         <a href="#result">DFOResult</a>
@@ -32,9 +35,9 @@
       <div class="api-body">
         <section id="quick-start">
           <h2>Quick start</h2>
-          <p>Install from the public repository into your Python environment. The runtime dependency is NumPy.</p>
+          <p>For installation, complete examples and harness choices, start with the <a href="../guide/">Solver User Guide</a>. This reference targets Solver 1.0.0 at cb58fd7; its runtime dependency is NumPy.</p>
           <pre tabindex="0" aria-label="Install NextEval"><code>python -m pip install \
-  "git+https://github.com/NextEval/nexteval.git"</code></pre>
+  "git+https://github.com/NextEval/nexteval.git@cb58fd74901de2476fe15b60ee4cfc993ca04095"</code></pre>
           <p>Configure a tool-calling model as described <a href="#model">below</a>, then run:</p>
           <pre data-language="python" tabindex="0" aria-label="Python quick start"><code>import numpy as np
 from nexteval import solve
@@ -55,7 +58,9 @@ print(result.x, result.fun, result.nfev)
 print(result.status, result.message)</code></pre>
         </section>
         <section id="model">
-          <h2>Model configuration</h2>
+          <h2>Model provider setup</h2>
+          <p>The model provider API supplies model responses to the agent. Its endpoint, credentials, and model ID are separate from the Solver Python API above. An external harness may manage this connection itself.</p>
+          <p>See the <a href="../guide/#provider">User Guide's provider setup</a> for explicit OpenAI-compatible and Anthropic-compatible clients, or <a href="../guide/#routes">model and harness</a> for external sessions.</p>
           <p><code>model="env"</code> uses an Anthropic-compatible provider. Set your endpoint, model ID, and token in the local environment; the values below are placeholders.</p>
           <pre tabindex="0" aria-label="Provider environment variables"><code>export ANTHROPIC_BASE_URL="https://your-compatible-endpoint/v1"
 export ANTHROPIC_MODEL="your-model-id"
@@ -109,6 +114,7 @@ export ANTHROPIC_AUTH_TOKEN="your-token"</code></pre>
           <p>A <code>runner.run(task, gateway)</code> owns a complete task. A <code>policy.decide(observation, context)</code> owns a stepwise decision. Both use the same protected objective ledger and budget accounting.</p>
           <div class="api-resources"><a href="https://github.com/NextEval/nexteval/blob/main/docs/interop.md">Interoperability</a><a href="https://github.com/NextEval/nexteval/blob/main/docs/execution-modes.md">Execution modes</a><a href="https://github.com/NextEval/nexteval/blob/main/docs/trace-contract.md">Trace contract</a></div>
         </section>
+        <p>For benchmark tasks, participant configuration, and evaluation records, see <a href="../../bench/#tasks">Bench task setup</a> and the <a href="https://github.com/NextEval/nexteval-bench/blob/main/docs/session-v1.md">Bench task protocol</a>.</p>
         <p class="api-provenance">Reference checked against <a href="https://github.com/NextEval/nexteval/blob/cb58fd74901de2476fe15b60ee4cfc993ca04095/src/nexteval/api.py">Solver cb58fd7</a>. <a href="https://github.com/NextEval/nexteval/blob/main/docs/api.md">Latest source reference <span aria-hidden="true">&#8599;</span></a></p>
       </div>
     </div>

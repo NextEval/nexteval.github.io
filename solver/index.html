@@ -7,14 +7,15 @@
   <meta name="theme-color" content="#101516">
   <title>NextEval Solver</title>
   <link rel="icon" type="image/svg+xml" href="../site-assets/brand/nexteval-on-dark.svg">
-  <link rel="stylesheet" href="../site.css?v=readable-api-1">
+  <link rel="stylesheet" href="../site.css?v=scoped-docs-2">
   <link rel="stylesheet" href="../slogan.css?v=2">
 </head>
 <body class="solver-page">
   <header class="site-header">
     <a class="site-brand" href="../" aria-label="NextEval home"><img src="../site-assets/brand/nexteval-on-dark.svg" alt="" width="30" height="30"><span>NextEval</span></a>
-    <nav class="site-nav" aria-label="Primary navigation"><a href="../">Overview</a><a class="active" href="./">Solver</a><a href="../bench/">Bench</a><a href="api/">API</a><a href="https://github.com/NextEval/nexteval" target="_blank" rel="noopener">GitHub <span aria-hidden="true">↗</span></a></nav>
+    <nav class="site-nav" aria-label="Primary navigation"><a href="../">Overview</a><a class="active" href="./" aria-current="page">Solver</a><a href="../bench/">Bench</a><a href="https://github.com/NextEval/nexteval" target="_blank" rel="noopener">GitHub <span aria-hidden="true">↗</span></a></nav>
   </header>
+  <div class="product-nav-band"><div class="product-nav shell"><a class="product-wordmark" href="./">Solver</a><nav aria-label="Solver navigation"><a class="active" href="./" aria-current="page">Overview</a><a href="guide/">User Guide</a><a href="api/">Python API</a></nav></div></div>
   <main>
     <section class="solver-hero shell">
       <div class="solver-hero-copy">
@@ -29,7 +30,7 @@
           </span>
         </h2>
         <p class="hero-lede">An agent-based derivative-free optimizer for budget-limited black-box minimization. Give it an opaque objective and a starting point; it adapts its numerical strategy through one continuous session.</p>
-        <div class="hero-actions"><a class="button button-primary" href="api/#quick-start">Quick start <span aria-hidden="true">↗</span></a><a class="button button-quiet" href="api/">API reference <span aria-hidden="true">↗</span></a></div>
+        <div class="hero-actions"><a class="button button-primary" href="guide/">User Guide <span aria-hidden="true">↗</span></a><a class="button button-quiet" href="api/">Python API reference <span aria-hidden="true">↗</span></a></div>
       </div>
       <div class="solver-console">
         <div class="console-head"><span><i class="status-light"></i>nexteval / session</span><span>opaque objective</span></div>
@@ -46,7 +47,7 @@ result = solve(
         <span class="code-string">"trace"</span>: <span class="code-string">"trajectory"</span>,
     },
 )</code></pre>
-        <div class="console-foot"><span>Requires a configured model.</span><a href="api/#model">Model setup <span aria-hidden="true">↗</span></a></div>
+        <div class="console-foot"><span>Requires a configured model.</span><a href="guide/#provider">Model provider setup <span aria-hidden="true">↗</span></a></div>
       </div>
     </section>
     <section class="solver-intro shell">
