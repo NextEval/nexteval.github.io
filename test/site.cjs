@@ -56,6 +56,20 @@ async function main() {
           assert.equal(await solverNav.getByRole('link', { name: 'Python API', exact: true, includeHidden: true }).count(), 1);
           assert.equal(await solverNav.locator('[aria-current="page"]').textContent(), name === 'api' ? 'Python API' : name === 'guide' ? 'User Guide' : 'Overview');
         }
+        if (route === '/solver/') {
+          const session = page.locator('#session');
+          assert.equal(await session.locator('img').count(), 0, 'session flow must not imply a performance comparison');
+          assert.deepEqual(await session.locator('.session-step strong').allTextContents(), [
+            'Read the state', 'Choose an action', 'Execute the action', 'Record the outcome',
+          ]);
+          assert.equal(await session.locator('svg.session-arrow').count(), 4);
+          assert.deepEqual(await session.locator('.session-memory li').allTextContents(), ['Conversation', 'Method state', 'Evaluation ledger']);
+          assert.equal(await session.locator('.number-list').count(), 0, 'avoid a second numbered explanation of the same cycle');
+          assert.equal(await session.getByRole('link', { name: 'Results and traces' }).getAttribute('href'), 'guide/#results');
+        }
+        if (route === '/') {
+          assert.deepEqual(await page.locator('.pipeline-step strong').allTextContents(), ['Solve', 'Preserve', 'Select', 'Compare']);
+        }
         const metrics = await page.evaluate(() => {
           const rect = selector => { const r = document.querySelector(selector).getBoundingClientRect(); return { x: r.x, y: r.y, right: r.right, bottom: r.bottom, width: r.width, height: r.height }; };
           const slogan = document.querySelector('.evaluation-slogan');

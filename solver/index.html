@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#101516">
   <title>NextEval Solver</title>
   <link rel="icon" type="image/svg+xml" href="../site-assets/brand/nexteval-on-dark.svg">
-  <link rel="stylesheet" href="../site.css?v=path-nav-1">
+  <link rel="stylesheet" href="../site.css?v=session-flow-1">
   <link rel="stylesheet" href="../slogan.css?v=2">
   <script src="../bench/vendor/lucide.min.js" defer></script>
   <script src="../navigation.js?v=1" defer></script>
@@ -56,9 +56,45 @@ result = solve(
       <p class="section-index">01 / WHAT IT IS</p>
       <div class="solver-intro-grid"><h2>A trusted numerical<br><span>environment for an agent</span></h2><p>The model selects numerical tools and sampling actions. The kernel validates every action, owns the objective ledger, and preserves the best valid observation. Reads cost no function evaluations; every real objective call is accounted for.</p></div>
     </section>
-    <section class="solver-loop shell">
-      <div class="loop-visual"><img src="../site-assets/brand/decision-field.png" alt="A cyan path adapting across a contour field"><div class="loop-label loop-label-a">history</div><div class="loop-label loop-label-b">tool call</div><div class="loop-label loop-label-c">next point</div></div>
-      <div class="loop-copy"><p class="section-index">02 / THE SESSION</p><h2>Persistent by design</h2><p>A task-mode run is one complete agent task. The conversation, numerical state, and evaluation ledger remain connected while the agent decides whether to continue, switch methods, or finish.</p><ol class="number-list"><li><span>01</span><div><strong>Read</strong><small>Inspect progress, geometry, history, and method state.</small></div></li><li><span>02</span><div><strong>Act</strong><small>Request a bounded numerical action through the gateway.</small></div></li><li><span>03</span><div><strong>Adapt</strong><small>Use the new observation to choose the next operation.</small></div></li></ol></div>
+    <section class="solver-loop shell" id="session" aria-labelledby="session-heading">
+      <div class="loop-copy">
+        <p class="section-index">02 / THE SESSION</p>
+        <h2 id="session-heading">New observations<br><span>The same session</span></h2>
+        <p>A task-mode run keeps the conversation and numerical state together. The agent can revisit earlier observations and change methods without starting a new task.</p>
+        <p class="session-ending">The cycle continues until the task completes or a stopping limit is reached. The result retains the best valid observation found along the way.</p>
+        <a class="session-trace-link" href="guide/#results">Results and traces <i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
+      </div>
+      <figure class="session-flow" aria-label="Agent and numerical environment in one continuous session" aria-describedby="session-caption">
+        <div class="session-flow-heading"><i data-lucide="repeat-2" aria-hidden="true"></i><span>ONE CONTINUOUS SESSION</span></div>
+        <ol class="session-cycle">
+          <li class="session-step session-read">
+            <span class="session-actor">01 / AGENT</span>
+            <i data-lucide="scan-search" class="session-step-icon" aria-hidden="true"></i>
+            <strong>Read the state</strong><span>History, progress, geometry</span>
+            <i data-lucide="arrow-right" class="session-arrow" aria-hidden="true"></i>
+          </li>
+          <li class="session-step session-choose">
+            <span class="session-actor">02 / AGENT</span>
+            <i data-lucide="git-branch" class="session-step-icon" aria-hidden="true"></i>
+            <strong>Choose an action</strong><span>Continue or switch methods</span>
+            <i data-lucide="arrow-down" class="session-arrow" aria-hidden="true"></i>
+          </li>
+          <li class="session-step session-execute">
+            <span class="session-actor">03 / ENVIRONMENT</span>
+            <i data-lucide="square-function" class="session-step-icon" aria-hidden="true"></i>
+            <strong>Execute the action</strong><span>Tools + protected objective</span>
+            <i data-lucide="arrow-left" class="session-arrow" aria-hidden="true"></i>
+          </li>
+          <li class="session-step session-record">
+            <span class="session-actor">04 / ENVIRONMENT</span>
+            <i data-lucide="notebook-pen" class="session-step-icon" aria-hidden="true"></i>
+            <strong>Record the outcome</strong><span>Observations + updated state</span>
+            <i data-lucide="arrow-up" class="session-arrow" aria-hidden="true"></i>
+          </li>
+        </ol>
+        <div class="session-memory"><span>Carried across turns</span><ul><li>Conversation</li><li>Method state</li><li>Evaluation ledger</li></ul></div>
+        <figcaption id="session-caption">One task, one evaluation budget</figcaption>
+      </figure>
     </section>
     <section class="solver-capabilities shell">
       <p class="section-index">03 / THE CONTRACT</p>
