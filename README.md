@@ -27,8 +27,19 @@ NextEval symbol and GitHub remains available in the product menu.
 
 The Solver and Bench repositories remain independent. This repository is a
 static presentation layer only: it does not run agents, call providers, or
-score submissions. The Bench page is copied from the reviewed release of
-NextEval/nexteval-bench-website so that the Pages deployment is self-contained.
+score submissions. The current results component is mirrored byte-for-byte
+from `NextEval/nexteval-bench-website/dist/results/` into `bench/results/`.
+`bench/index.html` is only the unified-site navigation and mount point. Make
+component/data edits in the source repository, then run its `sync-results.mjs`
+with this checkout as the target. `--check` detects source drift. The checked-in
+`bench/results-source.json` records all synchronized SHA-256 hashes.
+
+`bench/archive.html` preserves the earlier Solver research explorer and its
+assets; old `#profiles`, `#ranking`, and `#tasks` links redirect there. It is a
+different experiment protocol and is not mixed into the current task matrix.
+Only reviewed public-safe numerical exports enter `bench/results/data/`, never
+raw agent logs or credentials. The frontend validates frozen comparisons and
+renders offline OptiProfiler scores; it does not calculate scores or task means.
 
 ## Local preview
 
@@ -50,7 +61,13 @@ loading, and exercises the existing history and profile views. Set
 `SITE_TEST_ARTIFACTS`, or a temporary directory when unset.
 Set `SITE_BROWSER_CHANNEL=chrome` to use an installed Chrome browser.
 
-Run `node test/bench.cjs` for the Bench-specific checks: all four views at five
+Run `node test/results.mjs` to validate the current numerical export and its
+source manifest. `node test/results-browser.cjs` checks the real task matrix at
+five widths, task sorting, profile tolerances, histories, and legacy links.
+It reads the shipped data by default; `RESULTS_DATA_DIRECTORY` allows local
+review of a separate numerical export without publishing or copying it.
+
+Run `node test/bench.cjs` for the archived Bench checks: all four views at five
 viewport widths, readable type and chart axes, both archived features, every
 comparison group, matching legend line styles, solver selection, and task JSON
 downloads. It accepts the same deployment and screenshot settings and uses an

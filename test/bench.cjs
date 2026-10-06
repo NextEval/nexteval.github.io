@@ -34,10 +34,10 @@ async function main() {
       await page.waitForFunction(() => document.querySelector('#comparison-status').textContent === 'Applied comparison', undefined, { timeout: 60000 });
     };
     // Same-document links must load the requested evidence, not just relabel a control.
-    await page.goto(`${base}/bench/#profiles?feature=perturbed_x0`, { waitUntil: 'networkidle' });
+    await page.goto(`${base}/bench/archive.html#profiles?feature=perturbed_x0`, { waitUntil: 'networkidle' });
     await waitForResults();
     const initialComparison = await page.locator('#profile-data').getAttribute('href');
-    await page.goto(`${base}/bench/#profiles?feature=perturbed_x0%2Bnoisy&study=combined-noisy`, { waitUntil: 'networkidle' });
+    await page.goto(`${base}/bench/archive.html#profiles?feature=perturbed_x0%2Bnoisy&study=combined-noisy`, { waitUntil: 'networkidle' });
     await page.waitForFunction(() => document.querySelector('#study').value === 'combined-noisy', undefined, { timeout: 5000 });
     await waitForResults();
     assert.notEqual(await page.locator('#profile-data').getAttribute('href'), initialComparison);
@@ -47,7 +47,7 @@ async function main() {
     for (const view of ['home', 'ranking', 'profiles', 'tasks']) {
       for (const width of [320, 390, 768, 1280, 1920]) {
         await page.setViewportSize({ width, height: 900 });
-        await page.goto(`${base}/bench/#${view}`, { waitUntil: 'networkidle' });
+        await page.goto(`${base}/bench/archive.html#${view}`, { waitUntil: 'networkidle' });
         await page.evaluate(() => document.fonts.ready);
         if (['ranking', 'profiles'].includes(view)) await waitForResults();
         if (view === 'profiles') await page.locator('#history-chart .chart-frame svg').waitFor();
@@ -82,7 +82,7 @@ async function main() {
 
     await page.setViewportSize({ width: 1440, height: 1000 });
     for (const feature of ['perturbed_x0', 'perturbed_x0+noisy']) {
-      await page.goto(`${base}/bench/#profiles?feature=${encodeURIComponent(feature)}`, { waitUntil: 'networkidle' });
+      await page.goto(`${base}/bench/archive.html#profiles?feature=${encodeURIComponent(feature)}`, { waitUntil: 'networkidle' });
       await waitForResults();
       await page.locator('#history-chart .chart-frame svg').waitFor();
       assert.equal(await page.locator('#archive-feature').inputValue(), feature);
@@ -131,7 +131,7 @@ async function main() {
       assert(await page.locator('#history-chart .chart-tooltip').isVisible());
     }
 
-    await page.goto(`${base}/bench/#profiles?feature=perturbed_x0%2Bnoisy&study=combined-noisy`, { waitUntil: 'networkidle' });
+    await page.goto(`${base}/bench/archive.html#profiles?feature=perturbed_x0%2Bnoisy&study=combined-noisy`, { waitUntil: 'networkidle' });
     await waitForResults();
     const scopes = await page.locator('#study option').evaluateAll(options => options.map(o => o.value));
     for (const scope of scopes) {
@@ -160,7 +160,7 @@ async function main() {
     assert.equal(await page.locator('#profiles').isVisible(), true);
 
     await page.setViewportSize({ width: 1440, height: 1000 });
-    await page.goto(`${base}/bench/#tasks`, { waitUntil: 'networkidle' });
+    await page.goto(`${base}/bench/archive.html#tasks`, { waitUntil: 'networkidle' });
     await page.locator('[data-mode="suite"]').click();
     assert.equal(await page.locator('#metric-3').textContent(), '276');
     await page.locator('#feature').selectOption('perturbed_x0+noisy');

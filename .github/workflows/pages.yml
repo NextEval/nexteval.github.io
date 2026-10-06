@@ -25,6 +25,8 @@ jobs:
         uses: actions/checkout@v4
       - name: Verify published profile assets
         run: node test/assets.cjs
+      - name: Verify current results and source synchronization
+        run: node test/results.mjs
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
