@@ -36,7 +36,7 @@ async function main() {
     const page = await browser.newPage({ reducedMotion: 'reduce' });
     page.on('pageerror', error => faults.push(error.message));
     page.on('response', response => { if (response.url().startsWith(base) && response.status() >= 400) faults.push(`${response.status()} ${response.url()}`); });
-    for (const route of ['/', '/solver/', '/solver/api/', '/solver/guide/', '/bench/', '/bench/identity.html']) {
+    for (const route of ['/', '/solver/', '/solver/api/', '/solver/guide/', '/bench/archive.html', '/bench/identity.html']) {
       for (const width of [320, 375, 390, 768, 1000, 1280, 1440, 1920]) {
         await page.setViewportSize({ width, height: width <= 390 ? 844 : 900 });
         await page.goto(base + route, { waitUntil: 'networkidle' });
@@ -203,6 +203,9 @@ async function main() {
     assert.equal(await page.evaluate(() => document.activeElement.textContent), 'Overview');
     await page.getByRole('navigation', { name: 'Products', exact: true }).getByRole('link', { name: 'Bench', exact: true }).click();
     assert.match(page.url(), /\/bench\/$/);
+    await page.locator('.context-switcher summary').click();
+    await page.getByRole('navigation', { name: 'Bench', exact: true }).getByRole('link', { name: 'Research archive', exact: true }).click();
+    assert.match(page.url(), /\/bench\/archive\.html#profiles$/);
     await page.locator('.context-switcher summary').click();
     await page.getByRole('navigation', { name: 'Bench', exact: true }).getByRole('link', { name: 'Ranking', exact: true }).click();
     await page.waitForFunction(() => document.querySelector('[data-current-view]').textContent === 'Ranking');
