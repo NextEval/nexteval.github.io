@@ -27,10 +27,9 @@
 .results-scope span { white-space:nowrap; }
 .results-sort { display:flex; align-items:center; gap:12px; white-space:nowrap; font-size:14px; }
 .results-page select { border:1px solid #51555a; border-radius:3px; padding:8px 30px 8px 10px; background:var(--result-surface); min-height:42px; max-width:100%; }
-.matrix-meta { display:flex; justify-content:space-between; align-items:center; gap:12px; margin:5px 0 13px; color:var(--result-muted); font-size:14px; }
+.matrix-meta { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:12px; margin:5px 0 13px; color:var(--result-muted); font-size:14px; }
 .heat-legend { display:flex; gap:10px; align-items:center; white-space:nowrap; }
-.heat-scale { display:flex; gap:2px; }
-.heat-scale i { display:block; width:13px; height:9px; }
+.heat-scale { display:block; width:163px; height:9px; }
 .results-table-scroll { overflow:auto; border:1px solid var(--result-line); }
 .results-matrix { width:100%; min-width:850px; border-collapse:separate; border-spacing:0; table-layout:fixed; }
 .results-matrix caption { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(100%); }
@@ -49,13 +48,11 @@
 .participant-name { display:block; font-size:16px; line-height:1.4; }
 .participant-detail { display:block; color:var(--result-muted); font-size:14px; line-height:1.5; margin-top:2px; }
 .results-matrix tbody td { padding:0; height:60px; text-align:center; border-top:1px solid var(--result-line); border-left:1px solid var(--result-line); }
-.results-matrix td a { display:flex; height:100%; min-height:60px; width:100%; align-items:center; justify-content:center; font:17px/1 var(--result-mono); font-variant-numeric:tabular-nums; }
+.results-matrix td a { display:flex; height:100%; min-height:60px; width:100%; align-items:center; justify-content:center; color:#fff; font:17px/1 var(--result-mono); font-variant-numeric:tabular-nums; }
 .results-matrix td a:hover { box-shadow:inset 0 0 0 2px var(--result-accent); }
 .results-matrix tbody tr:hover th { background:#25272a; }
 .results-matrix .reference th { box-shadow:inset 3px 0 #c0b490; }
 .results-matrix th:first-child { position:sticky; left:0; z-index:1; }
-.heat-0 { background:#212426; }.heat-1 { background:#233332; }.heat-2 { background:#25423f; }.heat-3 { background:#264d47; }.heat-4 { background:#285a50; }.heat-5 { background:#2c685a; }.heat-6 { background:#307664; }.heat-7 { background:#34846f; }.heat-8 { background:#3d937a; }.heat-9 { background:#49a388; }.heat-10 { background:#66baa0; }
-.results-matrix .heat-7,.results-matrix .heat-8,.results-matrix .heat-9,.results-matrix .heat-10 { color:#080e0d; font-weight:650; }
 .matrix-foot { display:flex; justify-content:space-between; gap:16px; margin-top:14px; font-size:14px; color:var(--result-muted); }
 .results-method { margin-top:25px; border-top:1px solid var(--result-line); padding:18px 0; font-size:14px; color:var(--result-muted); }
 .results-method summary { color:var(--result-text); cursor:pointer; font-size:15px; }

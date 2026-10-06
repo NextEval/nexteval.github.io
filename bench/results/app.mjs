@@ -1,5 +1,8 @@
-import { FEATURES, validateSnapshot, validateProfiles, validateHistoryIndex, validateHistory, historyChartData, sortedParticipants, scoreText, heatLevel, featureFor, assetPath, chartData } from './model.mjs';
+import { FEATURES, validateSnapshot, validateProfiles, validateHistoryIndex, validateHistory, historyChartData, sortedParticipants, scoreText, featureFor, assetPath, chartData } from './model.mjs';
 import { ScientificChart, formatNumber } from './chart.mjs';
+import { icon } from './icons.mjs';
+import { PLAN, plannedParticipants } from './plan.mjs';
+import { relativeScore, referenceScore, relativeScoreExport, heatColor, HEAT_COLORS } from './scores.mjs';
 
 const host = document.getElementById('results-app');
 document.querySelector('.results-skip')?.addEventListener('click', event => {
@@ -8,7 +11,6 @@ document.querySelector('.results-skip')?.addEventListener('click', event => {
 const dataURL = new URL('./data/results.json', import.meta.url);
 const archiveURL = host.dataset.archive || '../index.html#profiles';
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
-const icon = name => `<i data-lucide="${name}" aria-hidden="true"></i>`;
 const taskURL = (task, values = {}) => '#task/' + encodeURIComponent(task.task_id) + '?' + new URLSearchParams(values);
 const cache = new Map();
 let snapshot, chart, previousPath, epoch = 0;
@@ -23,22 +25,25 @@ async function readJSON(url) {
 
 const fileURL = file => new URL(assetPath(file), dataURL);
 const labelFor = p => {
+  if (p.display_name) return p.display_name;
   if (!p.model || p.harness === 'reference' || p.model === 'none') return p.label;
   const model = p.model.split('/').at(-1);
   return ({ 'gpt-5.5':'GPT-5.5', 'gpt-5.6-sol':'GPT-5.6 Sol', 'gpt-5.6-terra':'GPT-5.6 Terra', 'gpt-5.6-luna':'GPT-5.6 Luna', 'gpt-6-sol':'GPT-6 Sol', 'gpt-6-luna':'GPT-6 Luna', 'claude-sonnet-5':'Claude Sonnet 5', 'deepseek-v4-flash':'DeepSeek V4 Flash' }[model] || p.model);
 };
-const detailFor = p => [({'codex':'Codex','claude-code':'Claude Code','scipy':'SciPy'}[p.harness] || p.harness), p.effort].filter(v => v && v !== 'none').join(' / ');
+const detailFor = p => [({'codex':'Codex','claude-code':'Claude Code','scipy':'SciPy'}[p.harness] || p.harness), p.effort].filter(Boolean).join(' / ');
 const chartParticipants = () => snapshot.participants.map(p => ({...p,label:reference(p) ? p.label : `${labelFor(p)} / ${detailFor(p)}`}));
 const reference = p => /cobyqa/i.test(p.label);
 const dateLabel = () => snapshot.generated_at ? new Date(snapshot.generated_at).toISOString().slice(0,10) : 'Versioned snapshot';
 
 function footer() {
-  return `<footer class="results-footer"><span>NextEval Bench / ${esc(dateLabel())}</span><div class="results-links"><a href="${esc(dataURL.href)}" download>Snapshot JSON</a><a href="https://github.com/NextEval/nexteval-bench-data" title="Private data archive; repository access required">Data archive</a></div></footer>`;
+  const scoreDownload = 'data:application/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(relativeScoreExport(snapshot), null, 2));
+  return `<footer class="results-footer"><span>NextEval Bench / ${esc(dateLabel())}</span><div class="results-links"><a href="${esc(scoreDownload)}" download="cobyqa-relative-scores.json">Scores JSON</a><a href="${esc(dataURL.href)}" download>Original snapshot JSON</a><a href="https://github.com/NextEval/nexteval-bench-data" title="Private data archive; repository access required">Data archive</a></div></footer>`;
 }
 
 function method(task) {
   return `<details class="results-method"><summary>Score and comparison protocol</summary>
-    <p>Scores are normalized performance-profile areas exported by OptiProfiler, averaged over 10 tolerances from 10<sup>-1</sup> to 10<sup>-10</sup>. Higher is better. A score of 1 is not a 100% success rate. Each task has its own fixed comparison; there is no cross-task average.</p>
+    <p>Displayed score = p<sup>4</sup> / (p<sup>4</sup> + b<sup>4</sup>), where p is the method's original OptiProfiler score and b is COBYQA's score in the same task and frozen comparison. The fixed exponent 4 expands display contrast without changing the ranking. COBYQA = 0.50; above 0.50 means a higher aggregate score, below 0.50 a lower one. This display scale is not an effect size, win probability, or claim of statistical significance.</p>
+    <p>Original scores are normalized performance-profile areas, averaged over 10 tolerances from 10<sup>-1</sup> to 10<sup>-10</sup>. The transformation is applied after that average. Profiles and original scores remain unchanged. A missing or zero baseline makes the relative score unavailable. There is no cross-task average.</p>
     <p>Each target uses the best budgeted history among that task's comparison members, including the matched COBYQA reference, for the same problem and repetition. Adding a member requires a new complete comparison.</p>
     <p>Historical normal 300-second runs and terminal 1000-second runs are included under the current reporting policy. Actual limits remain recorded below. This is not a controlled identical-prompt/time-limit experiment. Timeouts stay in the denominator.</p>
     ${task ? `<p>Comparison <code>${esc(task.comparison_id)}</code><br>Task <code>${esc(task.task_id)}</code> / version ${esc(task.task_version)}<br>Cohort <code>${esc(task.cohort)}</code></p>` : ''}
@@ -51,23 +56,30 @@ function matrix(params) {
   const tasks = FEATURES.map(feature => snapshot.tasks.find(t => featureFor(t)?.key === feature.key));
   const sortable = tasks.filter(t => t?.scores.length);
   const selected = sortable.find(t => t.task_id === params.get('sort')) || sortable[0];
-  const rows = sortedParticipants(snapshot, selected?.task_id);
+  const family = PLAN.families.some(f => f.family === params.get('family')) ? params.get('family') : '';
+  const allRows = sortedParticipants(snapshot, selected?.task_id, plannedParticipants());
+  const rows = allRows.filter(p => !family || p.family === family || reference(p));
   const cells = new Map(snapshot.matrix.map(c => [JSON.stringify([c.participant_id,c.task_id]), c]));
   host.innerHTML = `<div class="results-heading"><div><h1>Task matrix</h1><p>NextEval Bench / agent performance across packaged optimization tests</p></div><span class="results-edition">${esc(dateLabel())}</span></div>
     <div class="results-toolbar"><div class="results-scope"><span>S2MPJ</span><span>Unconstrained</span><span>Dimensions &le; 5</span><span>50 &times; n evaluations</span></div>
+      <label class="results-sort" for="family-filter">Family<select id="family-filter"><option value="">All families</option>${PLAN.families.map(f => `<option ${f.family === family ? 'selected' : ''}>${esc(f.family)}</option>`).join('')}</select></label>
       <label class="results-sort" for="sort-task">Sort by<select id="sort-task" ${selected ? '' : 'disabled'}>${sortable.map(t => `<option value="${esc(t.task_id)}" ${t === selected ? 'selected' : ''}>${esc(t.label)}</option>`).join('')}</select></label></div>
-    <div class="matrix-meta"><span>${rows.length} configurations / ${sortable.length} published comparisons</span><div class="heat-legend"><span>Score</span><span>0</span><span class="heat-scale" aria-hidden="true">${Array.from({length:11},(_,i) => `<i class="heat-${i}"></i>`).join('')}</span><span>1</span></div></div>
-    <div class="results-table-scroll" role="region" aria-label="Agent scores by task" tabindex="0"><table class="results-matrix"><caption>Exported scores sorted by ${esc(selected?.label || 'task')}. Empty cells have no published score.</caption><colgroup><col><col><col><col><col></colgroup><thead><tr><th scope="col">Agent / configuration</th>${FEATURES.map((feature,i) => {
+    <div class="matrix-meta"><span>${rows.length} configurations / ${sortable.length} published comparisons</span><div class="heat-legend"><span>COBYQA = 0.50</span><span>0</span><span class="heat-scale" aria-hidden="true" style="background:linear-gradient(to right,${HEAT_COLORS.join(',')})"></span><span>1</span></div></div>
+    <div class="results-table-scroll" role="region" aria-label="Agent scores by task" tabindex="0"><table class="results-matrix"><caption>COBYQA-relative display scores sorted by ${esc(selected?.label || 'task')}. Empty cells have no published score.</caption><colgroup><col><col><col><col><col></colgroup><thead><tr><th scope="col">Agent / configuration</th>${FEATURES.map((feature,i) => {
       const task = tasks[i];
       return `<th scope="col"><button class="task-column ${task === selected ? 'selected' : ''}" ${task ? `data-task="${esc(task.task_id)}"` : 'disabled'} title="${esc(feature.description)}">${icon(feature.icon)}<span>${esc(task?.label || feature.label)}</span><small>${task?.scores.length ? `${task.grid.problems} problems / ${task.grid.repetitions} repeats` : 'Not published'}</small></button></th>`;
-    }).join('')}</tr></thead><tbody>${rows.map(p => `<tr class="${reference(p) ? 'reference' : ''}"><th scope="row"><span class="participant-name">${esc(labelFor(p))}</span><span class="participant-detail">${esc(reference(p) ? 'Numerical reference' : detailFor(p))}</span></th>${tasks.map(t => {
+    }).join('')}</tr></thead><tbody>${rows.map(p => `<tr class="${reference(p) ? 'reference' : ''}"><th scope="row" ${p.condition ? `title="${esc(p.condition)}"` : ''}><span class="participant-name">${esc(labelFor(p))}</span><span class="participant-detail">${esc(reference(p) ? 'Numerical reference' : detailFor(p))}${p.condition ? ' / conditional' : ''}</span></th>${tasks.map(t => {
       const c = t && cells.get(JSON.stringify([p.participant_id,t.task_id]));
-      return c?.score != null ? `<td class="heat-${heatLevel(c.score)}"><a href="${taskURL(t)}" aria-label="${esc(p.label)}, ${esc(t.label)}, score ${scoreText(c.score)}">${scoreText(c.score)}</a></td>` : '<td aria-label="No published result" title="No published result"></td>';
+      const baseline = referenceScore(t), score = relativeScore(c?.score, baseline);
+      if (score === null) return c?.score != null ? '<td aria-label="Reference score unavailable" title="COBYQA reference score is missing or zero"></td>' : '<td aria-label="No published result" title="No published result"></td>';
+      return `<td style="background:${heatColor(score)}" data-score="${score}"><a href="${taskURL(t)}" title="Relative: ${score.toFixed(6)}; original: ${c.score.toFixed(6)}; COBYQA original: ${baseline.toFixed(6)}" aria-label="${esc(p.label)}, ${esc(t.label)}, COBYQA-relative score ${scoreText(score)}">${scoreText(score)}</a></td>`;
     }).join('')}</tr>`).join('')}</tbody></table></div>
     ${rows.length ? '' : '<section class="results-empty"><h2>No scored comparison released</h2><p>Completed coverage alone is not a score. Results will appear after the offline comparison export is verified.</p></section>'}
-    <div class="matrix-foot"><span>Higher is better / empty = not published</span><span>Order: ${esc(selected?.label || 'none')} / descending</span></div>
+    <div class="matrix-foot"><span>Higher is better / COBYQA = 0.50 / empty = unavailable</span><span>Order: ${esc(selected?.label || 'none')} / descending</span></div>
     ${method()}${footer()}`;
-  document.getElementById('sort-task').onchange = event => { location.hash = 'matrix?' + new URLSearchParams({ sort:event.target.value }); };
+  const updateMatrix = () => { location.hash = 'matrix?' + new URLSearchParams({sort:document.getElementById('sort-task').value, family:document.getElementById('family-filter').value}); };
+  document.getElementById('sort-task').onchange = updateMatrix;
+  document.getElementById('family-filter').onchange = updateMatrix;
   host.querySelectorAll('[data-task]').forEach(button => button.onclick = () => { location.hash = taskURL(snapshot.tasks.find(t => t.task_id === button.dataset.task)); });
 }
 

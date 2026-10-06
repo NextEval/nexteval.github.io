@@ -1,5 +1,5 @@
 export const FEATURES = [
-  { key: 'perturbed', taskFamilies:['nexteval-u5-perturbed'], label: 'Perturbed starts', icon: 'move-up-right', description: 'A different starting point' },
+  { key: 'perturbed', taskFamilies:['nexteval-u5-perturbed'], label: 'Perturbed starts', icon: 'perturbed-start', description: 'The original starting point shifted to a nearby point' },
   { key: 'noisy', taskFamilies:['nexteval-u5-perturbed-noisy'], label: 'Noisy observations', icon: 'audio-lines', description: 'Function values with noise' },
   { key: 'rotated', taskFamilies:['nexteval-u5-perturbed-rotated'], label: 'Rotated coordinates', icon: 'rotate-3d', description: 'A different coordinate system' },
   { key: 'random_nan', taskFamilies:['nexteval-u5-perturbed-random-nan','nexteval-u5-random_nan','nexteval-u5-perturbed-random_nan'], label: 'Random NaN', icon: 'circle-off', description: 'Some evaluations return no value' },
@@ -65,11 +65,16 @@ export function validateSnapshot(data) {
   return data;
 }
 
-export function sortedParticipants(data, taskId) {
+export function sortedParticipants(data, taskId, planned = []) {
   const task = data.tasks.find(task => task.task_id === taskId);
   const scores = new Map((task?.scores || []).map(row => [row.participant_id, row.score]));
-  return data.participants.filter(p => data.matrix.some(c => c.participant_id === p.participant_id && finiteScore(c.score)))
-    .slice().sort((a, b) => (scores.get(b.participant_id) ?? -1) - (scores.get(a.participant_id) ?? -1)
+  const participants = new Map(planned.map(p => [p.participant_id, p]));
+  for (const p of data.participants) {
+    if (data.matrix.some(c => c.participant_id === p.participant_id && finiteScore(c.score))) {
+      participants.set(p.participant_id, {...participants.get(p.participant_id), ...p});
+    }
+  }
+  return [...participants.values()].sort((a, b) => (scores.get(b.participant_id) ?? -1) - (scores.get(a.participant_id) ?? -1)
       || a.label.localeCompare(b.label));
 }
 
