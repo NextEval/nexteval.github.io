@@ -1,8 +1,8 @@
 export const FEATURES = [
-  { key: 'perturbed', label: 'Perturbed starts', icon: 'move-up-right', description: 'A different starting point' },
-  { key: 'noisy', label: 'Noisy observations', icon: 'audio-lines', description: 'Function values with noise' },
-  { key: 'rotated', label: 'Rotated coordinates', icon: 'rotate-3d', description: 'A different coordinate system' },
-  { key: 'random_nan', label: 'Random NaN', icon: 'circle-off', description: 'Some evaluations return no value' },
+  { key: 'perturbed', taskFamilies:['nexteval-u5-perturbed'], label: 'Perturbed starts', icon: 'move-up-right', description: 'A different starting point' },
+  { key: 'noisy', taskFamilies:['nexteval-u5-perturbed-noisy'], label: 'Noisy observations', icon: 'audio-lines', description: 'Function values with noise' },
+  { key: 'rotated', taskFamilies:['nexteval-u5-perturbed-rotated'], label: 'Rotated coordinates', icon: 'rotate-3d', description: 'A different coordinate system' },
+  { key: 'random_nan', taskFamilies:['nexteval-u5-perturbed-random-nan','nexteval-u5-random_nan','nexteval-u5-perturbed-random_nan'], label: 'Random NaN', icon: 'circle-off', description: 'Some evaluations return no value' },
 ];
 
 const require = (condition, message) => { if (!condition) throw new Error(message); };
@@ -19,7 +19,8 @@ export function assetPath(value) {
 }
 
 export function featureFor(task) {
-  return FEATURES.find(feature => task.task_id.includes(`-${feature.key}@`)) || null;
+  const family = /^(.*)@\d+$/.exec(task.task_id)?.[1];
+  return FEATURES.find(feature => feature.taskFamilies.includes(family)) || null;
 }
 
 export function validateSnapshot(data) {
@@ -34,7 +35,7 @@ export function validateSnapshot(data) {
   const participants = new Set(data.participants.map(p => p.participant_id));
   const tasks = new Map(data.tasks.map(task => [task.task_id, task]));
   for (const task of data.tasks) {
-    require(/^nexteval-u5-(perturbed|perturbed-noisy|perturbed-rotated|random_nan|perturbed-random_nan)@\d+$/.test(task.task_id), 'Task outside this U5 release');
+    require(featureFor(task), 'Task outside this U5 release');
     require(task.parameters?.max_eval_factor === 50, 'Evaluation budget differs from displayed scope');
     require(typeof task.label === 'string' && Array.isArray(task.scores) && Array.isArray(task.members), 'Invalid task');
     require(!task.snapshot_id || task.snapshot_id === data.snapshot_id, 'Mixed task snapshots');
