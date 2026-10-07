@@ -78,6 +78,14 @@ export function sortedParticipants(data, taskId, planned = []) {
       || a.label.localeCompare(b.label));
 }
 
+export function matrixVisibility(data, participants, expanded = false) {
+  const published = new Set(data.matrix.filter(cell => finiteScore(cell.score)).map(cell => cell.participant_id));
+  return {
+    rows: expanded ? participants : participants.filter(p => published.has(p.participant_id)),
+    unpublished: participants.filter(p => !published.has(p.participant_id)).length,
+  };
+}
+
 export function validateProfiles(profiles, task) {
   require(profiles.task_id === task.task_id && profiles.comparison_id === task.comparison_id, 'Profile comparison does not match task');
   require(profiles.axes?.performance?.axis_transform === 'log2' && profiles.axes?.data?.axis_transform === 'log2_1p'

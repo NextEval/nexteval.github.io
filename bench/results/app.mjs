@@ -1,4 +1,4 @@
-import { FEATURES, validateSnapshot, validateProfiles, validateHistoryIndex, validateHistory, historyChartData, sortedParticipants, scoreText, featureFor, assetPath, chartData } from './model.mjs';
+import { FEATURES, validateSnapshot, validateProfiles, validateHistoryIndex, validateHistory, historyChartData, sortedParticipants, matrixVisibility, scoreText, featureFor, assetPath, chartData } from './model.mjs';
 import { ScientificChart, formatNumber } from './chart.mjs';
 import { icon } from './icons.mjs';
 import { PLAN, plannedParticipants } from './plan.mjs';
@@ -30,7 +30,8 @@ const labelFor = p => {
   const model = p.model.split('/').at(-1);
   return ({ 'gpt-5.5':'GPT-5.5', 'gpt-5.6-sol':'GPT-5.6 Sol', 'gpt-5.6-terra':'GPT-5.6 Terra', 'gpt-5.6-luna':'GPT-5.6 Luna', 'gpt-6-sol':'GPT-6 Sol', 'gpt-6-luna':'GPT-6 Luna', 'claude-sonnet-5':'Claude Sonnet 5', 'deepseek-v4-flash':'DeepSeek V4 Flash' }[model] || p.model);
 };
-const detailFor = p => [({'codex':'Codex','claude-code':'Claude Code','scipy':'SciPy'}[p.harness] || p.harness), p.effort].filter(Boolean).join(' / ');
+const harnessFor = p => ({'codex':'Codex','claude-code':'Claude Code','scipy':'SciPy'}[p.harness] || p.harness);
+const detailFor = p => [harnessFor(p), p.effort].filter(Boolean).join(' / ');
 const chartParticipants = () => snapshot.participants.map(p => ({...p,label:reference(p) ? p.label : `${labelFor(p)} / ${detailFor(p)}`}));
 const reference = p => /cobyqa/i.test(p.label);
 const dateLabel = () => snapshot.generated_at ? new Date(snapshot.generated_at).toISOString().slice(0,10) : 'Versioned snapshot';
@@ -58,28 +59,39 @@ function matrix(params) {
   const selected = sortable.find(t => t.task_id === params.get('sort')) || sortable[0];
   const family = PLAN.families.some(f => f.family === params.get('family')) ? params.get('family') : '';
   const allRows = sortedParticipants(snapshot, selected?.task_id, plannedParticipants());
-  const rows = allRows.filter(p => !family || p.family === family || reference(p));
+  const filteredRows = allRows.filter(p => !family || p.family === family || reference(p));
+  const expanded = params.get('unpublished') === '1';
+  const {rows, unpublished} = matrixVisibility(snapshot, filteredRows, expanded);
   const cells = new Map(snapshot.matrix.map(c => [JSON.stringify([c.participant_id,c.task_id]), c]));
   host.innerHTML = `<div class="results-heading"><div><h1>Task matrix</h1><p>NextEval Bench / agent performance across packaged optimization tests</p></div><span class="results-edition">${esc(dateLabel())}</span></div>
     <div class="results-toolbar"><div class="results-scope"><span>S2MPJ</span><span>Unconstrained</span><span>Dimensions &le; 5</span><span>50 &times; n evaluations</span></div>
       <label class="results-sort" for="family-filter">Family<select id="family-filter"><option value="">All families</option>${PLAN.families.map(f => `<option ${f.family === family ? 'selected' : ''}>${esc(f.family)}</option>`).join('')}</select></label>
       <label class="results-sort" for="sort-task">Sort by<select id="sort-task" ${selected ? '' : 'disabled'}>${sortable.map(t => `<option value="${esc(t.task_id)}" ${t === selected ? 'selected' : ''}>${esc(t.label)}</option>`).join('')}</select></label></div>
-    <div class="matrix-meta"><span>${rows.length} configurations / ${sortable.length} published comparisons</span><div class="heat-legend"><span>COBYQA = 0.50</span><span>0</span><span class="heat-scale" aria-hidden="true" style="background:linear-gradient(to right,${HEAT_COLORS.join(',')})"></span><span>1</span></div></div>
-    <div class="results-table-scroll" role="region" aria-label="Agent scores by task" tabindex="0"><table class="results-matrix"><caption>COBYQA-relative display scores sorted by ${esc(selected?.label || 'task')}. Empty cells have no published score.</caption><colgroup><col><col><col><col><col></colgroup><thead><tr><th scope="col">Agent / configuration</th>${FEATURES.map((feature,i) => {
+    <div class="matrix-meta"><span>${rows.length} of ${filteredRows.length} configurations / ${sortable.length} published comparisons</span><div class="heat-legend"><span>COBYQA = 0.50</span><span>0</span><span class="heat-scale" aria-hidden="true" style="background:linear-gradient(to right,${HEAT_COLORS.join(',')})"></span><span>1</span></div></div>
+    <div class="results-table-scroll" role="region" aria-label="Agent scores by task" tabindex="0"><table class="results-matrix" id="model-matrix"><caption>COBYQA-relative display scores sorted by ${esc(selected?.label || 'task')}. Empty cells have no published score.</caption><colgroup><col><col><col><col></colgroup><thead><tr><th scope="col">MODEL / AGENT</th>${FEATURES.map((feature,i) => {
       const task = tasks[i];
       return `<th scope="col"><button class="task-column ${task === selected ? 'selected' : ''}" ${task ? `data-task="${esc(task.task_id)}"` : 'disabled'} title="${esc(feature.description)}">${icon(feature.icon)}<span>${esc(task?.label || feature.label)}</span><small>${task?.scores.length ? `${task.grid.problems} problems / ${task.grid.repetitions} repeats` : 'Not published'}</small></button></th>`;
-    }).join('')}</tr></thead><tbody>${rows.map(p => `<tr class="${reference(p) ? 'reference' : ''}"><th scope="row" ${p.condition ? `title="${esc(p.condition)}"` : ''}><span class="participant-name">${esc(labelFor(p))}</span><span class="participant-detail">${esc(reference(p) ? 'Numerical reference' : detailFor(p))}${p.condition ? ' / conditional' : ''}</span></th>${tasks.map(t => {
+    }).join('')}</tr></thead><tbody>${rows.map(p => `<tr class="${reference(p) ? 'reference' : ''}"><th scope="row" ${p.condition ? `title="${esc(p.condition)}"` : ''}><span class="participant-name">${esc(labelFor(p))}${!reference(p) && p.effort ? ` <span class="participant-effort">(${esc(p.effort)})</span>` : ''}</span><span class="participant-detail">${esc(reference(p) ? 'Numerical reference' : harnessFor(p))}${p.condition ? ' / conditional' : ''}</span></th>${tasks.map(t => {
       const c = t && cells.get(JSON.stringify([p.participant_id,t.task_id]));
       const baseline = referenceScore(t), score = relativeScore(c?.score, baseline);
       if (score === null) return c?.score != null ? '<td aria-label="Reference score unavailable" title="COBYQA reference score is missing or zero"></td>' : '<td aria-label="No published result" title="No published result"></td>';
       return `<td style="background:${heatColor(score)}" data-score="${score}"><a href="${taskURL(t)}" title="Relative: ${score.toFixed(6)}; original: ${c.score.toFixed(6)}; COBYQA original: ${baseline.toFixed(6)}" aria-label="${esc(p.label)}, ${esc(t.label)}, COBYQA-relative score ${scoreText(score)}">${scoreText(score)}</a></td>`;
     }).join('')}</tr>`).join('')}</tbody></table></div>
+    ${unpublished ? `<button type="button" class="matrix-expand" id="toggle-unpublished" aria-expanded="${expanded}" aria-controls="model-matrix" title="Configurations without published scores">${icon(expanded ? 'chevron-up' : 'chevron-down')}<span>${expanded ? 'Hide' : 'Show'} ${unpublished} ${expanded ? 'unpublished' : 'more'} configurations</span></button>` : ''}
     ${rows.length ? '' : '<section class="results-empty"><h2>No scored comparison released</h2><p>Completed coverage alone is not a score. Results will appear after the offline comparison export is verified.</p></section>'}
     <div class="matrix-foot"><span>Higher is better / COBYQA = 0.50 / empty = unavailable</span><span>Order: ${esc(selected?.label || 'none')} / descending</span></div>
     ${method()}${footer()}`;
-  const updateMatrix = () => { location.hash = 'matrix?' + new URLSearchParams({sort:document.getElementById('sort-task').value, family:document.getElementById('family-filter').value}); };
-  document.getElementById('sort-task').onchange = updateMatrix;
-  document.getElementById('family-filter').onchange = updateMatrix;
+  const updateMatrix = (showUnpublished = expanded) => {
+    const next = new URLSearchParams({sort:document.getElementById('sort-task').value, family:document.getElementById('family-filter').value});
+    if (showUnpublished) next.set('unpublished','1');
+    location.hash = 'matrix?' + next;
+  };
+  document.getElementById('sort-task').onchange = () => updateMatrix();
+  document.getElementById('family-filter').onchange = () => updateMatrix();
+  const expandButton = document.getElementById('toggle-unpublished');
+  if (expandButton) expandButton.onclick = () => {
+    updateMatrix(!expanded);
+  };
   host.querySelectorAll('[data-task]').forEach(button => button.onclick = () => { location.hash = taskURL(snapshot.tasks.find(t => t.task_id === button.dataset.task)); });
 }
 
