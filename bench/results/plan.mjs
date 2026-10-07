@@ -24,7 +24,7 @@ export const PLAN = Object.freeze({
     { family:'Hunyuan', harnesses:['codex','claude-code'], efforts:['no-thinking','high'], models:[
       ['hy4-preview','HY4 Preview'],
     ] },
-    { family:'MiMo (Xiaomi)', harnesses:['codex','claude-code'], efforts:['off','on'], models:[
+    { family:'MiMo', harnesses:['codex','claude-code'], efforts:['off','on'], models:[
       ['mimo-v2.6-flash','MiMo V2.6 Flash'], ['mimo-v2.6-pro','MiMo V2.6 Pro'],
     ] },
     { family:'Kimi', harnesses:['codex','claude-code'], efforts:['low','high','max'], models:[
