@@ -45,7 +45,7 @@ function method(task) {
     <p>Displayed score = p<sup>4</sup> / (p<sup>4</sup> + b<sup>4</sup>), where p is the method's original OptiProfiler score and b is COBYQA's score in the same task and frozen comparison. The fixed exponent 4 expands display contrast without changing the ranking. COBYQA = 0.50; above 0.50 means a higher aggregate score, below 0.50 a lower one. This display scale is not an effect size, win probability, or claim of statistical significance.</p>
     <p>Original scores are normalized performance-profile areas, averaged over 10 tolerances from 10<sup>-1</sup> to 10<sup>-10</sup>. The transformation is applied after that average. Profiles and original scores remain unchanged. A missing or zero baseline makes the relative score unavailable. There is no cross-task average.</p>
     <p>Each target uses the best budgeted history among that task's comparison members, including the matched COBYQA reference, for the same problem and repetition. Adding a member requires a new complete comparison.</p>
-    <p>Historical normal 300-second runs and terminal 1000-second runs are included under the current reporting policy. Actual limits remain recorded below. This is not a controlled identical-prompt/time-limit experiment. Timeouts stay in the denominator.</p>
+    <p>Timeouts stay in the comparison denominator. Execution metadata is retained in the downloadable records and data archive.</p>
     ${task ? `<p>Comparison <code>${esc(task.comparison_id)}</code><br>Task <code>${esc(task.task_id)}</code> / version ${esc(task.task_version)}<br>Cohort <code>${esc(task.cohort)}</code></p>` : ''}
     <p>Snapshot <code>${esc(snapshot.snapshot_id)}</code><br>Registry commit <code>${esc(snapshot.registry_commit)}</code></p>
     ${task?.limitations?.length ? `<ul>${task.limitations.map(note => `<li>${esc(note)}</li>`).join('')}</ul>` : ''}
@@ -84,9 +84,9 @@ function matrix(params) {
 }
 
 function coverage(task) {
-  return `<section class="task-coverage"><h2>Coverage and execution limits</h2><div class="results-table-scroll"><table class="coverage-table"><thead><tr><th>Configuration</th><th>Terminal / expected</th><th>Normal</th><th>Timeout</th><th>Actual limits</th></tr></thead><tbody>${(task.coverage || []).map(row => {
+  return `<section class="task-coverage"><h2>Coverage</h2><div class="results-table-scroll"><table class="coverage-table"><thead><tr><th>Configuration</th><th>Terminal / expected</th><th>Normal</th><th>Timeout</th></tr></thead><tbody>${(task.coverage || []).map(row => {
     const participant = snapshot.participants.find(p => p.participant_id === row.participant_id);
-    return `<tr><td>${esc(participant.label)}</td><td>${row.terminal} / ${row.expected}</td><td>${row.normal}</td><td>${row.timeout}</td><td>${Object.entries(row.actual_timeout_counts || {}).map(([limit,count]) => `${esc(limit)} s: ${count}`).join(' / ') || 'Not specified'}</td></tr>`;
+    return `<tr><td>${esc(participant.label)}</td><td>${row.terminal} / ${row.expected}</td><td>${row.normal}</td><td>${row.timeout}</td></tr>`;
   }).join('')}</tbody></table></div></section>`;
 }
 
@@ -139,10 +139,10 @@ async function renderHistories(histories, task, params, viewHost, ticket) {
   chart = new ScientificChart(document.getElementById('history-chart'));
   chart.set(historyChartData(history,chartParticipants(),repeat),'history');
   const rows = history.rows.filter(row => row.repeat_index === repeat);
-  document.getElementById('history-receipt').innerHTML = `<p class="profile-note">Best observed clean value after each recorded evaluation / lower is better / curves end where runs end. Nonfinite observations remain counted. This is not the agent-returned solution.</p><div class="results-table-scroll"><table class="coverage-table"><thead><tr><th>Configuration</th><th>Evaluations</th><th>Best finite value</th><th>Nonfinite</th><th>Terminal state</th><th>Actual limit</th></tr></thead><tbody>${rows.map(row => {
+  document.getElementById('history-receipt').innerHTML = `<p class="profile-note">Best observed clean value after each recorded evaluation / lower is better / curves end where runs end. Nonfinite observations remain counted. This is not the agent-returned solution.</p><div class="results-table-scroll"><table class="coverage-table"><thead><tr><th>Configuration</th><th>Evaluations</th><th>Best finite value</th><th>Nonfinite</th><th>Terminal state</th></tr></thead><tbody>${rows.map(row => {
     const participant = snapshot.participants.find(p => p.participant_id === row.participant_id);
     const finite = row.values.filter(Number.isFinite);
-    return `<tr><td>${esc(participant.label)}</td><td>${row.evaluations} / ${history.budget}</td><td>${finite.length ? formatNumber(Math.min(...finite)) : 'None'}</td><td>${row.values.length-finite.length}</td><td>${esc(row.terminal_status)}</td><td>${row.actual_timeout_s == null ? 'Not applicable' : `${row.actual_timeout_s} s`}</td></tr>`;
+    return `<tr><td>${esc(participant.label)}</td><td>${row.evaluations} / ${history.budget}</td><td>${finite.length ? formatNumber(Math.min(...finite)) : 'None'}</td><td>${row.values.length-finite.length}</td><td>${esc(row.terminal_status)}</td></tr>`;
   }).join('')}</tbody></table></div><details class="results-method"><summary>Selected run provenance</summary><p><a href="${fileURL(problem.history_file)}" download>Download ${esc(problem.problem)} numerical evidence</a></p><ul>${rows.map(row => `<li>${esc(snapshot.participants.find(p => p.participant_id === row.participant_id).label)}<br>Seed <code>${esc(row.instance_seed)}</code><br>Archive <code>${esc(row.archive_id)}</code>${row.attempt_id ? `<br>Attempt <code>${esc(row.attempt_id)}</code><br>Execution identity <code>${esc(row.source_agent_config_id)}</code>` : ''}</li>`).join('')}</ul></details>`;
 }
 
