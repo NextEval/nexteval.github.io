@@ -6,6 +6,15 @@ export function formatNumber(value){if(!Number.isFinite(value))return 'not avail
 export function stepIndex(xs,x){let a=0,b=xs.length;while(a<b){const m=(a+b)>>>1;if(xs[m]<=x)a=m+1;else b=m;}return a-1;}
 export function stepPath(xs,ys,X,Y){let path='',active=false;for(let i=0;i<xs.length;i++){if(!Number.isFinite(ys[i])){active=false;continue;}const x=X(xs[i]),y=Y(ys[i]);if(!Number.isFinite(x)||!Number.isFinite(y)){active=false;continue;}path+=active?`H${x}V${y}`:`M${x},${y}`;active=true;}return path;}
 export function rawX(kind,x){return kind==='performance'?2**x:kind==='data'?2**x-1:x;}
+export function tooltipRows(series,x,kind,hidden=new Set()){
+  return series.flatMap((s,index)=>{
+    if(hidden.has(index))return [];
+    const step=stepIndex(s.x,x),ended=kind==='history'&&x>s.n_evals+.001;
+    const missing=step<0||!Number.isFinite(s.y[step])||ended;
+    return [{series:s,index,step,ended,missing,value:missing?null:s.y[step]}];
+  }).sort((a,b)=>Number(a.missing)-Number(b.missing)||
+    (a.missing?0:b.value-a.value)||a.index-b.index);
+}
 export function historyView(data,repeat){
   const series=data.series.map(s=>({label:s.label,...s.repetitions[repeat]}));
   const values=series.flatMap(s=>s.y.filter(v=>Number.isFinite(v)));
@@ -84,7 +93,13 @@ export class ScientificChart{
     const cross=el('line',{y1:top,y2:top+h,stroke:'#9ea7a4','stroke-dasharray':'3 4',visibility:'hidden'});svg.append(cross);
     const tip=document.createElement('div');tip.className='chart-tooltip';tip.hidden=true;tip.setAttribute('role','status');
     const inspect=(pixel)=>{const x=Math.max(xmin,Math.min(xmax,xmin+(pixel-left)/w*(xmax-xmin)));const px=X(x);cross.setAttribute('x1',px);cross.setAttribute('x2',px);cross.setAttribute('visibility','visible');tip.replaceChildren();const title=document.createElement('strong');title.textContent=`${kind==='history'?'Evaluation':kind==='performance'?'Ratio':'Evaluations / (n + 1)'} ${formatNumber(kind==='history'?Math.floor(x):rawX(kind,x))}`;tip.append(title);
-      data.series.forEach((s,i)=>{if(this.hidden.has(i))return;const row=document.createElement('div');const j=stepIndex(s.x,x);const missing=j<0||!Number.isFinite(s.y[j])||(kind==='history'&&x>s.n_evals+.001);const value=missing?(kind==='history'&&x>s.n_evals?'run ended':'no finite value'):kind==='history'?formatNumber(s.y[j]):`${(s.y[j]*100).toFixed(2)}%`;row.style.color=styles[i].color;row.textContent=`${s.label}: ${value}${s.source_label?` [source: ${s.source_label}]`:''}`;if(!missing&&s.lower)row.textContent+=` [${(s.lower[j]*100).toFixed(2)}, ${(s.upper[j]*100).toFixed(2)}]%`;tip.append(row);});tip.hidden=false;tip.style.left=`${Math.max(0,Math.min(width-tip.offsetWidth,px+12))}px`;tip.style.top=`${top+12}px`;};
+      for(const entry of tooltipRows(data.series,x,kind,this.hidden)){
+        const {series:s,index,step:j,missing,ended}=entry,row=document.createElement('div');
+        const value=missing?(ended?'run ended':'no finite value'):kind==='history'?formatNumber(entry.value):`${(entry.value*100).toFixed(2)}%`;
+        row.style.color=styles[index].color;row.textContent=`${s.label}: ${value}${s.source_label?` [source: ${s.source_label}]`:''}`;
+        if(!missing&&s.lower)row.textContent+=` [${(s.lower[j]*100).toFixed(2)}, ${(s.upper[j]*100).toFixed(2)}]%`;
+        tip.append(row);
+      }tip.hidden=false;tip.style.left=`${Math.max(0,Math.min(width-tip.offsetWidth,px+12))}px`;tip.style.top=`${top+12}px`;};
     let cursor=left;svg.addEventListener('pointermove',event=>{cursor=(event.clientX-svg.getBoundingClientRect().left)*width/svg.getBoundingClientRect().width;inspect(cursor);});svg.addEventListener('pointerleave',()=>{cross.setAttribute('visibility','hidden');tip.hidden=true;});svg.addEventListener('keydown',event=>{if(['ArrowLeft','ArrowRight','Home','End'].includes(event.key)){event.preventDefault();cursor=event.key==='Home'?left:event.key==='End'?left+w:Math.max(left,Math.min(left+w,cursor+(event.key==='ArrowRight'?1:-1)*w/50));inspect(cursor);}});
     frame.append(svg,tip);this.host.append(frame,axis);
   }
