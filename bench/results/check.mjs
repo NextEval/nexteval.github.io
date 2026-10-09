@@ -3,6 +3,7 @@ import { fileURLToPath } from 'node:url';
 import { resolve, relative, join } from 'node:path';
 import { validateSnapshot, validateProfiles, validateHistoryIndex, validateHistory } from './model.mjs';
 import { validateUsage } from './usage.mjs';
+import { validateReleases } from './releases.mjs';
 import { createHash } from 'node:crypto';
 
 export async function checkBundle(directory = fileURLToPath(new URL('./data/',import.meta.url))) {
@@ -23,6 +24,9 @@ export async function checkBundle(directory = fileURLToPath(new URL('./data/',im
     return data;
   }
   const data = validateSnapshot(await load('results.json'));
+  if (await stat(join(root,'model-releases.json')).then(()=>true, error=>{ if (error.code === 'ENOENT') return false; throw error; })) {
+    validateReleases(await load('model-releases.json'));
+  }
   if (await stat(join(root,'website-usage.json')).then(()=>true, error=>{ if (error.code === 'ENOENT') return false; throw error; })) {
     const usage = validateUsage(await load('website-usage.json'));
     if (usage.pricing_file) {

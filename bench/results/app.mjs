@@ -5,6 +5,7 @@ import { PLAN, plannedParticipants } from './plan.mjs';
 import { relativeScore, referenceScore, relativeScoreExport, heatColor, HEAT_COLORS } from './scores.mjs';
 import { validateUsage, paretoData, pricingLinks } from './usage.mjs';
 import { ParetoChart, compactNumber, dollarNumber } from './pareto.mjs';
+import { validateReleases, releaseData } from './releases.mjs';
 
 const host = document.getElementById('results-app');
 document.querySelector('.results-skip')?.addEventListener('click', event => {
@@ -12,6 +13,7 @@ document.querySelector('.results-skip')?.addEventListener('click', event => {
 });
 const dataURL = new URL('./data/results.json', import.meta.url);
 const usageURL = new URL('./data/website-usage.json', import.meta.url);
+const releasesURL = new URL('./data/model-releases.json', import.meta.url);
 const archiveURL = host.dataset.archive || '../index.html#profiles';
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
 const taskURL = (task, values = {}) => '#task/' + encodeURIComponent(task.task_id) + '?' + new URLSearchParams(values);
@@ -105,43 +107,66 @@ async function pareto(params, ticket) {
     || snapshot.tasks.find(t => featureFor(t)?.key === 'perturbed_x0' && t.scores.length)
     || snapshot.tasks.find(t => t.scores.length);
   const family = PLAN.families.some(f => f.family === params.get('family')) ? params.get('family') : '';
-  const metric = params.get('metric') === 'tokens' ? 'tokens' : 'cost';
+  const metric = ['tokens','release_date'].includes(params.get('metric')) ? params.get('metric') : 'cost';
+  const released = metric === 'release_date';
   const scale = params.get('scale') === 'linear' ? 'linear' : 'log';
-  host.innerHTML = `<div class="results-heading"><div><h1>Score & consumption</h1><p>NextEval Bench / one packaged task, the same published scores</p></div><span class="results-edition">${esc(dateLabel())}</span></div>
+  host.innerHTML = `<div class="results-heading"><div><h1>${released ? 'Score & release date' : 'Score & consumption'}</h1><p>NextEval Bench / one packaged task, the same published scores</p></div><span class="results-edition">${esc(dateLabel())}</span></div>
     ${dashboardViews('pareto',task,family)}
     <div class="results-toolbar pareto-toolbar"><label class="results-sort" for="pareto-task">Task<select id="pareto-task">${snapshot.tasks.filter(t=>t.scores.length).map(t=>`<option value="${esc(t.task_id)}" ${t === task ? 'selected' : ''}>${esc(t.label)}</option>`).join('')}</select></label>
       <label class="results-sort" for="pareto-family">Family<select id="pareto-family"><option value="">All families</option>${PLAN.families.map(f=>`<option ${f.family === family ? 'selected' : ''}>${esc(f.family)}</option>`).join('')}</select></label>
-      <label class="results-sort" for="pareto-metric">Mean per run<select id="pareto-metric"><option value="cost" ${metric === 'cost' ? 'selected' : ''}>API-equivalent USD</option><option value="tokens" ${metric === 'tokens' ? 'selected' : ''}>Total tokens</option></select></label></div>
-    <section id="pareto-view" aria-live="polite"><p>Loading verified usage</p></section>${method(task)}${footer()}`;
+      <label class="results-sort" for="pareto-metric">X axis<select id="pareto-metric"><option value="cost" ${metric === 'cost' ? 'selected' : ''}>API-equivalent USD / run</option><option value="tokens" ${metric === 'tokens' ? 'selected' : ''}>Total tokens / run</option><option value="release_date" ${released ? 'selected' : ''}>Release date</option></select></label></div>
+    <section id="pareto-view" aria-live="polite"><p>Loading ${released ? 'release dates' : 'verified usage'}</p></section>${method(task)}${footer()}`;
   const update = () => { location.hash = 'pareto?' + new URLSearchParams({task:document.getElementById('pareto-task').value,family:document.getElementById('pareto-family').value,metric:document.getElementById('pareto-metric').value,scale:document.getElementById('pareto-log') ? document.getElementById('pareto-log').checked ? 'log' : 'linear' : scale}); };
   for (const id of ['pareto-task','pareto-family','pareto-metric']) document.getElementById(id).onchange = update;
   const view = document.getElementById('pareto-view');
-  let usage;
-  try { usage = validateUsage(await readJSON(usageURL)); }
+  let usage = null, releases = null;
+  try {
+    if (released) releases = validateReleases(await readJSON(releasesURL));
+    try { usage = validateUsage(await readJSON(usageURL)); }
+    catch (error) { if (!released) throw error; }
+  }
   catch (error) {
     if (ticket !== epoch) return;
-    view.innerHTML = `<section class="results-empty"><h2>Usage snapshot unavailable</h2><p>No costs or tokens are inferred. ${esc(error.message)}</p></section>`; return;
+    view.innerHTML = `<section class="results-empty"><h2>${released ? 'Release snapshot' : 'Usage snapshot'} unavailable</h2><p>No ${released ? 'dates' : 'costs or tokens'} are inferred. ${esc(error.message)}</p></section>`; return;
   }
   if (ticket !== epoch) return;
-  const data = paretoData(snapshot,usage,task,metric,family);
-  const positive = data.points.every(p=>p.x > 0), log = scale === 'log' && positive;
+  const data = released ? releaseData(snapshot,releases,task,family,usage) : paretoData(snapshot,usage,task,metric,family);
+  const positive = data.points.every(p=>p.x > 0), log = !released && scale === 'log' && positive;
   const notes = `API-equivalent cost uses public standard list prices, not a Coding Plan bill. Tokens include input, output and cache categories under the audited accounting policy. Ordinary timeouts remain in each cohort. COBYQA has no comparable model usage and is not plotted. The frontier compares displayed configurations only; it is not a statistical significance test.`;
-  view.innerHTML = `<div class="matrix-meta"><span>${data.points.length} of ${data.eligible} scored configurations / ${task.grid.cells} runs each</span><span>${metric === 'cost' && data.pricing_as_of ? `Prices as of ${esc(data.pricing_as_of)}` : 'Verified usage only'}</span></div>
-    ${data.points.length ? `<div class="pareto-scale"><label><input type="checkbox" id="pareto-log" ${log ? 'checked' : ''} ${positive ? '' : 'disabled'}>Log axis</label></div><div class="pareto-layout"><div><p class="chart-unit">COBYQA-relative score / higher is better</p><div id="pareto-chart" class="pareto-chart"></div><p class="chart-axis">Mean ${metric === 'cost' ? 'API-equivalent USD' : 'total tokens'} per run / ${log ? 'log scale / ' : ''}lower is better</p><div class="pareto-key"><span><i class="frontier-key"></i>Non-dominated</span><span><i></i>Other configurations</span><span>COBYQA score = 0.50</span></div></div><aside id="pareto-detail" class="pareto-detail" aria-label="Selected configuration"></aside></div>
-    <ol class="pareto-configurations" aria-label="Configurations">${data.points.map((p,i)=>`<li><button data-config="${esc(p.participant.participant_id)}"><span class="pareto-index">${i+1}</span><span><strong>${esc(labelFor(p.participant))} <span class="muted">(${esc(p.participant.effort)})</span></strong><small>${esc(harnessFor(p.participant))}</small></span><span class="pareto-value">${scoreText(p.score)}<small>${metric === 'cost' ? dollarNumber(p.x) : compactNumber(p.x)}</small></span></button></li>`).join('')}</ol>` : `<section class="results-empty"><h2>${data.mixedPricing ? 'Price snapshots do not match' : 'No complete usage for this selection'}</h2><p>${data.mixedPricing ? 'Dollar points need a common price date. The token view remains available.' : 'Scores stay published in Matrix. Missing consumption is not shown as zero.'}</p></section>`}
-    ${data.omitted ? `<p class="profile-note">${data.omitted} scored configurations omitted: usage incomplete or not priced under the common snapshot.</p>` : ''}
-    <details class="results-method"><summary>Usage and price policy</summary><p>${notes}</p>${usage.pricing_snapshot_id ? `<p>Price snapshot <code>${esc(usage.pricing_snapshot_id)}</code>${usage.pricing_sha256 ? `<br>SHA-256 <code>${esc(usage.pricing_sha256)}</code>` : ''}</p>` : ''}<p><a href="${esc(usageURL.href)}" download>Download accounting snapshot</a>${usage.pricing_file === 'pricing-snapshot.json' ? ` / <a href="${fileURL(usage.pricing_file)}" download>Download price snapshot</a>` : ''}</p></details>`;
+  view.innerHTML = `<div class="matrix-meta"><span>${data.points.length} of ${data.eligible} scored configurations / ${task.grid.cells} runs each</span><span>${released ? `Dates checked ${esc(data.checked_at)}` : metric === 'cost' && data.pricing_as_of ? `Prices as of ${esc(data.pricing_as_of)}` : 'Verified usage only'}</span></div>
+    ${data.points.length ? `${released ? '' : `<div class="pareto-scale"><label><input type="checkbox" id="pareto-log" ${log ? 'checked' : ''} ${positive ? '' : 'disabled'}>Log axis</label></div>`}<div class="pareto-layout"><div><p class="chart-unit">COBYQA-relative score / higher is better</p><div id="pareto-chart" class="pareto-chart"></div><p class="chart-axis">${released ? 'Model release date / UTC / best score available by date' : `Mean ${metric === 'cost' ? 'API-equivalent USD' : 'total tokens'} per run / ${log ? 'log scale / ' : ''}lower is better`}</p><div class="pareto-key"><span><i class="frontier-key"></i>Non-dominated</span><span><i></i>Other configurations</span><span>COBYQA score = 0.50</span></div></div><aside id="pareto-detail" class="pareto-detail" aria-label="Selected configuration"></aside></div>
+    <details class="pareto-config-list"><summary>Configurations (${data.points.length})</summary><ul class="pareto-configurations" aria-label="Configurations">${data.points.map(p=>`<li><button data-config="${esc(p.participant.participant_id)}"><span><strong>${esc(labelFor(p.participant))} <span class="muted">(${esc(p.participant.effort)})</span></strong><small>${esc(harnessFor(p.participant))}</small></span><span class="pareto-value">${scoreText(p.score)}<small>${released ? esc(p.release.released_at) : metric === 'cost' ? dollarNumber(p.x) : compactNumber(p.x)}</small></span></button></li>`).join('')}</ul></details>` : `<section class="results-empty"><h2>${released ? 'No verified release dates for this selection' : data.mixedPricing ? 'Price snapshots do not match' : 'No complete usage for this selection'}</h2><p>${data.mixedPricing ? 'Dollar points need a common price date. The token view remains available.' : 'Scores stay published in Matrix. Missing metadata is not inferred.'}</p></section>`}
+    ${data.omitted ? `<p class="profile-note">${data.omitted} scored configurations omitted: ${released ? 'release date unavailable' : 'usage incomplete or not priced under the common snapshot'}.</p>` : ''}
+    ${released ? `<details class="results-method"><summary>Release date policy and sources</summary><p>${esc(releases.notes)} The frontier prefers earlier release dates and higher scores, following <a href="https://www.terminal-bench-science.ai/?view=pareto" target="_blank" rel="noopener noreferrer">TB-Science</a>. It is descriptive, not a causal estimate of model progress. Each task keeps its own frozen comparison.</p><p><a href="${esc(releasesURL.href)}" download>Download model release dates and sources</a></p></details>` : `<details class="results-method"><summary>Usage and price policy</summary><p>${notes}</p>${usage.pricing_snapshot_id ? `<p>Price snapshot <code>${esc(usage.pricing_snapshot_id)}</code>${usage.pricing_sha256 ? `<br>SHA-256 <code>${esc(usage.pricing_sha256)}</code>` : ''}</p>` : ''}<p><a href="${esc(usageURL.href)}" download>Download accounting snapshot</a>${usage.pricing_file === 'pricing-snapshot.json' ? ` / <a href="${fileURL(usage.pricing_file)}" download>Download price snapshot</a>` : ''}</p></details>`}`;
   if (!data.points.length) return;
+  const detail = document.getElementById('pareto-detail');
+  detail.hidden = true;
   const select = point => {
-    const p = point.participant, g = point.group;
-    const links = pricingLinks(g.pricing_sources);
-    document.getElementById('pareto-detail').innerHTML = `<span class="pareto-status">${data.frontier.includes(point) ? 'NON-DOMINATED' : 'CONFIGURATION'}</span><h2>${esc(labelFor(p))}</h2><p class="muted">${esc(detailFor(p))}</p><dl><dt>Score</dt><dd>${scoreText(point.score)}</dd><dt>Runs</dt><dd>${g.runs} / ${task.grid.cells}</dd><dt>Mean tokens / run</dt><dd>${compactNumber(g.mean_total_tokens_per_run)}</dd><dt>Total tokens</dt><dd>${new Intl.NumberFormat('en-US').format(g.total_tokens)}</dd><dt>Mean API-equivalent USD / run</dt><dd>${g.mean_api_equivalent_cost_usd_per_run == null ? 'Unavailable' : dollarNumber(g.mean_api_equivalent_cost_usd_per_run)}</dd><dt>Total API-equivalent USD</dt><dd>${g.total_api_equivalent_cost_usd == null ? 'Unavailable' : dollarNumber(g.total_api_equivalent_cost_usd)}</dd><dt>Price date</dt><dd>${esc(g.pricing_as_of || 'Unavailable')}</dd></dl><div class="pareto-sources">${links.map(s=>`<a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer">${esc(s.label)} ↗</a>`).join('')}</div><a class="back-link" href="${taskURL(task)}">Task profiles ${icon('arrow-up-right')}</a>`;
+    const p = point.participant, g = point.group || {};
+    const links = pricingLinks(released ? point.release.sources : g.pricing_sources);
+    const metrics = [
+      ['Score',scoreText(point.score)], ['Runs',`${task.grid.cells} / ${task.grid.cells}`],
+      ...(released ? [['Model release date',point.release.released_at]] : []),
+      ['Mean tokens / run',g.mean_total_tokens_per_run == null ? 'Unavailable' : compactNumber(g.mean_total_tokens_per_run)],
+      ['Total tokens',g.total_tokens == null ? 'Unavailable' : new Intl.NumberFormat('en-US').format(g.total_tokens)],
+      ['Mean API-equivalent USD / run',g.mean_api_equivalent_cost_usd_per_run == null ? 'Unavailable' : dollarNumber(g.mean_api_equivalent_cost_usd_per_run)],
+      ['Total API-equivalent USD',g.total_api_equivalent_cost_usd == null ? 'Unavailable' : dollarNumber(g.total_api_equivalent_cost_usd)],
+      ['Price date',g.pricing_as_of || 'Unavailable']
+    ];
+    detail.innerHTML = `<div><span class="pareto-status">${data.frontier.includes(point) ? 'NON-DOMINATED' : 'CONFIGURATION'}</span><h2>${esc(labelFor(p))}</h2><p class="muted">${esc(detailFor(p))}</p></div><dl>${metrics.map(([name,value])=>`<div><dt>${esc(name)}</dt><dd>${esc(value)}</dd></div>`).join('')}</dl><div class="pareto-links"><a class="back-link" href="${taskURL(task)}">Task profiles ${icon('arrow-up-right')}</a><div class="pareto-sources">${links.map(s=>`<a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer">${esc(s.label)} ↗</a>`).join('')}</div></div><button type="button" class="pareto-close" aria-label="Close details" title="Close details">${icon('x')}</button>`;
+    detail.hidden = false;
+    detail.querySelector('.pareto-close').onclick = () => {
+      detail.hidden = true;
+      chart.select(null);
+      view.querySelectorAll('[data-config]').forEach(button=>button.setAttribute('aria-pressed','false'));
+      document.getElementById('pareto-chart').focus({preventScroll:true});
+    };
     view.querySelectorAll('[data-config]').forEach(button => button.setAttribute('aria-pressed',String(button.dataset.config === p.participant_id)));
     window.lucide?.createIcons();
   };
-  document.getElementById('pareto-log').onchange = update;
-  chart = new ParetoChart(document.getElementById('pareto-chart'),data,metric,select,labelFor,log ? 'log' : 'linear');
-  select(data.points[0]);
+  if (document.getElementById('pareto-log')) document.getElementById('pareto-log').onchange = update;
+  chart = new ParetoChart(document.getElementById('pareto-chart'),data,metric,select,labelFor,log ? 'log' : 'linear',harnessFor);
+  document.getElementById('pareto-chart').tabIndex = -1;
   view.querySelectorAll('[data-config]').forEach(button => button.onclick = () => {
     const point = data.points.find(p=>p.participant.participant_id === button.dataset.config);
     select(point); chart.select(point.participant.participant_id);

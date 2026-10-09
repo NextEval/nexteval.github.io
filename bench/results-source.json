@@ -2,9 +2,9 @@
   "source_repository": "NextEval/nexteval-bench-website",
   "source_path": "dist/results",
   "files": {
-    "app.mjs": "29bde5fa2ff52836d5a2a045b36c5f01b65bb6f47c3330c32a756f063260c29d",
+    "app.mjs": "13b950805ed13a83bbcb9ee0c2cb771701a2467e120bd791137784470077ad86",
     "chart.mjs": "c0ca5926486aeab299d402e5e231c2fd1c1fdd4fc4a2b323de2992e6fba2c7ed",
-    "check.mjs": "399839bf85a633a2b5a204188ed783e35a714a7490e738382780723010f9121e",
+    "check.mjs": "c860af65d88c1c3c2072e444c25284be5bc79f4686467bee26dd3dcd11dad5e9",
     "data/histories/cmp-028f22bc345b677049f737f4/ALLINITU.json": "07f003eeb598bf0f95dc6fbbf1f0ae6dd2fea090d8aacac00835452c3a378b50",
     "data/histories/cmp-028f22bc345b677049f737f4/BARD.json": "a1b23e6edccefa1f988d73e1c9c13c1f852af824a83ed3b219a802955eb7b469",
     "data/histories/cmp-028f22bc345b677049f737f4/BEALE.json": "616f2d021120cad877e736740562e9a4b347b32f8a7b98655aad4b260c1f0221",
@@ -377,6 +377,7 @@
     "data/histories/cmp-cf26f5f31962707297c643f3/ZANGWIL2.json": "9625618a2de73080f45c8ba947d397a6a648599c9af7173d27eea6b3b4f26b22",
     "data/histories/cmp-cf26f5f31962707297c643f3/index.json": "389e2024bf13fa2f1e06f6aee6dda4537f6641048299b685a3ed888e65f4d8d2",
     "data/histories/cmp-cf26f5f31962707297c643f3/n10FOLDTRLS.json": "e929208d0a89c1228ac3d7da8197bc3ed37e0abd42827865c5d66ac445a9a5e3",
+    "data/model-releases.json": "3c2459ac0db5c7b08a312c9250ce39aa68271225c8eabaf6ecff7358516277b2",
     "data/pricing-snapshot.json": "089efcb5cf6ea5087ff09c84e24429df1fbe5c78ab2404ec9b2434a4bdd59fab",
     "data/profiles/cmp-028f22bc345b677049f737f4.json": "58ad9b6801c62e51ec6dcce7f655f5cd24612b4670f95421dd81c8ca597fa1b1",
     "data/profiles/cmp-5d8d29c0c4510ce5ac8e338d.json": "a8e2b7b82988754a389e4f9fe7aa0edbdf0d7b075b8eb9492b5188a5eae22690",
@@ -387,9 +388,10 @@
     "icons.mjs": "8cfd8776c2d608e8ddb785d493113b1a0d6fce371f31afd3d39bd04d64234dc2",
     "index.html": "60f89083ffbf8302bc9d0c36c5e00cbd7d27c72f223ff29f4aa91ed5182b4b86",
     "model.mjs": "245a6162431f3e6ae5d0fe3a35a6e51320a497d14e501e06690f1102baf88eaa",
-    "pareto.mjs": "14702a6ab973747944040a791fe2e80871c481103f8e2c49e04195601db01607",
+    "pareto.mjs": "c6a7c4832b41cc08aa956825a22e8a47ba0ef988f62515e2f123c9bfbea4fa9a",
     "plan.mjs": "9eddbe2b31107b111eb14ed5619589d295a6637afb3303f1b0308c21f9284c52",
-    "results.css": "f9766f9c4acdc79d4301c432c8fabefd303e905e349643aa48c83ae1054eeed6",
+    "releases.mjs": "b8570af603f3eaeb740d72bcb39684208c7f6de968e817a797e3fe9b549ef3da",
+    "results.css": "258a05f958f6fb529359b8a29f40997f095779f666a9489db54bcf5564260c70",
     "scores.mjs": "4345bc8747616937350eb2227759e8fe8c2e1c28cc76781899f698885d6dcd19",
     "usage.mjs": "a971ba9dce8ac549c8fa4eabb9d2fa0c2d332aa4d0a00f254afd9057f833f7d0"
   }
