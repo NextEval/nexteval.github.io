@@ -41,6 +41,24 @@ Only reviewed public-safe numerical exports enter `bench/results/data/`, never
 raw agent logs or credentials. The frontend validates frozen comparisons and
 renders offline OptiProfiler scores; it does not calculate scores or task means.
 
+## Reviewed numerical snapshot
+
+Snapshot `web-a08cd141f08985e628b046cb` contains 35 complete agent treatment
+groups across four tasks. Its canonical source is website merge
+`7def33812e1d317c5cb276f986637a1b290930b1` (website PR #23), backed by private
+registry merge `8bb0186a178db028cc75ca24e719d18b7f4a91ea` (data PR #26).
+The 392 mirrored component files are hash-pinned in `bench/results-source.json`.
+
+The Qwen3.8 Flash / Claude Code / high increment retains 920 selected cells
+per task: perturbed starts have 868 normal outcomes, 51 ordinary timeouts and
+1 exact reviewed agent failure; noisy observations have 879 normal outcomes,
+38 ordinary timeouts and 3 exact reviewed agent failures. Failures remain
+distinct terminal outcomes with empty evaluation histories, not normal success.
+Every prior 34,040 numerical history row and the existing 33 accounting groups
+are unchanged. Missing Qwen accounting and unresolved exact-alias release date
+do not produce cost, token or release-date Pareto points. Raw logs, private
+bundles and credentials remain outside this repository.
+
 ## Local preview
 
     python3 -m http.server 8797
