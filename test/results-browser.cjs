@@ -11,6 +11,7 @@ async function main() {
   await fs.mkdir(output,{recursive:true});
   const dataRoot=process.env.RESULTS_DATA_DIRECTORY || path.join(root,'bench/results/data');
   const data=JSON.parse(await fs.readFile(path.join(dataRoot,'results.json'),'utf8'));
+  const {relativeScore,referenceScore}=await import('../bench/results/scores.mjs');
   const mime={'.html':'text/html','.css':'text/css','.mjs':'text/javascript','.js':'text/javascript','.svg':'image/svg+xml','.json':'application/json','.png':'image/png','.gz':'application/gzip'};
   const server=http.createServer(async(req,res)=>{
     const pathname=decodeURIComponent(new URL(req.url,'http://localhost').pathname);
@@ -58,9 +59,12 @@ async function main() {
       await page.waitForFunction(id=>document.querySelector('#sort-task')?.value===id,task.task_id);
       const ids=await page.locator('.results-matrix tbody tr').evaluateAll(rows=>rows.map(row=>[...row.querySelectorAll('a')].map(a=>a.getAttribute('aria-label'))));
       const expected=[...task.scores].sort((a,b)=>b.score-a.score||data.participants.find(p=>p.participant_id===a.participant_id).label.localeCompare(data.participants.find(p=>p.participant_id===b.participant_id).label));
+      const baseline=referenceScore(task);
       for(let i=0;i<expected.length;i++) {
         const participant=data.participants.find(p=>p.participant_id===expected[i].participant_id);
-        assert(ids[i].includes(`${participant.label}, ${task.label}, score ${expected[i].score.toFixed(2)}`),'Sort by exported task score');
+        const displayScore=relativeScore(expected[i].score,baseline).toFixed(2);
+        assert(ids[i]?.includes(`${participant.label}, ${task.label}, COBYQA-relative score ${displayScore}`),
+          `Sort by exported task score: ${task.task_id} row ${i}, expected ${participant.label} ${displayScore}, got ${JSON.stringify(ids[i])}`);
       }
       await page.locator(`[data-task="${task.task_id}"]`).click();
       await page.locator('#profile-chart svg[role="img"]').waitFor();
