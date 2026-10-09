@@ -113,8 +113,8 @@
 .dashboard-views svg { width:18px; height:18px; }
 .pareto-toolbar { flex-wrap:wrap; }
 .pareto-axis-controls { display:flex; justify-content:center; align-items:center; flex-wrap:wrap; gap:12px 24px; margin:4px 0 12px; font-size:14px; }
-.pareto-axis-controls .results-sort { width:auto; justify-content:center; flex-wrap:wrap; }
-.pareto-axis-controls .results-sort select { width:auto; min-width:0; max-width:100%; }
+.pareto-axis-controls select { background:var(--result-surface); color:var(--result-text); border:1px solid #62686d; border-radius:3px; padding:3px 9px; font:inherit; width:auto; min-width:0; max-width:100%; }
+.pareto-axis-direction { color:var(--result-muted); }
 .pareto-log-control { display:flex; align-items:center; gap:8px; min-height:30px; }
 .pareto-log-control input { accent-color:#a7d4cc; width:16px; height:16px; }
 .pareto-layout { display:grid; grid-template-columns:minmax(0,1fr); gap:28px; padding-top:12px; }

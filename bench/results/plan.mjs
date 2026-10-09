@@ -41,3 +41,8 @@ export function plannedParticipants() {
       model, display_name, harness, effort, family, condition:condition || null, planned:true,
     })))));
 }
+
+export function participantFamily(participant) {
+  const model = participant.model?.split('/').at(-1);
+  return PLAN.families.find(f => f.models.some(([id]) => id === model))?.family || participant.family || '';
+}

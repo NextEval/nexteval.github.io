@@ -1,5 +1,6 @@
 import { relativeScore, referenceScore } from './scores.mjs';
 import { paretoFrontier, pricingLinks } from './usage.mjs';
+import { participantFamily } from './plan.mjs';
 
 export function releaseTimestamp(date) {
   if (typeof date !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(date)) return null;
@@ -26,7 +27,7 @@ export function releaseData(snapshot, releases, task, family = '', usage = null)
   const groups = new Map((usage?.groups || []).filter(g=>g.task_id===task.task_id).map(g=>[g.participant_id,g]));
   const eligible = task.scores.filter(row=>{
     const p = participants.get(row.participant_id);
-    return p && !['scipy','reference'].includes(p.harness) && (!family || p.family===family);
+    return p && !['scipy','reference'].includes(p.harness) && (!family || participantFamily(p)===family);
   });
   // Dates belong to the exact requested model, never to a nearby family or a run timestamp.
   const points = eligible.flatMap(row=>{
