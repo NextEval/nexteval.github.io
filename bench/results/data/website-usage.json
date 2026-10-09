@@ -1,0 +1,565 @@
+{
+  "generated_at": "2026-10-09T14:49:46.423530+00:00",
+  "pricing_as_of": "2026-10-09",
+  "pricing_snapshot_id": "public-standard-20261009-r1",
+  "pricing_sha256": "089efcb5cf6ea5087ff09c84e24429df1fbe5c78ab2404ec9b2434a4bdd59fab",
+  "cost_basis": "API-equivalent token inference estimate, not subscription billing",
+  "source_usage_sha256": "cf1063a6d71ed564ce43fcda6076eb04fab7d4e3ef99ff002938e6631a6019c8",
+  "schema": "nexteval.website-usage/1",
+  "groups": [
+    {
+      "participant_id": "claude-code--claude-opus-5-5--medium",
+      "task_id": "nexteval-u5-perturbed-noisy@1",
+      "runs": 920,
+      "mean_total_tokens_per_run": 196471.89673913043,
+      "total_tokens": 180754145,
+      "mean_api_equivalent_cost_usd_per_run": 0.14748955869565217,
+      "total_api_equivalent_cost_usd": 135.690394,
+      "pricing_as_of": "2026-10-09",
+      "pricing_sources": [
+        "https://platform.claude.com/docs/en/about-claude/pricing"
+      ],
+      "accounting_status": "complete",
+      "selection_sha256": "061aaa5df7c1af45fe6189316835017b486cee68eeb49a1eea3263e8b04f286d",
+      "usage_known_runs": 920,
+      "cost_known_runs": 920
+    },
+    {
+      "participant_id": "claude-code--claude-opus-5-5--medium",
+      "task_id": "nexteval-u5-perturbed-rotated@1",
+      "runs": 920,
+      "mean_total_tokens_per_run": 183243.04130434783,
+      "total_tokens": 168583598,
+      "mean_api_equivalent_cost_usd_per_run": 0.1354061495652174,
+      "total_api_equivalent_cost_usd": 124.5736576,
+      "pricing_as_of": "2026-10-09",
+      "pricing_sources": [
+        "https://platform.claude.com/docs/en/about-claude/pricing"
+      ],
+      "accounting_status": "complete",
+      "selection_sha256": "cc2f990fe088f963083e2b23a6ba0d55b36827e5b67623c5f6ed64c611936292",
+      "usage_known_runs": 920,
+      "cost_known_runs": 920
+    },
+    {
+      "participant_id": "claude-code--claude-opus-5-5--medium",
+      "task_id": "nexteval-u5-perturbed@1",
+      "runs": 920,
+      "mean_total_tokens_per_run": 164756.60108695654,
+      "total_tokens": 151576073,
+      "mean_api_equivalent_cost_usd_per_run": 0.12337423391304347,
+      "total_api_equivalent_cost_usd": 113.5042952,
+      "pricing_as_of": "2026-10-09",
+      "pricing_sources": [
+        "https://platform.claude.com/docs/en/about-claude/pricing"
+      ],
+      "accounting_status": "complete",
+      "selection_sha256": "3dd7cd112a389fcf39b739719133b6b2776a25065e77000606b8095fb4e2fbdc",
+      "usage_known_runs": 920,
+      "cost_known_runs": 920
+    },
+    {
+      "participant_id": "claude-code--claude-sonnet-5--high",
+      "task_id": "nexteval-u5-perturbed-noisy@1",
+      "runs": 920,
+      "mean_total_tokens_per_run": 667361.2902173913,
+      "total_tokens": 613972387,
+      "mean_api_equivalent_cost_usd_per_run": 0.35078245804347824,
+      "total_api_equivalent_cost_usd": 322.7198614,
+      "pricing_as_of": "2026-10-09",
+      "pricing_sources": [
+        "https://platform.claude.com/docs/en/about-claude/pricing",
+        "https://platform.claude.com/docs/en/models/sonnet-5/overview"
+      ],
+      "accounting_status": "complete",
+      "selection_sha256": "86c2a680f6e1da149f0d75bc08b688d5b46de0644cf1cd9e0f638e0da4ead2d2",
+      "usage_known_runs": 920,
+      "cost_known_runs": 920
+    },
+    {
+      "participant_id": "claude-code--claude-sonnet-5--high",
+      "task_id": "nexteval-u5-perturbed-random-nan@1",
+      "runs": 920,
+      "mean_total_tokens_per_run": 726160.8510869566,
+      "total_tokens": 668067983,
+      "mean_api_equivalent_cost_usd_per_run": 0.38750215804347826,
+      "total_api_equivalent_cost_usd": 356.5019854,
+      "pricing_as_of": "2026-10-09",
+      "pricing_sources": [
+        "https://platform.claude.com/docs/en/about-claude/pricing",
+        "https://platform.claude.com/docs/en/models/sonnet-5/overview"
+      ],
+      "accounting_status": "complete",
+      "selection_sha256": "f4e298e37a8d8591a7f8af26e46dc6e8de551b6a334187b01c5b1404b030cad0",
+      "usage_known_runs": 920,
+      "cost_known_runs": 920
+    },
+    {
+      "participant_id": "claude-code--claude-sonnet-5--high",
+      "task_id": "nexteval-u5-perturbed-rotated@1",
+      "runs": 920,
+      "mean_total_tokens_per_run": 576322.0945652174,
+      "total_tokens": 530216327,
+      "mean_api_equivalent_cost_usd_per_run": 0.2996866663043478,
+      "total_api_equivalent_cost_usd": 275.711733,
+      "pricing_as_of": "2026-10-09",
+      "pricing_sources": [
+        "https://platform.claude.com/docs/en/about-claude/pricing",
+        "https://platform.claude.com/docs/en/models/sonnet-5/overview"
+      ],
+      "accounting_status": "complete",
+      "selection_sha256": "6ea4af4d93822e02c225e55f60816537e8f912277e62d5115bfc2a195b5ca9f0",
+      "usage_known_runs": 920,
+      "cost_known_runs": 920
+    },
+    {
+      "participant_id": "claude-code--claude-sonnet-5--high",
+      "task_id": "nexteval-u5-perturbed@1",
+      "runs": 920,
+      "mean_total_tokens_per_run": 570080.5304347826,
+      "total_tokens": 524474088,
+      "mean_api_equivalent_cost_usd_per_run": 0.31118017521739133,
+      "total_api_equivalent_cost_usd": 286.2857612,
+      "pricing_as_of": "2026-10-09",
+      "pricing_sources": [
+        "https://platform.claude.com/docs/en/about-claude/pricing",
+        "https://platform.claude.com/docs/en/models/sonnet-5/overview"
+      ],
+      "accounting_status": "complete",
+      "selection_sha256": "d0928ef3bd17c0ab1020392bb151c7f1c17ef8e3f1ff22911e1836fdbaa7acab",
+      "usage_known_runs": 920,
+      "cost_known_runs": 920
+    },
+    {
+      "participant_id": "claude-code--claude-sonnet-5--medium",
+      "task_id": "nexteval-u5-perturbed-noisy@1",
+      "runs": 920,
+      "mean_total_tokens_per_run": 392675.89130434784,
+      "total_tokens": 361261820,
+      "mean_api_equivalent_cost_usd_per_run": 0.1792717902173913,
+      "total_api_equivalent_cost_usd": 164.930047,
+      "pricing_as_of": "2026-10-09",
+      "pricing_sources": [
+        "https://platform.claude.com/docs/en/about-claude/pricing",
+        "https://platform.claude.com/docs/en/models/sonnet-5/overview"
+      ],
+      "accounting_status": "complete",
+      "selection_sha256": "c136b311c5937ba71ce09b4d872e4dea982c0cd68293e491087447b829ff266e",
+      "usage_known_runs": 920,
+      "cost_known_runs": 920
+    },
+    {
+      "participant_id": "claude-code--claude-sonnet-5--medium",
+      "task_id": "nexteval-u5-perturbed-random-nan@1",
+      "runs": 920,
+      "mean_total_tokens_per_run": 442761.14239130437,
+      "total_tokens": 407340251,
+      "mean_api_equivalent_cost_usd_per_run": 0.20539014239130435,
+      "total_api_equivalent_cost_usd": 188.958931,
+      "pricing_as_of": "2026-10-09",
+      "pricing_sources": [
+        "https://platform.claude.com/docs/en/about-claude/pricing",
+        "https://platform.claude.com/docs/en/models/sonnet-5/overview"
+      ],
+      "accounting_status": "complete",
+      "selection_sha256": "fbb3fe91739a6ba88a0c3b56697cadb2a0755e9eb7c1e5595632d2f996fb7772",
+      "usage_known_runs": 920,
+      "cost_known_runs": 920
+    },
+    {
+      "participant_id": "claude-code--claude-sonnet-5--medium",
+      "task_id": "nexteval-u5-perturbed-rotated@1",
+      "runs": 920,
+      "mean_total_tokens_per_run": 318934.51630434784,
+      "total_tokens": 293419755,
+      "mean_api_equivalent_cost_usd_per_run": 0.13928991652173914,
+      "total_api_equivalent_cost_usd": 128.1467232,
+      "pricing_as_of": "2026-10-09",
+      "pricing_sources": [
+        "https://platform.claude.com/docs/en/about-claude/pricing",
+        "https://platform.claude.com/docs/en/models/sonnet-5/overview"
+      ],
+      "accounting_status": "complete",
+      "selection_sha256": "271165b04f651ae46eeb6c0068f9ff5ad3b8120e0dd3821ee8d4e21ba1ae3f92",
+      "usage_known_runs": 920,
+      "cost_known_runs": 920
+    },
+    {
+      "participant_id": "claude-code--claude-sonnet-5--medium",
+      "task_id": "nexteval-u5-perturbed@1",
+      "runs": 920,
+      "mean_total_tokens_per_run": 321196.902173913,
+      "total_tokens": 295501150,
+      "mean_api_equivalent_cost_usd_per_run": 0.14701417347826087,
+      "total_api_equivalent_cost_usd": 135.2530396,
+      "pricing_as_of": "2026-10-09",
+      "pricing_sources": [
+        "https://platform.claude.com/docs/en/about-claude/pricing",
+        "https://platform.claude.com/docs/en/models/sonnet-5/overview"
+      ],
+      "accounting_status": "complete",
+      "selection_sha256": "c4fe2e05b453dd69c6d53c044559372c44b616b036a418ba9f480ffd44fd9636",
+      "usage_known_runs": 920,
+      "cost_known_runs": 920
+    },
+    {
+      "participant_id": "claude-code--deepseek-v4-flash--high",
+      "task_id": "nexteval-u5-perturbed-noisy@1",
+      "runs": 920,
+      "mean_total_tokens_per_run": 462077.1608695652,
+      "total_tokens": 425110988,
+      "mean_api_equivalent_cost_usd_per_run": 0.07917099587366572,
+      "total_api_equivalent_cost_usd": 72.83731620377246,
+      "pricing_as_of": "2026-10-09",
+      "pricing_sources": [
+        "https://api-docs.deepseek.com/updates/",
+        "https://docs.volcengine.com/docs/82379/1330310?lang=en",
+        "https://docs.volcengine.com/docs/ark/coding-plan-personal-model-release?lang=zh",
+        "https://docs.volcengine.com/docs/ark/context-cache?lang=zh",
+        "https://docs.volcengine.com/docs/ark/model-pricing?lang=zh&redirect=1"
+      ],
+      "accounting_status": "complete",
+      "selection_sha256": "c460fee7f0eea9db395199e7232ce004ff532880f72cfae94f46a7763581f621",
+      "usage_known_runs": 920,
+      "cost_known_runs": 920
+    },
+    {
+      "participant_id": "claude-code--deepseek-v4-flash--high",
+      "task_id": "nexteval-u5-perturbed-random-nan@1",
+      "runs": 920,
+      "mean_total_tokens_per_run": 232340.14891304346,
+      "total_tokens": 213752937,
+      "mean_api_equivalent_cost_usd_per_run": 0.09101678736786367,
+      "total_api_equivalent_cost_usd": 83.73544437843458,
+      "pricing_as_of": "2026-10-09",
+      "pricing_sources": [
+        "https://api-docs.deepseek.com/updates/",
+        "https://docs.volcengine.com/docs/82379/1330310?lang=en",
+        "https://docs.volcengine.com/docs/ark/coding-plan-personal-model-release?lang=zh",
+        "https://docs.volcengine.com/docs/ark/context-cache?lang=zh",
+        "https://docs.volcengine.com/docs/ark/model-pricing?lang=zh&redirect=1"
+      ],
+      "accounting_status": "complete",
+      "selection_sha256": "b29fbd9d118f913e130b3379863b9e5ca71ea4eb6f0d0f3fa90663a5a6d6c289",
+      "usage_known_runs": 920,
+      "cost_known_runs": 920
+    },
+    {
+      "participant_id": "claude-code--deepseek-v4-flash--high",
+      "task_id": "nexteval-u5-perturbed-rotated@1",
+      "runs": 920,
+      "mean_total_tokens_per_run": 198762.48586956522,
+      "total_tokens": 182861487,
+      "mean_api_equivalent_cost_usd_per_run": 0.07614262887529946,
+      "total_api_equivalent_cost_usd": 70.0512185652755,
+      "pricing_as_of": "2026-10-09",
+      "pricing_sources": [
+        "https://api-docs.deepseek.com/updates/",
+        "https://docs.volcengine.com/docs/82379/1330310?lang=en",
+        "https://docs.volcengine.com/docs/ark/coding-plan-personal-model-release?lang=zh",
+        "https://docs.volcengine.com/docs/ark/context-cache?lang=zh",
+        "https://docs.volcengine.com/docs/ark/model-pricing?lang=zh&redirect=1"
+      ],
+      "accounting_status": "complete",
+      "selection_sha256": "586cc7a9a09b4d20ec1591716f3879c98ce47052ad929d3f0199ae5f7bf8aba1",
+      "usage_known_runs": 920,
+      "cost_known_runs": 920
+    },
+    {
+      "participant_id": "claude-code--deepseek-v4-flash--high",
+      "task_id": "nexteval-u5-perturbed@1",
+      "runs": 920,
+      "mean_total_tokens_per_run": 215874.47608695654,
+      "total_tokens": 198604518,
+      "mean_api_equivalent_cost_usd_per_run": 0.08285606906928238,
+      "total_api_equivalent_cost_usd": 76.22758354373978,
+      "pricing_as_of": "2026-10-09",
+      "pricing_sources": [
+        "https://api-docs.deepseek.com/updates/",
+        "https://docs.volcengine.com/docs/82379/1330310?lang=en",
+        "https://docs.volcengine.com/docs/ark/coding-plan-personal-model-release?lang=zh",
+        "https://docs.volcengine.com/docs/ark/context-cache?lang=zh",
+        "https://docs.volcengine.com/docs/ark/model-pricing?lang=zh&redirect=1"
+      ],
+      "accounting_status": "complete",
+      "selection_sha256": "3a8de93836ddda3c5b11ba2ad1e21e7097822d282c6d0b77933ff61b5bb773a3",
+      "usage_known_runs": 920,
+      "cost_known_runs": 920
+    },
+    {
+      "participant_id": "claude-code--deepseek-v4-flash--low",
+      "task_id": "nexteval-u5-perturbed-noisy@1",
+      "runs": 920,
+      "mean_total_tokens_per_run": 212886.34347826088,
+      "total_tokens": 195855436,
+      "mean_api_equivalent_cost_usd_per_run": 0.08067409359481852,
+      "total_api_equivalent_cost_usd": 74.22016610723303,
+      "pricing_as_of": "2026-10-09",
+      "pricing_sources": [
+        "https://api-docs.deepseek.com/updates/",
+        "https://docs.volcengine.com/docs/82379/1330310?lang=en",
+        "https://docs.volcengine.com/docs/ark/coding-plan-personal-model-release?lang=zh",
+        "https://docs.volcengine.com/docs/ark/context-cache?lang=zh",
+        "https://docs.volcengine.com/docs/ark/model-pricing?lang=zh&redirect=1"
+      ],
+      "accounting_status": "complete",
+      "selection_sha256": "e275a46a9d0f7995c1f5ee44db24061ad0768cb41c93d728fda8ae7aa68c5953",
+      "usage_known_runs": 920,
+      "cost_known_runs": 920
+    },
+    {
+      "participant_id": "claude-code--deepseek-v4-flash--low",
+      "task_id": "nexteval-u5-perturbed-random-nan@1",
+      "runs": 920,
+      "mean_total_tokens_per_run": 233575.07826086957,
+      "total_tokens": 214889072,
+      "mean_api_equivalent_cost_usd_per_run": 0.09053416055896009,
+      "total_api_equivalent_cost_usd": 83.29142771424328,
+      "pricing_as_of": "2026-10-09",
+      "pricing_sources": [
+        "https://api-docs.deepseek.com/updates/",
+        "https://docs.volcengine.com/docs/82379/1330310?lang=en",
+        "https://docs.volcengine.com/docs/ark/coding-plan-personal-model-release?lang=zh",
+        "https://docs.volcengine.com/docs/ark/context-cache?lang=zh",
+        "https://docs.volcengine.com/docs/ark/model-pricing?lang=zh&redirect=1"
+      ],
+      "accounting_status": "complete",
+      "selection_sha256": "c87498ab87c5672a9b0dffffc25ae76363d8fd5576e1f2e9601bd8b32cb4471d",
+      "usage_known_runs": 920,
+      "cost_known_runs": 920
+    },
+    {
+      "participant_id": "claude-code--deepseek-v4-flash--low",
+      "task_id": "nexteval-u5-perturbed-rotated@1",
+      "runs": 920,
+      "mean_total_tokens_per_run": 202207.0206521739,
+      "total_tokens": 186030459,
+      "mean_api_equivalent_cost_usd_per_run": 0.02074725140288908,
+      "total_api_equivalent_cost_usd": 19.087471290657952,
+      "pricing_as_of": "2026-10-09",
+      "pricing_sources": [
+        "https://api-docs.deepseek.com/updates/",
+        "https://docs.volcengine.com/docs/82379/1330310?lang=en",
+        "https://docs.volcengine.com/docs/ark/coding-plan-personal-model-release?lang=zh",
+        "https://docs.volcengine.com/docs/ark/context-cache?lang=zh",
+        "https://docs.volcengine.com/docs/ark/model-pricing?lang=zh&redirect=1"
+      ],
+      "accounting_status": "complete",
+      "selection_sha256": "df3a13dd598ea4319ed48c54fbe2bb14c215f99552233fa1c625e7533888ba2a",
+      "usage_known_runs": 920,
+      "cost_known_runs": 920
+    },
+    {
+      "participant_id": "claude-code--deepseek-v4-flash--low",
+      "task_id": "nexteval-u5-perturbed@1",
+      "runs": 920,
+      "mean_total_tokens_per_run": 221902.23152173913,
+      "total_tokens": 204150053,
+      "mean_api_equivalent_cost_usd_per_run": 0.048911158376329436,
+      "total_api_equivalent_cost_usd": 44.99826570622308,
+      "pricing_as_of": "2026-10-09",
+      "pricing_sources": [
+        "https://api-docs.deepseek.com/updates/",
+        "https://docs.volcengine.com/docs/82379/1330310?lang=en",
+        "https://docs.volcengine.com/docs/ark/coding-plan-personal-model-release?lang=zh",
+        "https://docs.volcengine.com/docs/ark/context-cache?lang=zh",
+        "https://docs.volcengine.com/docs/ark/model-pricing?lang=zh&redirect=1"
+      ],
+      "accounting_status": "complete",
+      "selection_sha256": "56813941da68d94f069ec20f1b2fd531145ccbb55b68b64ca0cecc10b43010be",
+      "usage_known_runs": 920,
+      "cost_known_runs": 920
+    },
+    {
+      "participant_id": "codex--gpt-5.5--medium",
+      "task_id": "nexteval-u5-perturbed@1",
+      "runs": 920,
+      "mean_total_tokens_per_run": 75897.45326086956,
+      "total_tokens": 69825657,
+      "mean_api_equivalent_cost_usd_per_run": 0.17888123152173913,
+      "total_api_equivalent_cost_usd": 164.570733,
+      "pricing_as_of": "2026-10-09",
+      "pricing_sources": [
+        "https://developers.openai.com/api/docs/guides/prompt-caching",
+        "https://developers.openai.com/api/docs/models/gpt-5.5"
+      ],
+      "accounting_status": "complete",
+      "selection_sha256": "c344b6e6ccc9f37c8238e93738e1667d8a0c061f964048505ade4d7385c25d9c",
+      "usage_known_runs": 920,
+      "cost_known_runs": 920
+    },
+    {
+      "participant_id": "codex--gpt-5.6-luna--high",
+      "task_id": "nexteval-u5-perturbed@1",
+      "runs": 920,
+      "mean_total_tokens_per_run": 174802.08369565217,
+      "total_tokens": 160817917,
+      "mean_api_equivalent_cost_usd_per_run": 0.014651051913043478,
+      "total_api_equivalent_cost_usd": 13.47896776,
+      "pricing_as_of": "2026-10-09",
+      "pricing_sources": [
+        "https://developers.openai.com/api/docs/models/gpt-5.6-luna"
+      ],
+      "accounting_status": "complete",
+      "selection_sha256": "afb1834098fc5fe0a87af1ecdbdc945c428bda60d53d38b16084ea3fbbc06d7f",
+      "usage_known_runs": 920,
+      "cost_known_runs": 920
+    },
+    {
+      "participant_id": "codex--gpt-5.6-luna--medium",
+      "task_id": "nexteval-u5-perturbed@1",
+      "runs": 920,
+      "mean_total_tokens_per_run": 104082.44565217392,
+      "total_tokens": 95755850,
+      "mean_api_equivalent_cost_usd_per_run": 0.008294466956521739,
+      "total_api_equivalent_cost_usd": 7.6309096,
+      "pricing_as_of": "2026-10-09",
+      "pricing_sources": [
+        "https://developers.openai.com/api/docs/models/gpt-5.6-luna"
+      ],
+      "accounting_status": "complete",
+      "selection_sha256": "88f90e769f06015f5ab6e91e96b7771b15c6baff550c39c413107ad542aaf302",
+      "usage_known_runs": 920,
+      "cost_known_runs": 920
+    },
+    {
+      "participant_id": "codex--gpt-5.6-sol--high",
+      "task_id": "nexteval-u5-perturbed@1",
+      "runs": 920,
+      "mean_total_tokens_per_run": 259420.9108695652,
+      "total_tokens": 238667238,
+      "mean_api_equivalent_cost_usd_per_run": 0.303443612173913,
+      "total_api_equivalent_cost_usd": 279.1681232,
+      "pricing_as_of": "2026-10-09",
+      "pricing_sources": [
+        "https://developers.openai.com/api/docs/models/gpt-5.6-sol",
+        "https://developers.openai.com/api/docs/pricing"
+      ],
+      "accounting_status": "complete",
+      "selection_sha256": "3d43a5543ec8c7fe346ba2be49cd18a293e48ee7776a153a54170115c24bf8f6",
+      "usage_known_runs": 920,
+      "cost_known_runs": 920
+    },
+    {
+      "participant_id": "codex--gpt-5.6-sol--medium",
+      "task_id": "nexteval-u5-perturbed@1",
+      "runs": 920,
+      "mean_total_tokens_per_run": 172759.8108695652,
+      "total_tokens": 158939026,
+      "mean_api_equivalent_cost_usd_per_run": 0.20241355304347827,
+      "total_api_equivalent_cost_usd": 186.2204688,
+      "pricing_as_of": "2026-10-09",
+      "pricing_sources": [
+        "https://developers.openai.com/api/docs/models/gpt-5.6-sol",
+        "https://developers.openai.com/api/docs/pricing"
+      ],
+      "accounting_status": "complete",
+      "selection_sha256": "881880a05ba59cfe71c55a3504f753201a5ddc886c57ce4049fedfc710342d9a",
+      "usage_known_runs": 920,
+      "cost_known_runs": 920
+    },
+    {
+      "participant_id": "codex--gpt-5.6-terra--high",
+      "task_id": "nexteval-u5-perturbed@1",
+      "runs": 920,
+      "mean_total_tokens_per_run": 164218.96630434782,
+      "total_tokens": 151081449,
+      "mean_api_equivalent_cost_usd_per_run": 0.13069535652173914,
+      "total_api_equivalent_cost_usd": 120.239728,
+      "pricing_as_of": "2026-10-09",
+      "pricing_sources": [
+        "https://developers.openai.com/api/docs/models/gpt-5.6-terra"
+      ],
+      "accounting_status": "complete",
+      "selection_sha256": "786a75cf6a072123e94435576869e23a8fdb29dc3e220eb21ab5cf620361be7b",
+      "usage_known_runs": 920,
+      "cost_known_runs": 920
+    },
+    {
+      "participant_id": "codex--gpt-5.6-terra--medium",
+      "task_id": "nexteval-u5-perturbed@1",
+      "runs": 920,
+      "mean_total_tokens_per_run": 115467.425,
+      "total_tokens": 106230031,
+      "mean_api_equivalent_cost_usd_per_run": 0.07890558695652174,
+      "total_api_equivalent_cost_usd": 72.59314,
+      "pricing_as_of": "2026-10-09",
+      "pricing_sources": [
+        "https://developers.openai.com/api/docs/models/gpt-5.6-terra"
+      ],
+      "accounting_status": "complete",
+      "selection_sha256": "7cf3902a73d655e2f387f969f3fdd5df1b61b9736f1744d9980a27590fe6cad0",
+      "usage_known_runs": 920,
+      "cost_known_runs": 920
+    },
+    {
+      "participant_id": "codex--gpt-6-luna--high",
+      "task_id": "nexteval-u5-perturbed@1",
+      "runs": 920,
+      "mean_total_tokens_per_run": 162168.25108695653,
+      "total_tokens": 149194791,
+      "mean_api_equivalent_cost_usd_per_run": 0.005761492934782609,
+      "total_api_equivalent_cost_usd": 5.3005735,
+      "pricing_as_of": "2026-10-09",
+      "pricing_sources": [
+        "https://developers.openai.com/api/docs/models/gpt-6-luna"
+      ],
+      "accounting_status": "complete",
+      "selection_sha256": "6118eded7d52ebe862598f8047fed68e2d42f041878b3b6546927ddbd7185972",
+      "usage_known_runs": 920,
+      "cost_known_runs": 920
+    },
+    {
+      "participant_id": "codex--gpt-6-luna--medium",
+      "task_id": "nexteval-u5-perturbed@1",
+      "runs": 920,
+      "mean_total_tokens_per_run": 113708.68260869566,
+      "total_tokens": 104611988,
+      "mean_api_equivalent_cost_usd_per_run": 0.0034016987826086956,
+      "total_api_equivalent_cost_usd": 3.12956288,
+      "pricing_as_of": "2026-10-09",
+      "pricing_sources": [
+        "https://developers.openai.com/api/docs/models/gpt-6-luna"
+      ],
+      "accounting_status": "complete",
+      "selection_sha256": "311633c1ad81460beae52d83874a319ffa776e51cb2884b1e789e2888830c9cf",
+      "usage_known_runs": 920,
+      "cost_known_runs": 920
+    },
+    {
+      "participant_id": "codex--gpt-6-sol--high",
+      "task_id": "nexteval-u5-perturbed@1",
+      "runs": 920,
+      "mean_total_tokens_per_run": 211708.9597826087,
+      "total_tokens": 194772243,
+      "mean_api_equivalent_cost_usd_per_run": 0.12350325347826087,
+      "total_api_equivalent_cost_usd": 113.6229932,
+      "pricing_as_of": "2026-10-09",
+      "pricing_sources": [
+        "https://developers.openai.com/api/docs/models/gpt-6-sol"
+      ],
+      "accounting_status": "complete",
+      "selection_sha256": "f0283180d5af8bb963b332a34a80b670585ddf72ba030b3c52b1fc664ca904fe",
+      "usage_known_runs": 920,
+      "cost_known_runs": 920
+    },
+    {
+      "participant_id": "codex--gpt-6-sol--medium",
+      "task_id": "nexteval-u5-perturbed@1",
+      "runs": 920,
+      "mean_total_tokens_per_run": 162910.6695652174,
+      "total_tokens": 149877816,
+      "mean_api_equivalent_cost_usd_per_run": 0.08721002782608696,
+      "total_api_equivalent_cost_usd": 80.2332256,
+      "pricing_as_of": "2026-10-09",
+      "pricing_sources": [
+        "https://developers.openai.com/api/docs/models/gpt-6-sol"
+      ],
+      "accounting_status": "complete",
+      "selection_sha256": "ea91d63bebe50f34f4050698ea5a07250bb8684a03c7fd0bbf3d8b54b77213e1",
+      "usage_known_runs": 920,
+      "cost_known_runs": 920
+    }
+  ],
+  "pricing_file": "pricing-snapshot.json"
+}

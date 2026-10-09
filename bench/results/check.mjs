@@ -1,7 +1,9 @@
-import { readFile, readdir } from 'node:fs/promises';
+import { readFile, readdir, stat } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { resolve, relative, join } from 'node:path';
 import { validateSnapshot, validateProfiles, validateHistoryIndex, validateHistory } from './model.mjs';
+import { validateUsage } from './usage.mjs';
+import { createHash } from 'node:crypto';
 
 export async function checkBundle(directory = fileURLToPath(new URL('./data/',import.meta.url))) {
   const root = resolve(directory);
@@ -21,6 +23,15 @@ export async function checkBundle(directory = fileURLToPath(new URL('./data/',im
     return data;
   }
   const data = validateSnapshot(await load('results.json'));
+  if (await stat(join(root,'website-usage.json')).then(()=>true, error=>{ if (error.code === 'ENOENT') return false; throw error; })) {
+    const usage = validateUsage(await load('website-usage.json'));
+    if (usage.pricing_file) {
+      if (usage.pricing_file !== 'pricing-snapshot.json') throw new Error('Unknown pricing asset');
+      const pricing = await load(usage.pricing_file);
+      if (pricing.schema !== 'nexteval.reference-pricing/1' || pricing.pricing_snapshot_id !== usage.pricing_snapshot_id || pricing.pricing_as_of !== usage.pricing_as_of
+        || createHash('sha256').update(await readFile(join(root,usage.pricing_file))).digest('hex') !== usage.pricing_sha256) throw new Error('Pricing provenance mismatch');
+    }
+  }
   for (const task of data.tasks) {
     if (task.profiles_file) validateProfiles(await load(task.profiles_file),task);
     if (task.history_file) {

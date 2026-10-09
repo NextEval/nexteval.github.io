@@ -2,9 +2,9 @@
   "source_repository": "NextEval/nexteval-bench-website",
   "source_path": "dist/results",
   "files": {
-    "app.mjs": "efbe5e0bd54ba70b314647882eecabfadad3c4328b160bd0c1700cc0ae50a4e9",
+    "app.mjs": "29bde5fa2ff52836d5a2a045b36c5f01b65bb6f47c3330c32a756f063260c29d",
     "chart.mjs": "c0ca5926486aeab299d402e5e231c2fd1c1fdd4fc4a2b323de2992e6fba2c7ed",
-    "check.mjs": "820cf620060cef42b97214634cc4369b5223fd76ff84b94d86d639d64d6aaf4c",
+    "check.mjs": "399839bf85a633a2b5a204188ed783e35a714a7490e738382780723010f9121e",
     "data/histories/cmp-6bb638673cbcaeb40f43944a/ALLINITU.json": "13f90e8d42aadc24ef80d3c238b7f5498482f920e79e9c5f0342ab8ef27fcf1c",
     "data/histories/cmp-6bb638673cbcaeb40f43944a/BARD.json": "8b7596a5d87a5b5104d43638d186577617361d7dda7bb56fd6a381c944c32df2",
     "data/histories/cmp-6bb638673cbcaeb40f43944a/BEALE.json": "fc2e8dacf61b499e4d7a214e8db59b6cf68c0e09314884b85be166afee71c42d",
@@ -377,16 +377,20 @@
     "data/histories/cmp-90a0c3610cb6250ce7c42fc3/ZANGWIL2.json": "3345e6ae877997b80774066d500ceafa30511f5252f53480c64ab43d0d54362a",
     "data/histories/cmp-90a0c3610cb6250ce7c42fc3/index.json": "3db84de12817499e88f89bc9399d28e002452152b3eea1a0fd075831c5e3d6bb",
     "data/histories/cmp-90a0c3610cb6250ce7c42fc3/n10FOLDTRLS.json": "729bdfe1dfac642cc07b0d840f108123edb4a03cb1c52f22b3722327ad141162",
+    "data/pricing-snapshot.json": "089efcb5cf6ea5087ff09c84e24429df1fbe5c78ab2404ec9b2434a4bdd59fab",
     "data/profiles/cmp-6bb638673cbcaeb40f43944a.json": "84166264d2f811150374bc88e131b461833eee7cb6f65d95e4794a1cdf4e275d",
     "data/profiles/cmp-7a92d62727951c674048f518.json": "1deb5ca24ddc799335e1498d15e2dacbd908911f783f3349740a9cdab6f91f0f",
     "data/profiles/cmp-896eac46cf3cbdee9359803a.json": "0dbbf20e909f25e80f3aa324b2f69fa9796b37b90ce30cc101db777da103532d",
     "data/profiles/cmp-90a0c3610cb6250ce7c42fc3.json": "35ef8bd7bc45f95ff02c99d083b811e987cd4e59c1539bbb2f1542e97a44b22f",
     "data/results.json": "0e61af7ac7844c5c88522e5a28730d42d3556a689fd4f9f6aafaf09698c58fd9",
+    "data/website-usage.json": "25b2b2a24473c30f3ae511c78ac36f157a48c9e07cd5a49ab4d5c3b395eec931",
     "icons.mjs": "8cfd8776c2d608e8ddb785d493113b1a0d6fce371f31afd3d39bd04d64234dc2",
-    "index.html": "11f607b54776dbba28fffaecf6c7b1c014f5aaee517499b57bebfc70bb0ba47d",
+    "index.html": "60f89083ffbf8302bc9d0c36c5e00cbd7d27c72f223ff29f4aa91ed5182b4b86",
     "model.mjs": "245a6162431f3e6ae5d0fe3a35a6e51320a497d14e501e06690f1102baf88eaa",
+    "pareto.mjs": "14702a6ab973747944040a791fe2e80871c481103f8e2c49e04195601db01607",
     "plan.mjs": "9eddbe2b31107b111eb14ed5619589d295a6637afb3303f1b0308c21f9284c52",
-    "results.css": "076664a712f8a0e8cd60860cfa111075ebac4a9bd8d97819703dcc3868d2ed4e",
-    "scores.mjs": "4345bc8747616937350eb2227759e8fe8c2e1c28cc76781899f698885d6dcd19"
+    "results.css": "f9766f9c4acdc79d4301c432c8fabefd303e905e349643aa48c83ae1054eeed6",
+    "scores.mjs": "4345bc8747616937350eb2227759e8fe8c2e1c28cc76781899f698885d6dcd19",
+    "usage.mjs": "a971ba9dce8ac549c8fa4eabb9d2fa0c2d332aa4d0a00f254afd9057f833f7d0"
   }
 }

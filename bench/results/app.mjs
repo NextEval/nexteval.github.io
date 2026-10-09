@@ -3,12 +3,15 @@ import { ScientificChart, formatNumber } from './chart.mjs';
 import { icon } from './icons.mjs';
 import { PLAN, plannedParticipants } from './plan.mjs';
 import { relativeScore, referenceScore, relativeScoreExport, heatColor, HEAT_COLORS } from './scores.mjs';
+import { validateUsage, paretoData, pricingLinks } from './usage.mjs';
+import { ParetoChart, compactNumber, dollarNumber } from './pareto.mjs';
 
 const host = document.getElementById('results-app');
 document.querySelector('.results-skip')?.addEventListener('click', event => {
   event.preventDefault(); host.focus(); host.scrollIntoView({block:'start'});
 });
 const dataURL = new URL('./data/results.json', import.meta.url);
+const usageURL = new URL('./data/website-usage.json', import.meta.url);
 const archiveURL = host.dataset.archive || '../index.html#profiles';
 const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
 const taskURL = (task, values = {}) => '#task/' + encodeURIComponent(task.task_id) + '?' + new URLSearchParams(values);
@@ -28,13 +31,14 @@ const labelFor = p => {
   if (p.display_name) return p.display_name;
   if (!p.model || p.harness === 'reference' || p.model === 'none') return p.label;
   const model = p.model.split('/').at(-1);
-  return ({ 'gpt-5.5':'GPT-5.5', 'gpt-5.6-sol':'GPT-5.6 Sol', 'gpt-5.6-terra':'GPT-5.6 Terra', 'gpt-5.6-luna':'GPT-5.6 Luna', 'gpt-6-sol':'GPT-6 Sol', 'gpt-6-luna':'GPT-6 Luna', 'claude-sonnet-5':'Claude Sonnet 5', 'deepseek-v4-flash':'DeepSeek V4 Flash' }[model] || p.model);
+  return ({ 'gpt-5.5':'GPT-5.5', 'gpt-5.6-sol':'GPT-5.6 Sol', 'gpt-5.6-terra':'GPT-5.6 Terra', 'gpt-5.6-luna':'GPT-5.6 Luna', 'gpt-6-sol':'GPT-6 Sol', 'gpt-6-luna':'GPT-6 Luna', 'claude-sonnet-5':'Claude Sonnet 5', 'claude-opus-5-5':'Claude Opus 5.5', 'deepseek-v4-flash':'DeepSeek V4 Flash' }[model] || p.model);
 };
 const harnessFor = p => ({'codex':'Codex','claude-code':'Claude Code','scipy':'SciPy'}[p.harness] || p.harness);
 const detailFor = p => [harnessFor(p), p.effort].filter(Boolean).join(' / ');
 const chartParticipants = () => snapshot.participants.map(p => ({...p,label:reference(p) ? p.label : `${labelFor(p)} / ${detailFor(p)}`}));
 const reference = p => /cobyqa/i.test(p.label);
 const dateLabel = () => snapshot.generated_at ? new Date(snapshot.generated_at).toISOString().slice(0,10) : 'Versioned snapshot';
+const dashboardViews = (view, task, family = '') => `<nav class="results-tabs dashboard-views" aria-label="Results views"><a href="#matrix?${new URLSearchParams({sort:task?.task_id || '',family})}" ${view === 'matrix' ? 'aria-current="page"' : ''}>${icon('grid-2x2')}Matrix</a><a href="#pareto?${new URLSearchParams({task:task?.task_id || '',family})}" ${view === 'pareto' ? 'aria-current="page"' : ''}>${icon('chart-scatter')}Pareto</a></nav>`;
 
 function footer() {
   const scoreDownload = 'data:application/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(relativeScoreExport(snapshot), null, 2));
@@ -64,6 +68,7 @@ function matrix(params) {
   const {rows, unpublished} = matrixVisibility(snapshot, filteredRows, expanded);
   const cells = new Map(snapshot.matrix.map(c => [JSON.stringify([c.participant_id,c.task_id]), c]));
   host.innerHTML = `<div class="results-heading"><div><h1>Task matrix</h1><p>NextEval Bench / agent performance across packaged optimization tests</p></div><span class="results-edition">${esc(dateLabel())}</span></div>
+    ${dashboardViews('matrix',selected,family)}
     <div class="results-toolbar"><div class="results-scope"><span>S2MPJ</span><span>Unconstrained</span><span>Dimensions &le; 5</span><span>50 &times; n evaluations</span></div>
       <label class="results-sort" for="family-filter">Family<select id="family-filter"><option value="">All families</option>${PLAN.families.map(f => `<option ${f.family === family ? 'selected' : ''}>${esc(f.family)}</option>`).join('')}</select></label>
       <label class="results-sort" for="sort-task">Sort by<select id="sort-task" ${selected ? '' : 'disabled'}>${sortable.map(t => `<option value="${esc(t.task_id)}" ${t === selected ? 'selected' : ''}>${esc(t.label)}</option>`).join('')}</select></label></div>
@@ -93,6 +98,54 @@ function matrix(params) {
     updateMatrix(!expanded);
   };
   host.querySelectorAll('[data-task]').forEach(button => button.onclick = () => { location.hash = taskURL(snapshot.tasks.find(t => t.task_id === button.dataset.task)); });
+}
+
+async function pareto(params, ticket) {
+  const task = snapshot.tasks.find(t => t.task_id === params.get('task') && t.scores.length)
+    || snapshot.tasks.find(t => featureFor(t)?.key === 'perturbed_x0' && t.scores.length)
+    || snapshot.tasks.find(t => t.scores.length);
+  const family = PLAN.families.some(f => f.family === params.get('family')) ? params.get('family') : '';
+  const metric = params.get('metric') === 'tokens' ? 'tokens' : 'cost';
+  const scale = params.get('scale') === 'linear' ? 'linear' : 'log';
+  host.innerHTML = `<div class="results-heading"><div><h1>Score & consumption</h1><p>NextEval Bench / one packaged task, the same published scores</p></div><span class="results-edition">${esc(dateLabel())}</span></div>
+    ${dashboardViews('pareto',task,family)}
+    <div class="results-toolbar pareto-toolbar"><label class="results-sort" for="pareto-task">Task<select id="pareto-task">${snapshot.tasks.filter(t=>t.scores.length).map(t=>`<option value="${esc(t.task_id)}" ${t === task ? 'selected' : ''}>${esc(t.label)}</option>`).join('')}</select></label>
+      <label class="results-sort" for="pareto-family">Family<select id="pareto-family"><option value="">All families</option>${PLAN.families.map(f=>`<option ${f.family === family ? 'selected' : ''}>${esc(f.family)}</option>`).join('')}</select></label>
+      <label class="results-sort" for="pareto-metric">Mean per run<select id="pareto-metric"><option value="cost" ${metric === 'cost' ? 'selected' : ''}>API-equivalent USD</option><option value="tokens" ${metric === 'tokens' ? 'selected' : ''}>Total tokens</option></select></label></div>
+    <section id="pareto-view" aria-live="polite"><p>Loading verified usage</p></section>${method(task)}${footer()}`;
+  const update = () => { location.hash = 'pareto?' + new URLSearchParams({task:document.getElementById('pareto-task').value,family:document.getElementById('pareto-family').value,metric:document.getElementById('pareto-metric').value,scale:document.getElementById('pareto-log') ? document.getElementById('pareto-log').checked ? 'log' : 'linear' : scale}); };
+  for (const id of ['pareto-task','pareto-family','pareto-metric']) document.getElementById(id).onchange = update;
+  const view = document.getElementById('pareto-view');
+  let usage;
+  try { usage = validateUsage(await readJSON(usageURL)); }
+  catch (error) {
+    if (ticket !== epoch) return;
+    view.innerHTML = `<section class="results-empty"><h2>Usage snapshot unavailable</h2><p>No costs or tokens are inferred. ${esc(error.message)}</p></section>`; return;
+  }
+  if (ticket !== epoch) return;
+  const data = paretoData(snapshot,usage,task,metric,family);
+  const positive = data.points.every(p=>p.x > 0), log = scale === 'log' && positive;
+  const notes = `API-equivalent cost uses public standard list prices, not a Coding Plan bill. Tokens include input, output and cache categories under the audited accounting policy. Ordinary timeouts remain in each cohort. COBYQA has no comparable model usage and is not plotted. The frontier compares displayed configurations only; it is not a statistical significance test.`;
+  view.innerHTML = `<div class="matrix-meta"><span>${data.points.length} of ${data.eligible} scored configurations / ${task.grid.cells} runs each</span><span>${metric === 'cost' && data.pricing_as_of ? `Prices as of ${esc(data.pricing_as_of)}` : 'Verified usage only'}</span></div>
+    ${data.points.length ? `<div class="pareto-scale"><label><input type="checkbox" id="pareto-log" ${log ? 'checked' : ''} ${positive ? '' : 'disabled'}>Log axis</label></div><div class="pareto-layout"><div><p class="chart-unit">COBYQA-relative score / higher is better</p><div id="pareto-chart" class="pareto-chart"></div><p class="chart-axis">Mean ${metric === 'cost' ? 'API-equivalent USD' : 'total tokens'} per run / ${log ? 'log scale / ' : ''}lower is better</p><div class="pareto-key"><span><i class="frontier-key"></i>Non-dominated</span><span><i></i>Other configurations</span><span>COBYQA score = 0.50</span></div></div><aside id="pareto-detail" class="pareto-detail" aria-label="Selected configuration"></aside></div>
+    <ol class="pareto-configurations" aria-label="Configurations">${data.points.map((p,i)=>`<li><button data-config="${esc(p.participant.participant_id)}"><span class="pareto-index">${i+1}</span><span><strong>${esc(labelFor(p.participant))} <span class="muted">(${esc(p.participant.effort)})</span></strong><small>${esc(harnessFor(p.participant))}</small></span><span class="pareto-value">${scoreText(p.score)}<small>${metric === 'cost' ? dollarNumber(p.x) : compactNumber(p.x)}</small></span></button></li>`).join('')}</ol>` : `<section class="results-empty"><h2>${data.mixedPricing ? 'Price snapshots do not match' : 'No complete usage for this selection'}</h2><p>${data.mixedPricing ? 'Dollar points need a common price date. The token view remains available.' : 'Scores stay published in Matrix. Missing consumption is not shown as zero.'}</p></section>`}
+    ${data.omitted ? `<p class="profile-note">${data.omitted} scored configurations omitted: usage incomplete or not priced under the common snapshot.</p>` : ''}
+    <details class="results-method"><summary>Usage and price policy</summary><p>${notes}</p>${usage.pricing_snapshot_id ? `<p>Price snapshot <code>${esc(usage.pricing_snapshot_id)}</code>${usage.pricing_sha256 ? `<br>SHA-256 <code>${esc(usage.pricing_sha256)}</code>` : ''}</p>` : ''}<p><a href="${esc(usageURL.href)}" download>Download accounting snapshot</a>${usage.pricing_file === 'pricing-snapshot.json' ? ` / <a href="${fileURL(usage.pricing_file)}" download>Download price snapshot</a>` : ''}</p></details>`;
+  if (!data.points.length) return;
+  const select = point => {
+    const p = point.participant, g = point.group;
+    const links = pricingLinks(g.pricing_sources);
+    document.getElementById('pareto-detail').innerHTML = `<span class="pareto-status">${data.frontier.includes(point) ? 'NON-DOMINATED' : 'CONFIGURATION'}</span><h2>${esc(labelFor(p))}</h2><p class="muted">${esc(detailFor(p))}</p><dl><dt>Score</dt><dd>${scoreText(point.score)}</dd><dt>Runs</dt><dd>${g.runs} / ${task.grid.cells}</dd><dt>Mean tokens / run</dt><dd>${compactNumber(g.mean_total_tokens_per_run)}</dd><dt>Total tokens</dt><dd>${new Intl.NumberFormat('en-US').format(g.total_tokens)}</dd><dt>Mean API-equivalent USD / run</dt><dd>${g.mean_api_equivalent_cost_usd_per_run == null ? 'Unavailable' : dollarNumber(g.mean_api_equivalent_cost_usd_per_run)}</dd><dt>Total API-equivalent USD</dt><dd>${g.total_api_equivalent_cost_usd == null ? 'Unavailable' : dollarNumber(g.total_api_equivalent_cost_usd)}</dd><dt>Price date</dt><dd>${esc(g.pricing_as_of || 'Unavailable')}</dd></dl><div class="pareto-sources">${links.map(s=>`<a href="${esc(s.url)}" target="_blank" rel="noopener noreferrer">${esc(s.label)} ↗</a>`).join('')}</div><a class="back-link" href="${taskURL(task)}">Task profiles ${icon('arrow-up-right')}</a>`;
+    view.querySelectorAll('[data-config]').forEach(button => button.setAttribute('aria-pressed',String(button.dataset.config === p.participant_id)));
+    window.lucide?.createIcons();
+  };
+  document.getElementById('pareto-log').onchange = update;
+  chart = new ParetoChart(document.getElementById('pareto-chart'),data,metric,select,labelFor,log ? 'log' : 'linear');
+  select(data.points[0]);
+  view.querySelectorAll('[data-config]').forEach(button => button.onclick = () => {
+    const point = data.points.find(p=>p.participant.participant_id === button.dataset.config);
+    select(point); chart.select(point.participant.participant_id);
+  });
 }
 
 function coverage(task) {
@@ -169,7 +222,8 @@ async function route() {
       const task = snapshot.tasks.find(t => t.task_id === decodeURIComponent(path.slice(5)));
       if (!task) throw new Error('This task is not in the current snapshot');
       await detail(task,params,ticket);
-    } else matrix(params);
+    } else if (path === 'pareto') await pareto(params,ticket);
+    else matrix(params);
     if (ticket === epoch) {
       window.lucide?.createIcons();
       if (previousPath !== undefined && previousPath !== path) {
