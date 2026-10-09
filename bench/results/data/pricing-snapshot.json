@@ -1,0 +1,455 @@
+{
+  "basis": "API-equivalent token inference estimate, not subscription billing",
+  "models": {
+    "claude-opus-5-5": {
+      "cache_read": "0.2",
+      "cache_write_1h": "8",
+      "cache_write_5m": "5",
+      "cache_write_unknown": null,
+      "currency": "USD",
+      "input": "4",
+      "output": "20",
+      "provider_price_effective_from": null,
+      "sources": [
+        "https://platform.claude.com/docs/en/about-claude/pricing"
+      ]
+    },
+    "claude-sonnet-5": {
+      "cache_read": "0.2",
+      "cache_write_1h": "4",
+      "cache_write_5m": "2.5",
+      "cache_write_unknown": null,
+      "currency": "USD",
+      "input": "2",
+      "output": "10",
+      "provider_price_effective_from": null,
+      "sources": [
+        "https://platform.claude.com/docs/en/models/sonnet-5/overview",
+        "https://platform.claude.com/docs/en/about-claude/pricing"
+      ]
+    },
+    "deepseek-v4-flash-ga-260731": {
+      "cache_read": "0.10",
+      "cache_storage": {
+        "explicit_storage_cny_per_million_token_hour": "0.017",
+        "implicit_storage_rate": "0",
+        "included_in_reference_cost": false,
+        "unknown_duration_must_not_be_invented": true
+      },
+      "cache_write_1h": "3.00",
+      "cache_write_5m": "3.00",
+      "cache_write_semantics": "All three write fields price token processing at ordinary input rate, NOT an Anthropic-style TTL-specific creation tariff. Explicit-cache storage is separate and excluded from this token-only estimate. Implicit cache storage is free.",
+      "cache_write_unknown": "3.00",
+      "currency": "CNY",
+      "currency_units_per_usd": "6.7330",
+      "effective_date_note": "Pricing page says the old V4 Flash formal-release price is no longer applicable from 2026-08-21. This is not assumed to prove the exact effective date of every current component.",
+      "identity_verification": {
+        "conclusion": "Ark GA 260731 is mapped to the V4 Flash formal-release price row, not V4.1 and not the April preview.",
+        "evidence": [
+          "Ark official model catalog lists deepseek-v4-flash-ga-260731 separately from deepseek-v4-1-flash-260910 and the April preview.",
+          "DeepSeek official changelog names the 2026-07-31 formal update DeepSeek-V4-Flash-0731.",
+          "Ark release notes distinguish the V4 formal release from the September V4.1 introduction."
+        ],
+        "limitation": "The accessible Ark pricing row uses the formal-release name, not the full dated model ID. Mapping is a documented cross-page inference, not a verbatim ID-price row.",
+        "method": "cross_source_inference"
+      },
+      "input": "3.00",
+      "long_context_threshold": null,
+      "native_model_ids": [
+        "deepseek-v4-flash-ga-260731"
+      ],
+      "output": "9.00",
+      "provider": "Volcengine Ark",
+      "provider_price_effective_from": null,
+      "reference_region": "China",
+      "reference_service_tier": "online_standard",
+      "rejected_source": {
+        "reason": "Current deepseek-flash and legacy deepseek-v4-flash aliases on DeepSeek's own API route to V4.1; not the Ark dated native model.",
+        "url": "https://api-docs.deepseek.com/quick_start/pricing/"
+      },
+      "source_access_note": "Ark URLs were opened but returned empty rendered bodies or fetch timeouts. Exact price rows and cache rules were recovered from the official URLs' search-index extracts; DeepSeek changelog was opened in full. Do not label the Ark extraction as a successful full-page archival capture.",
+      "source_currency": "CNY",
+      "source_price_label": "deepseek-v4-flash\u6b63\u5f0f\u7248",
+      "source_rates": {
+        "cache_read": "0.10",
+        "cache_write_token_processing": "3.00",
+        "explicit_cache_storage_per_million_token_hour": "0.017",
+        "input": "3.00",
+        "output": "9.00"
+      },
+      "sources": [
+        "https://docs.volcengine.com/docs/ark/model-pricing?lang=zh&redirect=1",
+        "https://docs.volcengine.com/docs/82379/1330310?lang=en",
+        "https://docs.volcengine.com/docs/ark/coding-plan-personal-model-release?lang=zh",
+        "https://api-docs.deepseek.com/updates/",
+        "https://docs.volcengine.com/docs/ark/context-cache?lang=zh"
+      ],
+      "status": "ready_for_standard_token_inference_reference",
+      "tier_conditions": "Standard online text inference. No input-length price tiers or time-of-day tiers are listed for this exact formal V4 Flash price row. Reject model IDs for V4.1 or preview. Do not use Batch or low-priority rows.",
+      "usd_conversion_authority": "Use source CNY rates / fx.cny_per_usd with Decimal; displayed USD strings are rounded to 15 decimal places."
+    },
+    "gpt-5.5": {
+      "cache_read": "0.5",
+      "cache_write_1h": "5",
+      "cache_write_5m": "5",
+      "cache_write_unknown": "5",
+      "currency": "USD",
+      "input": "5",
+      "long_context_scope": "session",
+      "long_context_threshold": 272000,
+      "long_input_multiplier": "2",
+      "long_output_multiplier": "1.5",
+      "output": "30",
+      "provider_price_effective_from": null,
+      "sources": [
+        "https://developers.openai.com/api/docs/models/gpt-5.5",
+        "https://developers.openai.com/api/docs/guides/prompt-caching"
+      ]
+    },
+    "gpt-5.6-luna": {
+      "cache_read": "0.02",
+      "cache_write_1h": "0.25",
+      "cache_write_5m": "0.25",
+      "cache_write_unknown": "0.25",
+      "currency": "USD",
+      "input": "0.2",
+      "long_context_scope": "request",
+      "long_context_threshold": 272000,
+      "long_input_multiplier": "2",
+      "long_output_multiplier": "1.5",
+      "output": "1.2",
+      "provider_price_effective_from": null,
+      "sources": [
+        "https://developers.openai.com/api/docs/models/gpt-5.6-luna"
+      ]
+    },
+    "gpt-5.6-sol": {
+      "cache_read": "0.4",
+      "cache_write_1h": "5",
+      "cache_write_5m": "5",
+      "cache_write_unknown": "5",
+      "currency": "USD",
+      "input": "4",
+      "long_context_scope": "request",
+      "long_context_threshold": 272000,
+      "long_input_multiplier": "2",
+      "long_output_multiplier": "1.5",
+      "output": "20",
+      "provider_price_effective_from": "2026-08-21",
+      "sources": [
+        "https://developers.openai.com/api/docs/models/gpt-5.6-sol",
+        "https://developers.openai.com/api/docs/pricing"
+      ],
+      "tariff_note": "Current universally published Standard rate; provider describes it as promotional through at least 2026-11-21. No additional promotional discount is applied."
+    },
+    "gpt-5.6-terra": {
+      "cache_read": "0.2",
+      "cache_write_1h": "2.5",
+      "cache_write_5m": "2.5",
+      "cache_write_unknown": "2.5",
+      "currency": "USD",
+      "input": "2",
+      "long_context_scope": "request",
+      "long_context_threshold": 272000,
+      "long_input_multiplier": "2",
+      "long_output_multiplier": "1.5",
+      "output": "12",
+      "provider_price_effective_from": null,
+      "sources": [
+        "https://developers.openai.com/api/docs/models/gpt-5.6-terra"
+      ]
+    },
+    "gpt-6-luna": {
+      "cache_read": "0.01",
+      "cache_write_1h": "0.125",
+      "cache_write_5m": "0.125",
+      "cache_write_unknown": "0.125",
+      "currency": "USD",
+      "input": "0.1",
+      "long_context_scope": "request",
+      "long_context_threshold": 272000,
+      "long_input_multiplier": "2",
+      "long_output_multiplier": "1.5",
+      "output": "0.5",
+      "provider_price_effective_from": null,
+      "sources": [
+        "https://developers.openai.com/api/docs/models/gpt-6-luna"
+      ]
+    },
+    "gpt-6-sol": {
+      "cache_read": "0.2",
+      "cache_write_1h": "2.5",
+      "cache_write_5m": "2.5",
+      "cache_write_unknown": "2.5",
+      "currency": "USD",
+      "input": "2",
+      "long_context_scope": "request",
+      "long_context_threshold": 272000,
+      "long_input_multiplier": "2",
+      "long_output_multiplier": "1.5",
+      "output": "10",
+      "provider_price_effective_from": null,
+      "sources": [
+        "https://developers.openai.com/api/docs/models/gpt-6-sol"
+      ]
+    },
+    "qwen3.8-flash": {
+      "alternative_not_selected": {
+        "cache_read": "0.016",
+        "cache_write_1h": null,
+        "cache_write_5m": "0.2",
+        "currency": "USD",
+        "input": "0.15",
+        "output": "0.47",
+        "reason": "Do not silently switch region. Retain Beijing as the declared reference market for the current China-provider campaign.",
+        "region": "Singapore international / US Virginia US scope"
+      },
+      "cache_read": "0.014",
+      "cache_storage": {
+        "included_in_reference_cost": false,
+        "note": "No separate token-hour storage charge is listed for this ephemeral cache price."
+      },
+      "cache_write_1h": null,
+      "cache_write_1h_status": "unsupported_or_unverified_do_not_invent",
+      "cache_write_5m": "0.177",
+      "cache_write_unknown": "0.177",
+      "cache_write_unknown_rule": "Model Studio documents only 5-minute ephemeral explicit cache for this interface. Aggregate creation usage without TTL may use its single supported published creation price, flagged provider_single_supported_ttl. A positive explicit 1h bucket is unresolved and MUST NOT be coerced.",
+      "cn_crosscheck": {
+        "cache_read": "0.1",
+        "cache_write": "1.25",
+        "currency": "CNY",
+        "input": "0.8",
+        "output": "2.7",
+        "url": "https://help.aliyun.com/zh/model-studio/qwen3-8-flash",
+        "used_for_conversion": false
+      },
+      "conflicts": [
+        {
+          "issue": "Generic cache documentation says creation is typically 125% of input, which differs from the exact model card (0.177 USD vs 0.113*1.25).",
+          "resolution": "Use the model-specific explicit creation price, not a derived generic multiplier.",
+          "source": "https://www.alibabacloud.com/help/en/model-studio/context-cache"
+        }
+      ],
+      "currency": "USD",
+      "input": "0.113",
+      "long_context_threshold": null,
+      "native_model_ids": [
+        "qwen3.8-flash"
+      ],
+      "output": "0.382",
+      "provider": "Alibaba Cloud Model Studio",
+      "provider_price_effective_from": null,
+      "reference_region": "China (Beijing)",
+      "reference_region_is_benchmark_policy_not_verified_coding_plan_route": true,
+      "reference_service_tier": "online_standard",
+      "source_last_updated": "2026-10-09",
+      "sources": [
+        "https://www.alibabacloud.com/help/en/model-studio/qwen3-8-flash",
+        "https://www.alibabacloud.com/help/en/model-studio/context-cache",
+        "https://www.alibabacloud.com/help/en/model-studio/model-pricing"
+      ],
+      "status": "ready_for_beijing_standard_reference_except_explicit_1h",
+      "tier_conditions": "Text requests within the published 1M context limit; official model price card has no length tiers and does not split thinking/non-thinking prices. Beijing USD list card, not Singapore/US domestic rates."
+    }
+  },
+  "policy": "Use published Standard list rates on the reference date. Exclude account-specific credits, off-peak, negotiated, Batch, Flex, Fast and regional adjustments. A universally published Standard tariff is retained even when the provider calls it promotional; record that explicitly. Exclude infrastructure and storage-duration charges not observable from token usage.",
+  "pricing_as_of": "2026-10-09",
+  "pricing_date_timezone": "Asia/Shanghai",
+  "pricing_policy_id": "public-standard-list/1",
+  "pricing_retrieved_on": "2026-10-09",
+  "pricing_snapshot_id": "public-standard-20261009-r1",
+  "provider_snapshot": {
+    "acceptance": {
+      "batch_ready_when": [
+        "Native model IDs match exactly.",
+        "Token normalization and request dedup pass.",
+        "Reference estimate is labeled token-inference-only.",
+        "Qwen explicit 1h creation count is zero; aggregate unlabelled creation is annotated provider_single_supported_ttl.",
+        "Region and source-access qualifications are retained in exported metadata."
+      ],
+      "no_model_calls": true,
+      "no_runtime_changes": true,
+      "not_proven": [
+        "Actual Coding Plan cash charges.",
+        "Hidden third-party routing or exact underlying weights.",
+        "Ark explicit-cache storage bill without lifecycle records.",
+        "Qwen one-hour explicit cache tariff."
+      ],
+      "reprice_policy": "Create a new snapshot version for any changed rates or policy; retain this snapshot and previous costs."
+    },
+    "basis": "API-equivalent token inference estimate, not Coding Plan billing",
+    "exclusions": [
+      "off_peak_discounts",
+      "promotional_discounts",
+      "free_quota",
+      "subscription_allocation",
+      "batch",
+      "flex",
+      "priority",
+      "tax_adjustments",
+      "infrastructure",
+      "explicit_cache_storage_duration"
+    ],
+    "fx": {
+      "applies_to": [
+        "deepseek-v4-flash-ga-260731"
+      ],
+      "base_currency": "USD",
+      "cny_per_usd": "6.7330",
+      "conversion": "usd = cny / 6.7330",
+      "id": "cny-usd-reference-20261009",
+      "quote_currency": "CNY",
+      "reference_date": "2026-10-09",
+      "retrieved_on": "2026-10-09",
+      "source": "https://www.fx168news.com/article/%E4%BA%BA%E6%B0%91%E5%B8%81%E4%B8%AD%E9%97%B4%E4%BB%B7-1100756",
+      "source_publication_date": "2026-10-09",
+      "source_tier": "reputable_secondary_reporting_official_fixing",
+      "type": "PBOC central parity as reported by FX168; not transaction or card settlement FX"
+    },
+    "models": {
+      "deepseek-v4-flash-ga-260731": {
+        "cache_read": "0.10",
+        "cache_storage": {
+          "explicit_storage_cny_per_million_token_hour": "0.017",
+          "implicit_storage_rate": "0",
+          "included_in_reference_cost": false,
+          "unknown_duration_must_not_be_invented": true
+        },
+        "cache_write_1h": "3.00",
+        "cache_write_5m": "3.00",
+        "cache_write_semantics": "All three write fields price token processing at ordinary input rate, NOT an Anthropic-style TTL-specific creation tariff. Explicit-cache storage is separate and excluded from this token-only estimate. Implicit cache storage is free.",
+        "cache_write_unknown": "3.00",
+        "currency": "CNY",
+        "currency_units_per_usd": "6.7330",
+        "effective_date_note": "Pricing page says the old V4 Flash formal-release price is no longer applicable from 2026-08-21. This is not assumed to prove the exact effective date of every current component.",
+        "identity_verification": {
+          "conclusion": "Ark GA 260731 is mapped to the V4 Flash formal-release price row, not V4.1 and not the April preview.",
+          "evidence": [
+            "Ark official model catalog lists deepseek-v4-flash-ga-260731 separately from deepseek-v4-1-flash-260910 and the April preview.",
+            "DeepSeek official changelog names the 2026-07-31 formal update DeepSeek-V4-Flash-0731.",
+            "Ark release notes distinguish the V4 formal release from the September V4.1 introduction."
+          ],
+          "limitation": "The accessible Ark pricing row uses the formal-release name, not the full dated model ID. Mapping is a documented cross-page inference, not a verbatim ID-price row.",
+          "method": "cross_source_inference"
+        },
+        "input": "3.00",
+        "long_context_threshold": null,
+        "native_model_ids": [
+          "deepseek-v4-flash-ga-260731"
+        ],
+        "output": "9.00",
+        "provider": "Volcengine Ark",
+        "provider_price_effective_from": null,
+        "reference_region": "China",
+        "reference_service_tier": "online_standard",
+        "rejected_source": {
+          "reason": "Current deepseek-flash and legacy deepseek-v4-flash aliases on DeepSeek's own API route to V4.1; not the Ark dated native model.",
+          "url": "https://api-docs.deepseek.com/quick_start/pricing/"
+        },
+        "source_access_note": "Ark URLs were opened but returned empty rendered bodies or fetch timeouts. Exact price rows and cache rules were recovered from the official URLs' search-index extracts; DeepSeek changelog was opened in full. Do not label the Ark extraction as a successful full-page archival capture.",
+        "source_currency": "CNY",
+        "source_price_label": "deepseek-v4-flash\u6b63\u5f0f\u7248",
+        "source_rates": {
+          "cache_read": "0.10",
+          "cache_write_token_processing": "3.00",
+          "explicit_cache_storage_per_million_token_hour": "0.017",
+          "input": "3.00",
+          "output": "9.00"
+        },
+        "sources": [
+          "https://docs.volcengine.com/docs/ark/model-pricing?lang=zh&redirect=1",
+          "https://docs.volcengine.com/docs/82379/1330310?lang=en",
+          "https://docs.volcengine.com/docs/ark/coding-plan-personal-model-release?lang=zh",
+          "https://api-docs.deepseek.com/updates/",
+          "https://docs.volcengine.com/docs/ark/context-cache?lang=zh"
+        ],
+        "status": "ready_for_standard_token_inference_reference",
+        "tier_conditions": "Standard online text inference. No input-length price tiers or time-of-day tiers are listed for this exact formal V4 Flash price row. Reject model IDs for V4.1 or preview. Do not use Batch or low-priority rows.",
+        "usd_conversion_authority": "Use source CNY rates / fx.cny_per_usd with Decimal; displayed USD strings are rounded to 15 decimal places."
+      },
+      "qwen3.8-flash": {
+        "alternative_not_selected": {
+          "cache_read": "0.016",
+          "cache_write_1h": null,
+          "cache_write_5m": "0.2",
+          "currency": "USD",
+          "input": "0.15",
+          "output": "0.47",
+          "reason": "Do not silently switch region. Retain Beijing as the declared reference market for the current China-provider campaign.",
+          "region": "Singapore international / US Virginia US scope"
+        },
+        "cache_read": "0.014",
+        "cache_storage": {
+          "included_in_reference_cost": false,
+          "note": "No separate token-hour storage charge is listed for this ephemeral cache price."
+        },
+        "cache_write_1h": null,
+        "cache_write_1h_status": "unsupported_or_unverified_do_not_invent",
+        "cache_write_5m": "0.177",
+        "cache_write_unknown": "0.177",
+        "cache_write_unknown_rule": "Model Studio documents only 5-minute ephemeral explicit cache for this interface. Aggregate creation usage without TTL may use its single supported published creation price, flagged provider_single_supported_ttl. A positive explicit 1h bucket is unresolved and MUST NOT be coerced.",
+        "cn_crosscheck": {
+          "cache_read": "0.1",
+          "cache_write": "1.25",
+          "currency": "CNY",
+          "input": "0.8",
+          "output": "2.7",
+          "url": "https://help.aliyun.com/zh/model-studio/qwen3-8-flash",
+          "used_for_conversion": false
+        },
+        "conflicts": [
+          {
+            "issue": "Generic cache documentation says creation is typically 125% of input, which differs from the exact model card (0.177 USD vs 0.113*1.25).",
+            "resolution": "Use the model-specific explicit creation price, not a derived generic multiplier.",
+            "source": "https://www.alibabacloud.com/help/en/model-studio/context-cache"
+          }
+        ],
+        "currency": "USD",
+        "input": "0.113",
+        "long_context_threshold": null,
+        "native_model_ids": [
+          "qwen3.8-flash"
+        ],
+        "output": "0.382",
+        "provider": "Alibaba Cloud Model Studio",
+        "provider_price_effective_from": null,
+        "reference_region": "China (Beijing)",
+        "reference_region_is_benchmark_policy_not_verified_coding_plan_route": true,
+        "reference_service_tier": "online_standard",
+        "source_last_updated": "2026-10-09",
+        "sources": [
+          "https://www.alibabacloud.com/help/en/model-studio/qwen3-8-flash",
+          "https://www.alibabacloud.com/help/en/model-studio/context-cache",
+          "https://www.alibabacloud.com/help/en/model-studio/model-pricing"
+        ],
+        "status": "ready_for_beijing_standard_reference_except_explicit_1h",
+        "tier_conditions": "Text requests within the published 1M context limit; official model price card has no length tiers and does not split thinking/non-thinking prices. Beijing USD list card, not Singapore/US domestic rates."
+      }
+    },
+    "pricing_as_of": "2026-10-09",
+    "pricing_date_timezone": "Asia/Shanghai",
+    "pricing_policy_id": "public-standard-list/1",
+    "pricing_retrieved_on": "2026-10-09",
+    "pricing_snapshot_id": "ark-v4-flash-ga-qwen38-flash-standard-20261009-r1",
+    "schema": "nexteval.provider-reference-pricing/1",
+    "snapshot_created_at": "2026-10-09T14:35:19Z",
+    "time_of_day_policy": "standard_non_discounted_no_time_of_day_adjustment",
+    "token_contract": {
+      "formula_usd": "(U*input + R*cache_read + W5*cache_write_5m + W1*cache_write_1h + Wu*cache_write_unknown + O*output)/1000000",
+      "guards": [
+        "Nonnegative disjoint token partitions required.",
+        "Do not add reasoning tokens to output twice.",
+        "Deduplicate native request usage before applying rates.",
+        "Never sum cumulative usage counters.",
+        "Never select another model's rates by fuzzy name matching."
+      ],
+      "normalized_input_includes_cache_reads_and_writes": true,
+      "null_rule": "A null rate contributes zero ONLY when its corresponding token count is zero; otherwise the cost is unresolved.",
+      "output_includes_reasoning": true,
+      "partitions": "I = U + R + W5 + W1 + Wu"
+    },
+    "unit": "per_1000000_tokens"
+  },
+  "schema": "nexteval.reference-pricing/1",
+  "time_of_day_policy": "standard_non_discounted_no_time_of_day_adjustment"
+}
