@@ -1,4 +1,5 @@
 import { relativeScore, referenceScore } from './scores.mjs';
+import { participantFamily } from './plan.mjs';
 
 const key = row => JSON.stringify([row.participant_id, row.task_id]);
 const nonnegative = value => typeof value === 'number' && Number.isFinite(value) && value >= 0;
@@ -40,7 +41,7 @@ export function paretoData(snapshot, usage, task, metric = 'cost', family = '') 
   const groups = new Map((usage?.groups || []).map(row => [key(row),row]));
   const eligible = task.scores.filter(row => {
     const p = participants.get(row.participant_id);
-    return p && p.harness !== 'scipy' && p.harness !== 'reference' && (!family || p.family === family);
+    return p && p.harness !== 'scipy' && p.harness !== 'reference' && (!family || participantFamily(p) === family);
   });
   const candidates = eligible.flatMap(row => {
     const group = groups.get(key({...row,task_id:task.task_id}));
