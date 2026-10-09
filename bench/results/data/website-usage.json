@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-10-09T16:32:33.874181+00:00",
+  "generated_at": "2026-10-09T17:11:18.181549+00:00",
   "pricing_as_of": "2026-10-09",
   "pricing_snapshot_id": "public-standard-20261009-r1",
   "pricing_sha256": "089efcb5cf6ea5087ff09c84e24429df1fbe5c78ab2404ec9b2434a4bdd59fab",
   "cost_basis": "API-equivalent token inference estimate, not subscription billing",
-  "source_usage_sha256": "c313e44878769ef3183e5cd8a554f0f6f1f27f57bb5badce796e3b25304a0f69",
+  "source_usage_sha256": "4780cd2bd10a1287d156ffec85b139ee51b344993907e6a65c8256dcd1ec9353",
   "schema": "nexteval.website-usage/1",
   "groups": [
     {
@@ -576,6 +576,23 @@
       "selection_sha256": "8879d65ecbc8acecc340a6df639de796d02a3455af74a5af6a65bac0bfa328fb",
       "usage_known_runs": 918,
       "cost_known_runs": 918
+    },
+    {
+      "participant_id": "codex--gpt-5.6-terra--medium",
+      "task_id": "nexteval-u5-perturbed-noisy@1",
+      "runs": 920,
+      "mean_total_tokens_per_run": null,
+      "total_tokens": null,
+      "mean_api_equivalent_cost_usd_per_run": null,
+      "total_api_equivalent_cost_usd": null,
+      "pricing_as_of": "2026-10-09",
+      "pricing_sources": [
+        "https://developers.openai.com/api/docs/models/gpt-5.6-terra"
+      ],
+      "accounting_status": "incomplete",
+      "selection_sha256": "bf8372aa1fdd945f172aab1ba0559be91edeeba50906ef425eb8ab51f66fe1e9",
+      "usage_known_runs": 919,
+      "cost_known_runs": 919
     }
   ],
   "pricing_file": "pricing-snapshot.json"
