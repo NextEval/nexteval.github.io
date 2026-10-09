@@ -18,6 +18,12 @@ export function validateReleases(data) {
     if (releaseTimestamp(row.released_at) === null || row.released_at > data.checked_at
       || !pricingLinks(row.sources).length) throw new Error('Unverified model release date');
   }
+  if (data.excluded_models != null && !Array.isArray(data.excluded_models)) throw new Error('Invalid release exclusions');
+  for (const row of data.excluded_models || []) {
+    if (!row.model || seen.has(row.model) || typeof row.reason !== 'string' || !row.reason.trim()
+      || row.released_at != null || !pricingLinks(row.sources).length) throw new Error('Invalid release exclusion');
+    seen.add(row.model);
+  }
   return data;
 }
 

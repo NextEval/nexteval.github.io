@@ -33,7 +33,7 @@ const labelFor = p => {
   if (p.display_name) return p.display_name;
   if (!p.model || p.harness === 'reference' || p.model === 'none') return p.label;
   const model = p.model.split('/').at(-1);
-  return ({ 'gpt-5.5':'GPT-5.5', 'gpt-5.6-sol':'GPT-5.6 Sol', 'gpt-5.6-terra':'GPT-5.6 Terra', 'gpt-5.6-luna':'GPT-5.6 Luna', 'gpt-6-sol':'GPT-6 Sol', 'gpt-6-luna':'GPT-6 Luna', 'claude-sonnet-5':'Claude Sonnet 5', 'claude-opus-5-5':'Claude Opus 5.5', 'deepseek-v4-flash':'DeepSeek V4 Flash' }[model] || p.model);
+  return ({ 'gpt-5.5':'GPT-5.5', 'gpt-5.6-sol':'GPT-5.6 Sol', 'gpt-5.6-terra':'GPT-5.6 Terra', 'gpt-5.6-luna':'GPT-5.6 Luna', 'gpt-6-sol':'GPT-6 Sol', 'gpt-6-luna':'GPT-6 Luna', 'claude-sonnet-5':'Claude Sonnet 5', 'claude-opus-5-5':'Claude Opus 5.5', 'deepseek-v4-flash':'DeepSeek V4 Flash', 'qwen3.8-flash':'Qwen3.8 Flash' }[model] || p.model);
 };
 const harnessFor = p => ({'codex':'Codex','claude-code':'Claude Code','scipy':'SciPy'}[p.harness] || p.harness);
 const detailFor = p => [harnessFor(p), p.effort].filter(Boolean).join(' / ');
@@ -177,9 +177,9 @@ async function pareto(params, ticket) {
 }
 
 function coverage(task) {
-  return `<section class="task-coverage"><h2>Coverage</h2><div class="results-table-scroll"><table class="coverage-table"><thead><tr><th>Configuration</th><th>Terminal / expected</th><th>Normal</th><th>Timeout</th></tr></thead><tbody>${(task.coverage || []).map(row => {
+  return `<section class="task-coverage"><h2>Coverage</h2><div class="results-table-scroll"><table class="coverage-table"><thead><tr><th>Configuration</th><th>Terminal / expected</th><th>Normal</th><th>Timeout</th><th>Agent failure</th></tr></thead><tbody>${(task.coverage || []).map(row => {
     const participant = snapshot.participants.find(p => p.participant_id === row.participant_id);
-    return `<tr><td>${esc(participant.label)}</td><td>${row.terminal} / ${row.expected}</td><td>${row.normal}</td><td>${row.timeout}</td></tr>`;
+    return `<tr><td>${esc(participant.label)}</td><td>${row.terminal} / ${row.expected}</td><td>${row.normal}</td><td>${row.timeout}</td><td>${row.agent_failure || 0}</td></tr>`;
   }).join('')}</tbody></table></div></section>`;
 }
 

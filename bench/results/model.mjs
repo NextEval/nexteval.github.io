@@ -48,7 +48,9 @@ export function validateSnapshot(data) {
     for (const row of task.coverage || []) {
       require(participants.has(row.participant_id), 'Unknown coverage participant');
       require(['expected', 'terminal', 'normal', 'timeout', 'missing'].every(k => Number.isInteger(row[k]) && row[k] >= 0), 'Invalid coverage counts');
-      require(row.normal + row.timeout === row.terminal && row.terminal + row.missing === row.expected, 'Inconsistent coverage denominator');
+      const failures = row.agent_failure === undefined ? 0 : row.agent_failure;
+      require(Number.isInteger(failures) && failures >= 0, 'Invalid agent failure count');
+      require(row.normal + row.timeout + failures === row.terminal && row.terminal + row.missing === row.expected, 'Inconsistent coverage denominator');
     }
   }
   require(unique(data.matrix.map(cell => cellKey(cell.participant_id, cell.task_id))), 'Duplicate matrix cell');
