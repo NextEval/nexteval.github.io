@@ -1,0 +1,17 @@
+{
+  "schema": "nexteval.model-releases/1",
+  "checked_at": "2026-10-10",
+  "date_policy": "first_public_release",
+  "notes": "First public release of the named model, not experiment time, a later update, or provider endpoint availability. Dates do not assert an immutable served checkpoint. In particular, the V4 Flash date does not assert that Volcengine serves DeepSeek's current direct-API alias. Missing dates are omitted rather than inferred. UTC calendar dates; medium/high share a date but remain separate points.",
+  "models": [
+    {"model":"openai/gpt-5.5","released_at":"2026-04-23","sources":[{"title":"OpenAI: Introducing GPT-5.5","url":"https://openai.com/index/introducing-gpt-5-5/"}]},
+    {"model":"openai/gpt-5.6-luna","released_at":"2026-07-09","sources":[{"title":"OpenAI: GPT-5.6 launch","url":"https://openai.com/index/gpt-5-6/"}]},
+    {"model":"openai/gpt-5.6-terra","released_at":"2026-07-09","sources":[{"title":"OpenAI: GPT-5.6 launch","url":"https://openai.com/index/gpt-5-6/"}]},
+    {"model":"openai/gpt-5.6-sol","released_at":"2026-07-09","sources":[{"title":"OpenAI: GPT-5.6 launch","url":"https://openai.com/index/gpt-5-6/"}]},
+    {"model":"openai/gpt-6-luna","released_at":"2026-09-22","sources":[{"title":"OpenAI: GPT-6 Sol and Luna launch","url":"https://openai.com/index/introducing-gpt-6-sol-and-luna/"},{"title":"OpenAI: September 22 system card update","url":"https://deploymentsafety.openai.com/gpt-6-astra/sec%3Aappendix-sol-luna"}]},
+    {"model":"openai/gpt-6-sol","released_at":"2026-09-22","sources":[{"title":"OpenAI: GPT-6 Sol and Luna launch","url":"https://openai.com/index/introducing-gpt-6-sol-and-luna/"},{"title":"OpenAI: September 22 system card update","url":"https://deploymentsafety.openai.com/gpt-6-astra/sec%3Aappendix-sol-luna"}]},
+    {"model":"anthropic/claude-sonnet-5","released_at":"2026-06-30","sources":[{"title":"Anthropic: Introducing Claude Sonnet 5","url":"https://www.anthropic.com/news/claude-sonnet-5"}]},
+    {"model":"anthropic/claude-opus-5-5","released_at":"2026-09-22","sources":[{"title":"Anthropic: Introducing Claude Opus 5.5","url":"https://www.anthropic.com/claude-opus-5-5"}]},
+    {"model":"anthropic/deepseek-v4-flash","released_at":"2026-04-24","sources":[{"title":"DeepSeek: April 24 first V4 release","url":"https://api-docs.deepseek.com/updates/#date-2026-04-24"}],"notes":"First public V4 Flash release, including preview. July 31 is a later update. Direct DeepSeek API alias routing changed again on September 10; no assumption about Volcengine checkpoint identity is made."}
+  ]
+}
