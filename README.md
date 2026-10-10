@@ -43,10 +43,11 @@ renders offline OptiProfiler scores; it does not calculate scores or task means.
 
 ## Reviewed numerical snapshot
 
-Snapshot `web-a08cd141f08985e628b046cb` contains 35 complete agent treatment
-groups across four tasks. Its canonical source is website merge
-`7def33812e1d317c5cb276f986637a1b290930b1` (website PR #23), backed by private
-registry merge `8bb0186a178db028cc75ca24e719d18b7f4a91ea` (data PR #26).
+Snapshot `web-02c1a4d043ccfb375665bd25` contains 36 complete agent treatment
+groups across four tasks. Its canonical source is the website's pinned map
+`scripts/results-export/catalog-source-map.qwen-high-rotated-20261010.json`,
+backed by private registry merge `eacb9e62d20642f18bd58d2f3b46fefd72b85834`
+(data PR #28). The numerical verification receipt is kept with that source map.
 The 392 mirrored component files are hash-pinned in `bench/results-source.json`.
 
 The Qwen3.8 Flash / Claude Code / high increment retains 920 selected cells
@@ -54,7 +55,11 @@ per task: perturbed starts have 868 normal outcomes, 51 ordinary timeouts and
 1 exact reviewed agent failure; noisy observations have 879 normal outcomes,
 38 ordinary timeouts and 3 exact reviewed agent failures. Failures remain
 distinct terminal outcomes with empty evaluation histories, not normal success.
-Every prior 34,040 numerical history row and the existing 33 accounting groups
+The latest rotated increment adds 896 normal terminal outcomes and 24 ordinary
+timeouts, including five empty unsuccessful histories. All 920 original
+attempts remain attached without retries. Three call-limit cancellations have
+exact persisted hard-stop proofs and retain their native cancellation evidence.
+Every prior 35,880 numerical history row and the existing 33 accounting groups
 are unchanged. Missing Qwen accounting and unresolved exact-alias release date
 do not produce cost, token or release-date Pareto points. Raw logs, private
 bundles and credentials remain outside this repository.
