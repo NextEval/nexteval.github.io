@@ -1,3 +1,4 @@
+import { sourceNotesTable } from './evidence.mjs';
 import { FEATURES, validateSnapshot, validateProfiles, validateHistoryIndex, validateHistory, historyChartData, sortedParticipants, matrixVisibility, scoreText, featureFor, assetPath, chartData } from './model.mjs';
 import { ScientificChart, formatNumber } from './chart.mjs';
 import { icon } from './icons.mjs';
@@ -35,7 +36,7 @@ const labelFor = p => {
   const model = p.model.split('/').at(-1);
   return ({ 'gpt-5.5':'GPT-5.5', 'gpt-5.6-sol':'GPT-5.6 Sol', 'gpt-5.6-terra':'GPT-5.6 Terra', 'gpt-5.6-luna':'GPT-5.6 Luna', 'gpt-6-sol':'GPT-6 Sol', 'gpt-6-luna':'GPT-6 Luna', 'claude-sonnet-5':'Claude Sonnet 5', 'claude-opus-5-5':'Claude Opus 5.5', 'deepseek-v4-flash':'DeepSeek V4 Flash', 'qwen3.8-flash':'Qwen3.8 Flash' }[model] || p.model);
 };
-const harnessFor = p => ({'codex':'Codex','claude-code':'Claude Code','scipy':'SciPy'}[p.harness] || p.harness);
+const harnessFor = p => ({'codex':'Codex','claude-code':'Claude Code','scipy':'SciPy'}[p.harness] || p.harness) + (p.participant_id==='codex--qwen3.8-flash--low--collaborator-macos' ? ' / Mac' : '');
 const detailFor = p => [harnessFor(p), p.effort].filter(Boolean).join(' / ');
 const chartParticipants = () => snapshot.participants.map(p => ({...p,label:reference(p) ? p.label : `${labelFor(p)} / ${detailFor(p)}`}));
 const reference = p => /cobyqa/i.test(p.label);
@@ -185,6 +186,7 @@ function coverage(task) {
 
 function evidence(task) {
   return `<details class="results-method"><summary>Source evidence</summary><p>Numerical exports are public display files. Archive identifiers below refer to private evidence; they are not public download links.</p>
+    ${sourceNotesTable(task.evidence_refs || [], fileURL)}
     <ul>${(task.evidence_refs || []).map(ref => `<li>${esc(ref.visibility || 'private')} / <code>${esc(ref.archive_id || ref.submission_id || ref.id)}</code>${ref.bundle_sha256 ? `<br>SHA-256 <code>${esc(ref.bundle_sha256)}</code>` : ''}</li>`).join('')}</ul>
     <p>${task.profiles_file ? `<a href="${fileURL(task.profiles_file)}" download>Profile coordinates</a>` : ''}${task.history_file ? ` / <a href="${fileURL(task.history_file)}" download>Numerical histories</a>` : ''}</p></details>`;
 }
