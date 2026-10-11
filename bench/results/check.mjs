@@ -1,3 +1,4 @@
+import { validatePublicTerminalReview } from './evidence.mjs';
 import { readFile, readdir, stat } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { resolve, relative, join } from 'node:path';
@@ -37,10 +38,39 @@ export async function checkBundle(directory = fileURLToPath(new URL('./data/',im
     }
   }
   for (const task of data.tasks) {
+    const reviewed = new Map();
+    const observed = new Map();
+    for (const source of task.evidence_refs || []) {
+      const ref = source.reviewed_terminal_evidence;
+      if (!ref) continue;
+      const doc = validatePublicTerminalReview(await load(ref.path), source);
+      if (doc.task_id !== task.task_id || createHash("sha256").update(await readFile(join(root, ref.path))).digest("hex") !== ref.sha256) throw new Error("Terminal evidence checksum/task mismatch");
+      reviewed.set(source.participant_id, {doc, ref});
+      observed.set(source.participant_id, new Map());
+    }
     if (task.profiles_file) validateProfiles(await load(task.profiles_file),task);
     if (task.history_file) {
       const index = validateHistoryIndex(await load(task.history_file),task);
-      for (const problem of index.problems) validateHistory(await load(problem.history_file),task,problem);
+      for (const problem of index.problems) {
+        const history = validateHistory(await load(problem.history_file),task,problem);
+        for (const row of history.rows) {
+          const item = reviewed.get(row.participant_id);
+          const permit = item?.doc.permits.find(p => p.trial_id === row.attempt_id);
+          if (!permit && row.reviewed_terminal_evidence) throw new Error("Unpermitted history annotation");
+          if (!permit) continue;
+          const note = row.reviewed_terminal_evidence;
+          if (!note || row.terminal_status !== "agent_failure" || !["budget_exhausted","call_limit_reached","no_evaluations"].includes(row.runtime_status)
+              || note.cause !== "UNKNOWN" || note.caller !== "UNKNOWN" || note.trial_id !== row.attempt_id
+              || note.evidence_file !== item.ref.path || note.review_sha256 !== item.ref.review_sha256
+              || note.decision !== permit.decision || ["manifest","result","scoring"].some(k => note.source_sha256?.[k] !== permit.source_sha256[k])) throw new Error("Terminal history binding changed");
+          const seen = observed.get(row.participant_id);
+          if (seen.has(row.attempt_id)) throw new Error("Duplicate reviewed history attempt");
+          seen.set(row.attempt_id, true);
+        }
+      }
+    }
+    for (const [pid, item] of reviewed) {
+      if (observed.get(pid).size !== item.doc.permits.length) throw new Error("Reviewed permit outside numerical histories");
     }
   }
   async function inspect(directory) {

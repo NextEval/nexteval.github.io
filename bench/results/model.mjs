@@ -1,3 +1,4 @@
+import { validateSourceNotes } from './evidence.mjs';
 export const FEATURES = [
   { key: 'perturbed', taskFamilies:['nexteval-u5-perturbed'], label: 'Perturbed starts', icon: 'perturbed-start', description: 'The original starting point shifted to a nearby point' },
   { key: 'noisy', taskFamilies:['nexteval-u5-perturbed-noisy'], label: 'Noisy observations', icon: 'audio-lines', description: 'Function values with noise' },
@@ -45,6 +46,13 @@ export function validateSnapshot(data) {
     require(task.scores.every(s => task.members.includes(s.participant_id) && finiteScore(s.score)), 'Invalid score or comparison member');
     require(!task.scores.length || task.scores.length === task.members.length, 'Incomplete scored comparison');
     for (const key of ['profiles_file', 'history_file']) if (task[key]) assetPath(task[key]);
+    for (const ref of task.evidence_refs || []) {
+      validateSourceNotes(ref);
+      if (ref.reviewed_terminal_evidence) {
+        const row = (task.coverage || []).find(row => row.participant_id === ref.participant_id);
+        require(row && (row.agent_failure || 0) >= ref.reviewed_terminal_evidence.agent_failure_count, 'Reviewed failures missing from coverage');
+      }
+    }
     for (const row of task.coverage || []) {
       require(participants.has(row.participant_id), 'Unknown coverage participant');
       require(['expected', 'terminal', 'normal', 'timeout', 'missing'].every(k => Number.isInteger(row[k]) && row[k] >= 0), 'Invalid coverage counts');
