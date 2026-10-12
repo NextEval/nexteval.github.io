@@ -179,3 +179,12 @@
 .source-notes-table th:nth-child(4) { width:22%; }
 .source-notes-table th:nth-child(5) { width:35%; }
 .source-notes-table code { white-space:normal; overflow-wrap:anywhere; }
+.historical-warning { border-left:3px solid #e9b86c; padding:12px 16px; color:var(--result-muted); margin:18px 0!important; }
+.historical-section { margin:24px 0; min-width:0; }
+.historical-section h2 { margin-bottom:12px!important; }
+.historical-table { min-width:760px; }
+.historical-table small { display:block; color:var(--result-muted); }
+.historical-table a { color:var(--result-accent); }
+.historical-current code,.historical-section code { overflow-wrap:anywhere; }
+.historical-section .profile-note { margin:12px 0!important; }
+.dashboard-views { flex-wrap:wrap; }
