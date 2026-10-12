@@ -7,6 +7,7 @@ import { relativeScore, referenceScore, relativeScoreExport, heatColor, HEAT_COL
 import { validateUsage, paretoData, pricingLinks } from './usage.mjs';
 import { ParetoChart, compactNumber, dollarNumber } from './pareto.mjs';
 import { validateReleases, releaseData } from './releases.mjs';
+import { renderHistorical } from './historical.mjs';
 
 const host = document.getElementById('results-app');
 document.querySelector('.results-skip')?.addEventListener('click', event => {
@@ -41,7 +42,7 @@ const detailFor = p => [harnessFor(p), p.effort].filter(Boolean).join(' / ');
 const chartParticipants = () => snapshot.participants.map(p => ({...p,label:reference(p) ? p.label : `${labelFor(p)} / ${detailFor(p)}`}));
 const reference = p => /cobyqa/i.test(p.label);
 const dateLabel = () => snapshot.generated_at ? new Date(snapshot.generated_at).toISOString().slice(0,10) : 'Versioned snapshot';
-const dashboardViews = (view, task, family = '') => `<nav class="results-tabs dashboard-views" aria-label="Results views"><a href="#matrix?${new URLSearchParams({sort:task?.task_id || '',family})}" ${view === 'matrix' ? 'aria-current="page"' : ''}>${icon('grid-2x2')}Matrix</a><a href="#pareto?${new URLSearchParams({task:task?.task_id || '',family})}" ${view === 'pareto' ? 'aria-current="page"' : ''}>${icon('chart-scatter')}Pareto</a></nav>`;
+const dashboardViews = (view, task, family = '') => `<nav class="results-tabs dashboard-views" aria-label="Results views"><a href="#matrix?${new URLSearchParams({sort:task?.task_id || '',family})}" ${view === 'matrix' ? 'aria-current="page"' : ''}>${icon('grid-2x2')}Matrix</a><a href="#pareto?${new URLSearchParams({task:task?.task_id || '',family})}" ${view === 'pareto' ? 'aria-current="page"' : ''}>${icon('chart-scatter')}Pareto</a><a href="#historical" ${view === 'historical' ? 'aria-current="page"' : ''}>${icon('history')}NextEval-assisted</a></nav>`;
 
 function footer() {
   const scoreDownload = 'data:application/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(relativeScoreExport(snapshot), null, 2));
@@ -253,6 +254,7 @@ async function route() {
       if (!task) throw new Error('This task is not in the current snapshot');
       await detail(task,params,ticket);
     } else if (path === 'pareto') await pareto(params,ticket);
+    else if (path === 'historical') chart = await renderHistorical({host,snapshot,params,readJSON,fileURL,esc,views:dashboardViews,footer,isCurrent:() => ticket === epoch});
     else matrix(params);
     if (ticket === epoch) {
       window.lucide?.createIcons();

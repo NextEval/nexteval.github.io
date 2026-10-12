@@ -5,6 +5,7 @@ import { resolve, relative, join } from 'node:path';
 import { validateSnapshot, validateProfiles, validateHistoryIndex, validateHistory } from './model.mjs';
 import { validateUsage } from './usage.mjs';
 import { validateReleases } from './releases.mjs';
+import { validateHistorical, validateHistoricalProfile, validateHistoricalHistory } from './historical.mjs';
 import { createHash } from 'node:crypto';
 
 export async function checkBundle(directory = fileURLToPath(new URL('./data/',import.meta.url))) {
@@ -72,6 +73,24 @@ export async function checkBundle(directory = fileURLToPath(new URL('./data/',im
     for (const [pid, item] of reviewed) {
       if (observed.get(pid).size !== item.doc.permits.length) throw new Error("Reviewed permit outside numerical histories");
     }
+  }
+  if (await stat(join(root,'historical-assisted/index.json')).then(()=>true, error=>{ if (error.code === 'ENOENT') return false; throw error; })) {
+    const historical = validateHistorical(await load('historical-assisted/index.json'));
+    const manifest = await load('historical-assisted/manifest.json');
+    if (manifest.schema !== 'nexteval.historical-public-manifest/1' || manifest.model_calls !== 0 || manifest.objective_calls !== 0) throw new Error('Unknown historical manifest');
+    const expected = ['historical-assisted/index.json'];
+    let rows = 0;
+    for (const cohort of historical.cohorts) {
+      expected.push(cohort.profiles_file);
+      validateHistoricalProfile(await load(cohort.profiles_file),cohort);
+      for (const problem of cohort.problems) {
+        expected.push(problem.history_file);
+        rows += validateHistoricalHistory(await load(problem.history_file),cohort,problem).rows.length;
+      }
+    }
+    if (rows !== manifest.recorded_rows || expected.length !== new Set(expected).size
+      || JSON.stringify(expected.sort()) !== JSON.stringify(Object.keys(manifest.files).sort())) throw new Error('Historical manifest membership changed');
+    for (const file of expected) if (createHash('sha256').update(await readFile(join(root,file))).digest('hex') !== manifest.files[file]) throw new Error('Historical public checksum mismatch');
   }
   async function inspect(directory) {
     for (const entry of await readdir(directory,{withFileTypes:true})) {
