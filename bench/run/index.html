@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="NextEval Bench local candidate workflow: no-call checks, separately authorized native smoke and runs, and read-only saved evidence status.">
+  <title>Run locally | NextEval Bench</title>
+  <link rel="icon" type="image/svg+xml" href="../../site-assets/brand/nexteval-on-dark.svg">
+  <link rel="stylesheet" href="../../site.css?v=path-nav-1">
+  <script src="../vendor/lucide.min.js" defer></script>
+  <script src="../../navigation.js?v=1" defer></script>
+  <script src="../../solver/docs.js" defer></script>
+</head>
+<body class="api-page guide-page">
+  <header class="site-header" data-product="bench">
+    <a class="site-brand" href="../../" aria-label="NextEval home"><img src="../../site-assets/brand/nexteval-on-dark.svg" alt="" width="30" height="30"><span>NextEval</span></a>
+    <div class="header-path"><span class="path-divider" aria-hidden="true">/</span><details class="nav-switcher product-switcher"><summary>Bench <i data-lucide="chevron-down" aria-hidden="true"></i></summary><nav class="switcher-panel" aria-label="Products"><a href="../../">Overview</a><a href="../../solver/">Solver</a><a href="../" aria-current="location">Bench</a><a class="menu-external" href="https://github.com/NextEval" target="_blank" rel="noopener">GitHub <i data-lucide="arrow-up-right" aria-hidden="true"></i></a></nav></details><span class="path-divider" aria-hidden="true">/</span><details class="nav-switcher context-switcher"><summary><span data-current-view>Run locally</span><i data-lucide="chevron-down" aria-hidden="true"></i></summary><nav class="switcher-panel" aria-label="Bench"><a href="../">Results</a><a href="./" aria-current="page">Run locally</a><a href="../archive.html#profiles">Research archive</a><a class="menu-external" href="https://github.com/NextEval/nexteval-bench" target="_blank" rel="noopener">Bench source <i data-lucide="arrow-up-right" aria-hidden="true"></i></a></nav></details></div>
+    <a class="header-source" href="https://github.com/NextEval/nexteval-bench" target="_blank" rel="noopener">GitHub <i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
+  </header>
+  <main class="api-shell shell">
+    <header class="api-heading"><p class="eyebrow">NEXTEVAL BENCH / LOCAL RESEARCH CANDIDATE</p><h1>Run locally</h1><p>Inspect a frozen task plan, check the local runtime, then retain the evidence from an explicitly authorized agent session.</p></header>
+    <div class="api-layout">
+      <nav class="api-toc" aria-label="Local run sections"><a href="#status">Candidate status</a><a href="#installation">Installation</a><a href="#treatment">Exact treatment</a><a href="#local-checks">No-call checks</a><a href="#smoke">Authorized smoke</a><a href="#run">Authorized run</a><a href="#evidence">Saved evidence</a><a href="#boundaries">Support boundaries</a></nav>
+      <div class="api-body">
+        <section id="status">
+          <h2>Candidate status</h2>
+          <p><strong>Pre-release candidate, not provider-certified or genuine-CLI-certified.</strong> Package <code>0.1.0rc1</code> is not a PyPI release. Local checks and documentation tests do not establish account access, a working installed native CLI, effective thinking controls, or benchmark acceptance.</p>
+          <p>This named-dataset workflow evaluates harness + model + configuration. OptiProfiler owns problems, features and numerical profiles; pinned Harbor owns each full agent session and container; Bench owns the adapter and evidence contract. The agent receives a budgeted callable objective, <code>x0</code>, <code>maxfun</code> and common instructions, not NextEval Solver's numerical toolkit. Historical assisted <code>v1</code> and legacy toy runs are different protocols.</p>
+          <p>Installation is pinned to candidate commit <code>8dca62ccc550031517094a985ad4af0830bac6d8</code>, available for review but not a tagged release. Maintainer release approval and genuine native CLI/provider acceptance remain pending. Do not substitute a moving branch or treat this page as a run receipt.</p>
+        </section>
+        <section id="installation">
+          <h2>Installation</h2>
+          <p>Use Python 3.12 or newer and a working local Docker daemon on a reviewed macOS or Linux research host. These commands use Bash. Keep the Bench environment separate from Solver and the website; neither is required to run this path.</p>
+          <pre data-step="install" aria-label="Reviewed source installation" tabindex="0"><code>git clone https://github.com/NextEval/nexteval-bench.git
+cd nexteval-bench
+git checkout --detach 8dca62ccc550031517094a985ad4af0830bac6d8
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install .
+python -m pip check
+nexteval-bench --version
+docker build -t nexteval-bench-agent:scientific-v1 images/scientific</code></pre>
+          <p>Stop on any failed command. Installation and image building may download dependencies, but do not run a model or objective. Review the host firewall and image first. The image must not contain the private evaluator, problem library, credentials or experiment records. Execution resolves its tag to a local content ID; changing the image invalidates the matching smoke treatment.</p>
+        </section>
+        <section id="treatment">
+          <h2>Exact treatment</h2>
+          <p>The example selects the existing Claude Code API route. Set the four named variables locally to reviewed values before copying the setup block. <code>BENCH_CREDENTIAL_FILE</code> is an absolute path to an existing valid private credential file outside both output directories, never a credential value. Do not create a fake credential to make preflight pass, print credentials, put them in command arguments, or upload them to this website.</p>
+          <pre data-step="treatment" aria-label="Shared treatment and private output paths" tabindex="0"><code>: "${BENCH_MODEL:?Set the exact reviewed anthropic/model ID}"
+: "${BENCH_CLI_VERSION:?Set the exact reviewed Claude Code version}"
+: "${BENCH_BASE_URL:?Set the reviewed HTTPS API endpoint}"
+: "${BENCH_CREDENTIAL_FILE:?Set an existing absolute private credential-file path}"
+TREATMENT=(
+  --agent claude-code --model "$BENCH_MODEL"
+  --agent-version "$BENCH_CLI_VERSION" --thinking disabled
+  --auth api --base-url "$BENCH_BASE_URL"
+  --credential-file "$BENCH_CREDENTIAL_FILE"
+  --image nexteval-bench-agent:scientific-v1
+  --session-timeout 1000 --research-network
+)
+DATASET="nexteval-u5-perturbed@1"
+SMOKE_DIR="$HOME/nexteval-local/smoke-reviewed-treatment"
+RUN_DIR="$HOME/nexteval-local/run-reviewed-treatment"</code></pre>
+          <p>Keep the same Bash session for later blocks. Both output directories must be new and evaluator-private; preserve existing attempts rather than overwriting them. Disabled thinking is a request, not proof of provider behavior. If native records use another canonical model ID, explicitly review and add <code>--reported-model</code> to this shared treatment before preflight, smoke and run; never infer or silently accept an alias.</p>
+          <p>Codex is the other implemented named-CLI adapter, selected by <code>--agent codex</code>; implementation alone does not admit a provider treatment. Changing harness, model, version, reasoning, authentication or endpoint creates another treatment requiring its own review and smoke. For subscription authentication use the selected harness's valid private login source, <code>--auth subscription</code>, and omit <code>--base-url</code>. A CLI login is not a generic API key; no route silently falls back to a different paid API.</p>
+        </section>
+        <section id="local-checks">
+          <h2>No-call checks</h2>
+          <p>Run these checks before seeking authorization for real-agent work. They make no model calls or objective evaluations. They are not an authenticated provider smoke.</p>
+          <pre data-step="local-checks" aria-label="Local no-call inspection" tabindex="0"><code>nexteval-bench doctor --image nexteval-bench-agent:scientific-v1
+nexteval-bench datasets list
+nexteval-bench datasets show "$DATASET"
+nexteval-bench datasets verify "$DATASET"
+nexteval-bench preflight "${TREATMENT[@]}"
+nexteval-bench run --dataset "$DATASET" "${TREATMENT[@]}" \
+  --n-concurrent 1 --output "$RUN_DIR" --dry-run</code></pre>
+          <dl class="api-definitions"><div><dt><code>doctor</code></dt><dd>Checks installed numerical dependencies, Docker and the image, not provider authentication.</dd></div><div><dt><code>preflight</code></dt><dd>Checks dependencies, explicit local auth route and credential-file format/permissions, native adapter hooks, Docker and image identity. It reads the local credential source without emitting it. <code>local_ready=true</code> and <code>model_calls=0</code> leave provider authentication, model access, installed container CLI version and reasoning-control acceptance unverified. It launches no agent or container and refreshes no login.</dd></div><div><dt><code>--dry-run</code></dt><dd>Checks the frozen problem-library source and prints a plan without Docker, model calls, objective evaluations or an experiment output directory. It does not validate account access or credential contents. Removing this flag alone is not authorization to execute.</dd></div></dl>
+          <p>The selected <code>u5</code> candidate means dimensions 1 through 5, not exactly dimension 5. Its frozen plan expects 92 problems &times; 10 repetitions = 920 agent identities, each with a <code>50*n</code> objective budget. Those are expected counts, not materialized attempts or scores. The paired real COBYQA reference is separate from the agent denominator and is never a fallback.</p>
+        </section>
+        <section id="smoke">
+          <h2>Separately authorized smoke</h2>
+          <p><strong>Stop here until this exact real-agent smoke is explicitly authorized.</strong> The following command contacts a model and may incur charges or subscription usage. No earlier check, page load or copy action invokes it. Do not run a replacement smoke automatically when validation fails.</p>
+          <pre data-step="smoke" aria-label="Separately authorized six-evaluation smoke" tabindex="0"><code># Run only after separate authorization for this exact treatment.
+nexteval-bench smoke "${TREATMENT[@]}" --output "$SMOKE_DIR"</code></pre>
+          <p>Acceptance requires exactly six successful objective evaluations in one native tool-bearing session on the private two-dimensional plain smoke problem. Ledger queries, exported observations and retained OptiProfiler clean histories must agree. Retain <code>$SMOKE_DIR/smoke-receipt.json</code> together with the original <code>trials/&lt;trial_id&gt;/</code>, receipt-bound inventory, native model/version records and confirmed cleanup. A copied receipt alone, CLI exit zero or a positive evaluation count is insufficient.</p>
+          <p>The existing offline <code>validate_smoke</code> gate rechecks this exact source/framework, treatment, image and retained evidence before admission. Hash binding is not independent provider attestation. A source, CLI or configuration change needs separate review and authorization, not receipt editing or an automatic paid retry. Passing smoke is not a benchmark score.</p>
+        </section>
+        <section id="run">
+          <h2>Separately authorized run</h2>
+          <p><strong>Dataset execution needs its own authorization after the matching smoke passes.</strong> This is a potentially substantial real-model run, not part of local preflight or a consequence of passing smoke. Inspect the expected denominator and private output path first.</p>
+          <pre data-step="run" aria-label="Separately authorized dataset execution" tabindex="0"><code># Run only after separate authorization for the dataset execution.
+nexteval-bench run --dataset "$DATASET" "${TREATMENT[@]}" \
+  --n-concurrent 1 --output "$RUN_DIR" \
+  --smoke-receipt "$SMOKE_DIR/smoke-receipt.json"</code></pre>
+          <p><code>--n-concurrent</code> is OptiProfiler's top-level <code>n_jobs</code>, not an API rate limit or a second Harbor pool. Each agent solver invocation owns an independent native session, container and ledger. The requested 1000-second allowance excludes setup. Ordinary audited wall timeouts remain numerical failures, not retry requests; provider/authentication/cleanup errors are not generic ordinary timeouts.</p>
+          <p>Do not silently change routing or networking to unblock a run. The existing automatic oracle transport is Unix on Linux and TCP on macOS; this page adds no transport or scaffold. <code>--research-network</code> acknowledges supervised single-tenant research networking, not hostile-submission isolation or hosted security acceptance. Retain partial runs and all originals when execution stops.</p>
+        </section>
+        <section id="evidence">
+          <h2>Saved evidence and blank scores</h2>
+          <p>After workers have stopped, inspect a quiescent evaluator-owned root. These commands inspect saved evidence without model calls, objective evaluations or scheduling continuations.</p>
+          <pre data-step="evidence" aria-label="Read-only saved evidence inspection" tabindex="0"><code>nexteval-bench status "$RUN_DIR"
+nexteval-bench artifacts check "$RUN_DIR"</code></pre>
+          <dl class="api-definitions"><div><dt>Expected</dt><dd>The frozen plan's identity denominator, not a count inferred from directories. Invalid or conflicting plans yield unknown (<code>null</code>) counts.</dd></div><div><dt>Materialized</dt><dd>Enumerated trial entries and parseable identities, including incomplete attempts. Attempts are not unique identities; duplicate attempts put all copies into review.</dd></div><div><dt>Evidence-eligible terminal</dt><dd><code>eligible_numerical_terminal</code> requires rechecked numerical evidence, native identity and configuration, hash-bound artifacts and cleanup. Eligibility is not model success or publication.</dd></div><div><dt>Pending or review</dt><dd><code>infra_pending</code> retains incomplete attempts and infrastructure or operator terminations; <code>unknown_review</code> retains missing or unsafe evidence, unknown errors, duplicates and no-evaluation records. <code>automatic_retry=false</code>; no generic no-evaluation permit is admitted.</dd></div><div><dt>Archived</dt><dd>An independent accepted archive receipt bound to eligible identities and current evidence. Files, HDF5s and PDFs alone do not establish it.</dd></div><div><dt>Published</dt><dd>An independent accepted publication receipt, not a runtime flag. This offline reader does not fetch the destination, authenticate a publisher or establish remote availability.</dd></div></dl>
+          <p><code>coverage_complete</code> requires one eligible attempt for every expected identity without extras or invalid attempts. It does not establish HDF5 assembly, archive, publication or successful model outcomes. Expected, materialized, evidence-eligible, archived and published counts must remain distinct.</p>
+          <p>Numerical eligibility also requires both finalized cancellation-origin and original-agent-execution receipts. Missing either or both remains review-only, even after rehashing the artifact inventory. This reader adds no automatic legacy admission policy: preserve older records for separate exact-source review, without rewriting or rerunning them.</p>
+          <p><strong>Incomplete scores stay blank.</strong> Missing or unaccepted results are not zero scores or fabricated numerical success. Native OptiProfiler histories are the numerical authority; an observed incumbent does not replace clean scoring history. Changed source or CLI versions remain separate generations (<code>split_epochs</code>), not one homogeneous comparison. Keep raw logs, model content, credentials and evaluator-private histories out of public exports.</p>
+        </section>
+        <section id="boundaries">
+          <h2>Support boundaries</h2>
+          <p>Exact provider/model/endpoint support is unknown until retained native evidence for that treatment is reviewed. Optional <code>count_tokens</code> support and fallback behavior are unknown; a missing optional endpoint does not authorize a generic HTTP client, replacement transport, different paid provider or fabricated fallback. Requested controls are not effective-control receipts.</p>
+          <p>No provider, Docker experiment or genuine native CLI session was executed to validate this documentation. Local semantic/browser QA checks only this static page, navigation and copy behavior. The existing native Codex/Claude Code adapters retain provider interaction; this page adds no adapter, hosted service, credential broker, scheduler or recovery policy.</p>
+          <p>Review the corresponding <a href="https://github.com/NextEval/nexteval-bench/tree/8dca62ccc550031517094a985ad4af0830bac6d8">pinned Bench source</a>: <code>README.md</code>, <code>docs/datasets-and-cli.md</code>, <code>docs/provider-preflight.md</code>, <code>docs/profile-status.md</code>, <code>docs/stopping-and-recovery.md</code> and <code>src/nexteval_bench/profiling/cli.py</code>. This candidate pin is not release acceptance; older smoke receipts do not certify a changed source snapshot.</p>
+        </section>
+      </div>
+    </div>
+  </main>
+  <footer class="site-footer shell"><span>&copy; 2026 NextEval Bench</span><a href="../">Reviewed results <span aria-hidden="true">&#8599;</span></a></footer>
+</body>
+</html>
