@@ -1,3 +1,4 @@
+import { MIMO_SCHEMA, validateExactMimoHistory } from './mimo-evidence.mjs';
 import { validatePublicTerminalReview } from './evidence.mjs';
 import { readFile, readdir, stat } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
@@ -60,6 +61,7 @@ export async function checkBundle(directory = fileURLToPath(new URL('./data/',im
           if (!permit && row.reviewed_terminal_evidence) throw new Error("Unpermitted history annotation");
           if (!permit) continue;
           const note = row.reviewed_terminal_evidence;
+          if (item.doc.schema === MIMO_SCHEMA) validateExactMimoHistory(row, note, permit);
           if (!note || row.terminal_status !== "agent_failure" || !["budget_exhausted","call_limit_reached","no_evaluations"].includes(row.runtime_status)
               || note.cause !== "UNKNOWN" || note.caller !== "UNKNOWN" || note.trial_id !== row.attempt_id
               || note.evidence_file !== item.ref.path || note.review_sha256 !== item.ref.review_sha256

@@ -1,3 +1,4 @@
+import { MIMO_SCHEMA, validateExactMimoTerminalReview } from './mimo-evidence.mjs';
 import { assetPath } from './model.mjs';
 
 const assert = (ok, message) => { if (!ok) throw new Error(message); };
@@ -48,6 +49,7 @@ export function sourceNotesTable(sources, fileURL) {
 }
 
 export function validatePublicTerminalReview(doc, source) {
+  if (doc?.schema === MIMO_SCHEMA) return validateExactMimoTerminalReview(doc, source);
   const ref=source.reviewed_terminal_evidence;
   keys(doc,['schema','review_schema','treatment_id','participant_id','task_id','selected_cells','profile_row_map_sha256','review_sha256','permits','campaign_id']);
   assert(doc.schema==='nexteval.reviewed-terminal-evidence-digest/1' && doc.review_schema==='nexteval.reviewed-terminal-evidence/1' && doc.selected_cells===920
