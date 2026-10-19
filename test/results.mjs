@@ -1,3 +1,4 @@
+import '../scripts/results-storage/prepare-public-results.mjs';
 import { readFile, readdir } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
