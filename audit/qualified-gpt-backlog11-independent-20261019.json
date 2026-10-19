@@ -1,0 +1,25 @@
+{
+  "schema": "nexteval.independent-publication-review/1",
+  "reviewed_at": 1792408804.6638696,
+  "selected": 10120,
+  "all_attempts": 10173,
+  "selected_numeric_rows": 1367777,
+  "retained_partial_rows": 610,
+  "independent_payload_review_sha256": "9c62b55a115679c9f93be50c5ed8723eca75c19dedccc2050afe3433acac507f",
+  "independent_comparison_review_sha256": "05c083d64009388e79801852d68e89deab4db32ce98edff86628922911f718b0",
+  "candidate_results_sha256": "18e6849c5bc859f39f18c1d67242a3e41514a3e1270c60da2632d118c60995de",
+  "old_history_rows_preserved": 51520,
+  "legacy_assets_preserved": 557,
+  "legacy_metadata_preserved": 3,
+  "frozen_reader_tests": 28,
+  "failed_usage": "UNKNOWN",
+  "cost_usd": null,
+  "native_full_tail_certified": false,
+  "native_bodies_exported": false,
+  "new_model_calls": 0,
+  "reviewed_prior_heads": {
+    "website": "6166a592631805d0735fd5058abd83621fbb7c46",
+    "pages": "e8c41cdebe8063a6b5367100b5ef0c2704975c13"
+  },
+  "note": "Additive review record only; data files, source map, scientific values, original labels and test code unchanged. Publication still requires successful deployment and independent hosted acceptance."
+}
