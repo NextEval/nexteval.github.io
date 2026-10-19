@@ -1,0 +1,2 @@
+# Generated numerical payloads are validated by SHA and semantic tests.
+bench/results/data/** -diff linguist-generated=true
