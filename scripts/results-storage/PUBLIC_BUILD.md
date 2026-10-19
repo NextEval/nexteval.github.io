@@ -1,25 +1,9 @@
 # Immutable Public Results Build
 
-The canonical reviewed 74-group web artifact is stored in private HF at fixed
-revision d780ffe0ee1474768b513c1fcd4cb1ff15b02679 and independently byte-verified.
-Scientific archives and all credentials remain private. No HF token is copied
-to Actions, JavaScript, or a model container.
+Current catalog:75 groups. Canonical static view remains in Private HF at fixed revision 9a74d8492b222771195ab7784cb25a8c62b8406e.
 
-The public deployment build explicitly downloads the approved public-view asset
-from the existing public Pages repository. Its exact release/asset identifiers,
-URL, size and SHA256 are bound in public_distribution. This is not an automatic
-private-HF fallback. The source website repository itself stays private.
-Every one of 958 public-view files must match the SAME HF-verified SHA/size
-manifest before the generated results directory is replaced. No scientific
-export, scoring, model calls, or source-selection changes occur.
+Public CI uses only the approved numerical static view in the existing Pages release, pinned by release/asset ID, URL, size, archive SHA and all 958 member SHAs. No HF token, scientific archive, native body or hidden reasoning is exposed.
 
-The existing results-test entrypoint prepares this verified fixture before its
-unchanged numerical/UI checks. The existing Pages workflow then uploads that
-same generated tree. No workflow permission or CI-secret changes are needed.
-Only small code, manifest, and reviewed source metadata are staged in Git;
-existing tracked numerical originals and old PR branches are retained.
+The source commit binds unchanged UI code; generated science is separately bound to registry e1e1384f06a038225052251cbd7cdd6f76424fb5 and independent increment QA. All previous74 groups,71760 historical rows and557 legacy assets are retained. Old comparison-version files remain in original Git/HF/versioned release archives, separate from the current referenced-only canonical view. No scoring/model execution occurs in deployment.
 
-Future releases need an explicit immutable public-view artifact or separately
-approved private-HF CI access; this contract is not permission to expose private
-scientific bundles or raw native reasoning. A successful PR alone is not an
-online publication receipt.
+A successful PR alone is not an online publication receipt.
