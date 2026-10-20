@@ -1,6 +1,6 @@
 # Immutable Public Results Build
 
-Current catalog:85 groups. Canonical static view remains in Private HF at fixed revision 56638a7b868c2a862d4260012ea2fde33ba4612c.
+Current catalog:85 groups. Canonical static view remains in Private HF at fixed revision 2f5146acf6fa4b3d9dd45702efac8c1dfdd553ab.
 
 Public CI uses only the approved numerical static view in the existing Pages release, pinned by release/asset ID, URL, size, archive SHA and all 958 member SHAs. No HF token, scientific archive, native body or hidden reasoning is exposed.
 
