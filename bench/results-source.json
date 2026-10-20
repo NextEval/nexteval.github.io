@@ -961,7 +961,7 @@
     "scores.mjs": "4345bc8747616937350eb2227759e8fe8c2e1c28cc76781899f698885d6dcd19",
     "usage.mjs": "72f6a4ca783cadc0d98f09c704363981142ebd616fc11bc3cfb7d4440dda349c"
   },
-  "source_commit": "13fd1a4bea0d443d08e076de1bb49b16afc43493",
+  "source_commit": "057417fcc7758a7249cd3da69e1d7c7306a53dd3",
   "source_prefix": "dist/results",
   "source_kind": "manifest-materialized-static-results",
   "materialization": {
