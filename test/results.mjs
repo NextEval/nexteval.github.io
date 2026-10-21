@@ -4,7 +4,8 @@ import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
 import assert from 'node:assert/strict';
-import { checkBundle } from '../bench/results/check.mjs';
+// Load generated modules only after the verified hydration side effect finishes.
+const {checkBundle} = await import('../bench/results/check.mjs');
 
 const root = fileURLToPath(new URL('../',import.meta.url));
 const manifest = JSON.parse(await readFile(join(root,'bench/results-source.json'),'utf8'));
