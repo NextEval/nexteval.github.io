@@ -22,7 +22,7 @@
     "data/model-releases.json": "05ee8856099e41681ce99884c66e8c6f37749341897b451b7636e839fcb33a53",
     "data/pricing-snapshot.json": "089efcb5cf6ea5087ff09c84e24429df1fbe5c78ab2404ec9b2434a4bdd59fab",
     "data/results.json": "3aadd3b34bfb09b5f93c2a3ca1f2182b82d94e1f1339b83de698733dd4dd34ba",
-    "data/website-usage.json": "3a7bb2a734d75d8e27ad23aa41225c6361d7b1bbea40a60e6046fab3da62f72f",
+    "data/website-usage.json": "8a904f0ed7c541d57ea3d7b295d0278d34a44419be929390092cccc3b297d49b",
     "archive/ten-repeat/usage.mjs": "72f6a4ca783cadc0d98f09c704363981142ebd616fc11bc3cfb7d4440dda349c",
     "archive/ten-repeat/mimo-evidence.mjs": "acf9163a8b1d3317e6252d621e6c91cb7a8aca627ebe22cf05c5755107cc0b52",
     "archive/ten-repeat/scores.mjs": "4345bc8747616937350eb2227759e8fe8c2e1c28cc76781899f698885d6dcd19",
@@ -1921,7 +1921,7 @@
     "data/histories/cmp-e8ddb9269774e455e0171035/SISSER2.json": "55f69251dbf99ef2f1d201945d434bb86bc338b35dfaa6cbcfd8d14e501c39b4",
     "data/histories/cmp-e8ddb9269774e455e0171035/KIRBY2LS.json": "3517109d6bb90a569fbea8e2c67d51350a8b2bb7cf325736ed0a2ba3cbd40e7f"
   },
-  "source_commit": "008a19b5c2a6da091704c4cde9548ca899314b3c",
+  "source_commit": "12f0d0481da5dedd70b5d3ae02e18b4f334d2721",
   "source_prefix": "dist/results",
   "source_kind": "manifest-materialized-static-results",
   "materialization": {
@@ -1940,6 +1940,11 @@
       "hf_private_unchanged": true
     },
     "private_hf_revision": "0b5cd3640585cdbfb68f28d0f9cdeb4adb7e8e05",
-    "data_registry_commit": "41b87ee2e3c63174c915dda43abe8bcc86006492"
+    "data_registry_commit": "41b87ee2e3c63174c915dda43abe8bcc86006492",
+    "public_aggregate_overlay": {
+      "config_sha256": "076000557561cc8da08b601d67a241f99ab6970368dffa19be8aef08582ad0a5",
+      "source_cost_ledger_sha256": "203ba6ab90c6fd7a9ef8f9c29c7ae0dc2612181dd05ea7e00547f7ef8873c374",
+      "private_derivation_sha256": "ead7f17df7eed45abd0237009a342a5542ab1f272315c6e0b1875bdd35e8d68c"
+    }
   }
 }

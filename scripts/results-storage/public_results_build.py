@@ -16,6 +16,7 @@ import tempfile
 import urllib.request
 
 from web_artifact import materialize, validate_manifest, storage_pin
+from public_usage_overlay import load_overlay, apply_overlay
 
 
 def sha(path):
@@ -63,7 +64,7 @@ def extract_tree(manifest, archive, output):
     return {'files': result['files'], 'source_commit': result['source_commit'], 'all_file_hashes_verified': True}
 
 
-def build(manifest, output, archive=None):
+def build(manifest, output, archive=None, overlay=None):
     validate_manifest(manifest); storage_pin(manifest); pin = public_pin(manifest)
     output = Path(output)
     if output.is_symlink(): raise ValueError('output_symlink')
@@ -79,7 +80,8 @@ def build(manifest, output, archive=None):
         with os.fdopen(descriptor, 'a') as lock:
             if os.fstat(lock.fileno()).st_uid != os.getuid(): raise ValueError('foreign_build_lock')
             fcntl.flock(lock, fcntl.LOCK_EX)
-            if matches(manifest, output):
+            effective = overlay["manifest"] if overlay is not None else manifest
+            if matches(effective, output):
                 return {'files': len(manifest['files']), 'already_verified': True, 'downloaded': False}
             output.parent.mkdir(parents=True, exist_ok=True)
             with tempfile.TemporaryDirectory(prefix='.verified-public-', dir=output.parent) as temporary:
@@ -95,6 +97,10 @@ def build(manifest, output, archive=None):
                             dst.write(block)
                 verified = temp / 'results'
                 result = extract_tree(manifest, archive, verified)
+                if overlay is not None:
+                    apply_overlay(overlay, verified)
+                    if not matches(effective, verified): raise ValueError("aggregate_overlay_final_hashes")
+                    result["public_aggregate_overlay_verified"] = True
                 previous = temp / 'previous-generated-results'
                 if output.exists(): output.rename(previous)
                 try: verified.rename(output)
@@ -110,9 +116,11 @@ def main():
     parser.add_argument('--output', required=True)
     parser.add_argument('--source', choices=['approved-public-release'], required=True)
     parser.add_argument('--archive', help='Explicit offline fixture/origin archive only')
+    parser.add_argument('--overrides', help='Hash-bound public aggregate overlay only')
     args = parser.parse_args()
     manifest = json.loads(Path(args.manifest).read_bytes())
-    print(json.dumps(build(manifest, args.output, args.archive)))
+    overlay = load_overlay(manifest, args.overrides, sha(args.manifest)) if args.overrides else None
+    print(json.dumps(build(manifest, args.output, args.archive, overlay)))
 
 
 if __name__ == '__main__': main()
