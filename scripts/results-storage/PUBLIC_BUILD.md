@@ -1,9 +1,11 @@
-# Immutable Public Results Build
+# Formal Three-Repeat Primary Results
 
-Current catalog:85 groups. Canonical static view remains in Private HF at fixed revision 2f5146acf6fa4b3d9dd45702efac8c1dfdd553ab.
+Primary:92 problems times original seed ordinals0,1,2 (276 per Feature/config). Full published ten-repeat static results remain byte-identical under archive/ten-repeat, with a visible archive link. All raw scientific originals,attempts,failures and partials remain immutable in their original private archives.
 
-Public CI uses only the approved numerical static view in the existing Pages release, pinned by release/asset ID, URL, size, archive SHA and all 958 member SHAs. No HF token, scientific archive, native body or hidden reasoning is exposed.
+85 existing audited groups are projected,not rerun. Four official OptiProfiler comparisons were independently recomputed offline from identical selected baseline/reference identities. The change was decided after earlier data collection; original seed ordinals,not outcomes or completion order,determine selection.
 
-The source commit binds unchanged UI code; generated science is separately bound to registry e2e5bf67686ff2c57607fec2d0f298deec323f41 and independent increment QA. All previous83 groups,80040 historical rows and557 legacy assets are retained. Old comparison-version files remain in original Git/HF/versioned release archives, separate from the current referenced-only canonical view. No scoring/model execution occurs in deployment.
+Canonical HF remains PRIVATE at 0b5cd3640585cdbfb68f28d0f9cdeb4adb7e8e05. Public CI uses only the explicitly approved numerical public-view release,with all 1918 file SHAs/sizes checked. Git contains small manifests,UI adapters and tests only. No HF credentials,raw native or hidden reasoning in Git/CI/JavaScript.
 
-A successful PR alone is not an online publication receipt.
+Old exact920 tests run against the unchanged archive fixture; new exact276,seed,negative failure-evidence and UNKNOWN usage tests cover the primary view. MiMo keeps its exact inherited cancellation schema. Ten-repeat usage must not be divided or reused as exact primary accounting.
+
+Data primary catalog is merged at 41b87ee2e3c63174c915dda43abe8bcc86006492. Deployment and independent online SHA/1440+390 acceptance are separate.
