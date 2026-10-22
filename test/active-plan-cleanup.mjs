@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {resolve} from 'node:path';
 import {pathToFileURL} from 'node:url';
-const root=process.argv[2]?pathToFileURL(resolve(process.argv[2])+'/'):new URL('./dist/results/',import.meta.url);
+const root=process.argv[2]?pathToFileURL(resolve(process.argv[2])+'/'):new URL('../bench/results/',import.meta.url);
 const {PLAN,plannedParticipants}=await import(new URL('plan.mjs',root));
 const {sortedParticipants,matrixVisibility}=await import(new URL('model.mjs',root));
 const data=JSON.parse(readFileSync(new URL('data/results.json',root),'utf8'));
@@ -20,7 +20,7 @@ test('official medium/high and high Qwen Max model remain planned',()=>{
  assert(planned.some(p=>p.family==='MiMo'&&p.effort==='on'));
 });
 test('all published configurations survive including cancelled historical tiers',()=>{
- assert.equal(data.tasks.reduce((n,t)=>n+t.sources.length,0),88);
+ assert.equal(data.tasks.reduce((n,t)=>n+t.sources.length,0),91);
  for(const task of data.tasks){
   const rows=sortedParticipants(data,task.task_id,planned),ids=new Set(rows.map(p=>p.participant_id));
   assert([...old].every(id=>ids.has(id)),'existing scientific result disappeared');
