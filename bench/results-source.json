@@ -16,7 +16,7 @@
     "model.mjs": "657a8a31033cab16dbb71530444eaa84717ac47b41857d26071126fbee5d5c35",
     "chart.mjs": "c0ca5926486aeab299d402e5e231c2fd1c1fdd4fc4a2b323de2992e6fba2c7ed",
     "results.css": "d030794e288f9549726cc92b4b32866184200dcc4cde7e824c86b629e06f5d8c",
-    "plan.mjs": "2052b9fcbc34f2be1be73e668b5949d11c1714085a6737e61c0588f6c327a781",
+    "plan.mjs": "eed63c0838c5e90b4935b49c547a316b23e95ae6f9f99a74d358442f386606c6",
     "historical.mjs": "cef847b87662f09a3a9e04118ae66089184ba2837d557301aa4652db0237afca",
     "app.mjs": "9717fa94d17de9dc95cc8608f209086e3b1f35c8ea5c72486a50055b2f970410",
     "data/model-releases.json": "05ee8856099e41681ce99884c66e8c6f37749341897b451b7636e839fcb33a53",
@@ -1922,7 +1922,7 @@
     "data/profiles/cmp-46ebf5a50e4c5470ba217117.json": "b17529720a53625106c86fa40847556d56dc6623f233f34976c1973a9bf5a2cf",
     "incremental-pareto-audit.mjs": "759c824278e65c9b7d603863ae0d191a98b80385d42483116275ec5f754c186b"
   },
-  "source_commit": "2fe7382877bc8cc25db90c18f25bdf03ac744524",
+  "source_commit": "b01c5e037b49db94c81aace8d5f4c66cc8253fd5",
   "source_prefix": "dist/results",
   "source_kind": "manifest-materialized-static-results",
   "materialization": {
@@ -1941,6 +1941,12 @@
       "hf_private_unchanged": true
     },
     "private_hf_revision": "69bab99c66f8a9b200a7f46d86678818d978f6a8",
-    "data_registry_commit": "892c6fa1648e3ae2422bf4be9a0cd03ddf89d881"
+    "data_registry_commit": "892c6fa1648e3ae2422bf4be9a0cd03ddf89d881",
+    "public_plan_overlay": {
+      "source_sha256": "eed63c0838c5e90b4935b49c547a316b23e95ae6f9f99a74d358442f386606c6",
+      "helper_sha256": "487c29a9be6586f250460699f2c85e129e94187352b3616de8fee5ebb1e6d9b1",
+      "base_plan_sha256": "2052b9fcbc34f2be1be73e668b5949d11c1714085a6737e61c0588f6c327a781",
+      "only_target": "plan.mjs"
+    }
   }
 }
