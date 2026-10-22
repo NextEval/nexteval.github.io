@@ -5,6 +5,8 @@ no HF token in public CI. Scientific archives stay private; every public file
 must match the same per-file manifest independently verified against private HF.
 """
 import argparse
+import copy
+import subprocess
 import fcntl
 import hashlib
 import json
@@ -64,8 +66,16 @@ def extract_tree(manifest, archive, output):
     return {'files': result['files'], 'source_commit': result['source_commit'], 'all_file_hashes_verified': True}
 
 
-def build(manifest, output, archive=None, overlay=None):
+def build(manifest, output, archive=None, overlay=None, plan_source=None):
     validate_manifest(manifest); storage_pin(manifest); pin = public_pin(manifest)
+    if plan_source is not None:
+        source = Path(plan_source)
+        if overlay is not None or not source.is_file() or source.is_symlink() or source.resolve() != Path(__file__).resolve().with_name('active-plan.mjs'):
+            raise ValueError('only_fixed_public_plan_source')
+        if source.stat().st_size > 32768 or sha(source) != 'eed63c0838c5e90b4935b49c547a316b23e95ae6f9f99a74d358442f386606c6':
+            raise ValueError('public_plan_source_hash')
+        if manifest['files']['dist/results/plan.mjs']['sha256'] not in ('2052b9fcbc34f2be1be73e668b5949d11c1714085a6737e61c0588f6c327a781','eed63c0838c5e90b4935b49c547a316b23e95ae6f9f99a74d358442f386606c6'):
+            raise ValueError('unknown_public_plan_predecessor')
     output = Path(output)
     if output.is_symlink(): raise ValueError('output_symlink')
     output = output.resolve()
@@ -81,6 +91,9 @@ def build(manifest, output, archive=None, overlay=None):
             if os.fstat(lock.fileno()).st_uid != os.getuid(): raise ValueError('foreign_build_lock')
             fcntl.flock(lock, fcntl.LOCK_EX)
             effective = overlay["manifest"] if overlay is not None else manifest
+            if plan_source is not None:
+                effective = copy.deepcopy(effective)
+                effective['files']['dist/results/plan.mjs'] = {'bytes': source.stat().st_size, 'sha256': sha(source)}
             if matches(effective, output):
                 return {'files': len(manifest['files']), 'already_verified': True, 'downloaded': False}
             output.parent.mkdir(parents=True, exist_ok=True)
@@ -101,6 +114,10 @@ def build(manifest, output, archive=None, overlay=None):
                     apply_overlay(overlay, verified)
                     if not matches(effective, verified): raise ValueError("aggregate_overlay_final_hashes")
                     result["public_aggregate_overlay_verified"] = True
+                if plan_source is not None:
+                    child = subprocess.run(['node', str(Path(__file__).with_name('apply-public-plan.mjs')), str(verified)], capture_output=True, text=True, timeout=90)
+                    if child.returncode or not matches(effective, verified): raise ValueError('public_plan_overlay_verification')
+                    result['public_plan_overlay_verified'] = True
                 previous = temp / 'previous-generated-results'
                 if output.exists(): output.rename(previous)
                 try: verified.rename(output)
@@ -117,10 +134,11 @@ def main():
     parser.add_argument('--source', choices=['approved-public-release'], required=True)
     parser.add_argument('--archive', help='Explicit offline fixture/origin archive only')
     parser.add_argument('--overrides', help='Hash-bound public aggregate overlay only')
+    parser.add_argument('--plan-source', help='Exact reviewed active-plan.mjs only; runs inside original build lock')
     args = parser.parse_args()
     manifest = json.loads(Path(args.manifest).read_bytes())
     overlay = load_overlay(manifest, args.overrides, sha(args.manifest)) if args.overrides else None
-    print(json.dumps(build(manifest, args.output, args.archive, overlay)))
+    print(json.dumps(build(manifest, args.output, args.archive, overlay, args.plan_source)))
 
 
 if __name__ == '__main__': main()
