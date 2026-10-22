@@ -1922,7 +1922,7 @@
     "data/profiles/cmp-46ebf5a50e4c5470ba217117.json": "b17529720a53625106c86fa40847556d56dc6623f233f34976c1973a9bf5a2cf",
     "incremental-pareto-audit.mjs": "759c824278e65c9b7d603863ae0d191a98b80385d42483116275ec5f754c186b"
   },
-  "source_commit": "b01c5e037b49db94c81aace8d5f4c66cc8253fd5",
+  "source_commit": "e5076262fc1356e983b3f1d9abf6a138b76296df",
   "source_prefix": "dist/results",
   "source_kind": "manifest-materialized-static-results",
   "materialization": {
@@ -1944,9 +1944,10 @@
     "data_registry_commit": "892c6fa1648e3ae2422bf4be9a0cd03ddf89d881",
     "public_plan_overlay": {
       "source_sha256": "eed63c0838c5e90b4935b49c547a316b23e95ae6f9f99a74d358442f386606c6",
-      "helper_sha256": "487c29a9be6586f250460699f2c85e129e94187352b3616de8fee5ebb1e6d9b1",
+      "helper_sha256": "7fa4fb29c5012edb7bb64c1636c1de22b1ee5116e930d3b7f9aa95830afcbd1c",
       "base_plan_sha256": "2052b9fcbc34f2be1be73e668b5949d11c1714085a6737e61c0588f6c327a781",
-      "only_target": "plan.mjs"
+      "only_target": "plan.mjs",
+      "builder_sha256": "68f9ef05e8b75aec0229d74a655e7b463069cf9a2d7d823840db5eab79dc2ed0"
     }
   }
 }
