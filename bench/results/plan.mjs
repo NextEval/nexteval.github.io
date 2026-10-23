@@ -16,7 +16,7 @@ export const PLAN = Object.freeze({
     ] },
     { family:'DeepSeek', harnesses:['codex','claude-code'], efforts:['high'], models:[
       ['deepseek-v4-flash','DeepSeek V4 Flash'], ['deepseek-v4-pro','DeepSeek V4 Pro'],
-      ['deepseek-v4.1-flash','DeepSeek V4.1 Flash', 'Conditional on model availability'],
+      ['deepseek-v4.1-flash','DeepSeek V4.1 Flash'],
     ] },
     { family:'GLM', harnesses:['codex','claude-code'], efforts:['high'], models:[
       ['glm-5.3','GLM 5.3'], ['glm-5.3-flash','GLM 5.3 Flash'],
