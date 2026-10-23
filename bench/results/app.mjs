@@ -1,3 +1,4 @@
+import { modelName, harnessName, configurationName, presentationParticipant } from './identities.mjs';
 import { sourceNotesTable } from './evidence.mjs';
 import { FEATURES, validateSnapshot, validateProfiles, validateHistoryIndex, validateHistory, historyChartData, sortedParticipants, matrixVisibility, scoreText, featureFor, assetPath, chartData } from './model.mjs';
 import { ScientificChart, formatNumber } from './chart.mjs';
@@ -30,15 +31,10 @@ async function readJSON(url) {
 }
 
 const fileURL = file => new URL(assetPath(file), dataURL);
-const labelFor = p => {
-  if (p.display_name) return p.display_name;
-  if (!p.model || p.harness === 'reference' || p.model === 'none') return p.label;
-  const model = p.model.split('/').at(-1);
-  return ({ 'gpt-5.5':'GPT-5.5', 'gpt-5.6-sol':'GPT-5.6 Sol', 'gpt-5.6-terra':'GPT-5.6 Terra', 'gpt-5.6-luna':'GPT-5.6 Luna', 'gpt-6-sol':'GPT-6 Sol', 'gpt-6-luna':'GPT-6 Luna', 'claude-sonnet-5':'Claude Sonnet 5', 'claude-opus-5-5':'Claude Opus 5.5', 'deepseek-v4-flash':'DeepSeek V4 Flash', 'qwen3.8-flash':'Qwen3.8 Flash' }[model] || p.model);
-};
-const harnessFor = p => ({'codex':'Codex','claude-code':'Claude Code','scipy':'SciPy'}[p.harness] || p.harness) + (p.participant_id==='codex--qwen3.8-flash--low--collaborator-macos' ? ' / Mac' : '');
+const labelFor = modelName;
+const harnessFor = harnessName;
 const detailFor = p => [harnessFor(p), p.effort].filter(Boolean).join(' / ');
-const chartParticipants = () => snapshot.participants.map(p => ({...p,label:reference(p) ? p.label : `${labelFor(p)} / ${detailFor(p)}`}));
+const chartParticipants = () => snapshot.participants.map(p => ({...p,label:reference(p) ? p.label : `${configurationName(p)} / ${harnessFor(p)}`}));
 const reference = p => /cobyqa/i.test(p.label);
 const dateLabel = () => snapshot.generated_at ? new Date(snapshot.generated_at).toISOString().slice(0,10) : 'Versioned snapshot';
 const dashboardViews = (view, task, family = '') => `<nav class="results-tabs dashboard-views" aria-label="Results views"><a href="#matrix?${new URLSearchParams({sort:task?.task_id || '',family})}" ${view === 'matrix' ? 'aria-current="page"' : ''}>${icon('grid-2x2')}Matrix</a><a href="#pareto?${new URLSearchParams({task:task?.task_id || '',family})}" ${view === 'pareto' ? 'aria-current="page"' : ''}>${icon('chart-scatter')}Pareto</a></nav>`;
@@ -83,7 +79,7 @@ function matrix(params) {
       const c = t && cells.get(JSON.stringify([p.participant_id,t.task_id]));
       const baseline = referenceScore(t), score = relativeScore(c?.score, baseline);
       if (score === null) return c?.score != null ? '<td aria-label="Reference score unavailable" title="COBYQA reference score is missing or zero"></td>' : '<td aria-label="No published result" title="No published result"></td>';
-      return `<td style="background:${heatColor(score)}" data-score="${score}"><a href="${taskURL(t)}" title="Relative: ${score.toFixed(6)}; original: ${c.score.toFixed(6)}; COBYQA original: ${baseline.toFixed(6)}" aria-label="${esc(p.label)}, ${esc(t.label)}, COBYQA-relative score ${scoreText(score)}">${scoreText(score)}</a></td>`;
+      return `<td style="background:${heatColor(score)}" data-score="${score}"><a href="${taskURL(t)}" title="Relative: ${score.toFixed(6)}; original: ${c.score.toFixed(6)}; COBYQA original: ${baseline.toFixed(6)}" aria-label="${esc(configurationName(p))}, ${esc(t.label)}, COBYQA-relative score ${scoreText(score)}">${scoreText(score)}</a></td>`;
     }).join('')}</tr>`).join('')}</tbody></table></div>
     ${unpublished ? `<button type="button" class="matrix-expand" id="toggle-unpublished" aria-expanded="${expanded}" aria-controls="model-matrix" title="Configurations without published scores">${icon(expanded ? 'chevron-up' : 'chevron-down')}<span>${expanded ? 'Hide' : 'Show'} ${unpublished} ${expanded ? 'unpublished' : 'more'} configurations</span></button>` : ''}
     ${rows.length ? '' : '<section class="results-empty"><h2>No scored comparison released</h2><p>Completed coverage alone is not a score. Results will appear after the offline comparison export is verified.</p></section>'}
@@ -180,7 +176,7 @@ async function pareto(params, ticket) {
 function coverage(task) {
   return `<section class="task-coverage"><h2>Coverage</h2><div class="results-table-scroll"><table class="coverage-table"><thead><tr><th>Configuration</th><th>Terminal / expected</th><th>Normal</th><th>Timeout</th><th>Agent failure</th></tr></thead><tbody>${(task.coverage || []).map(row => {
     const participant = snapshot.participants.find(p => p.participant_id === row.participant_id);
-    return `<tr><td>${esc(participant.label)}</td><td>${row.terminal} / ${row.expected}</td><td>${row.normal}</td><td>${row.timeout}</td><td>${row.agent_failure || 0}</td></tr>`;
+    return `<tr><td>${esc(configurationName(participant))}</td><td>${row.terminal} / ${row.expected}</td><td>${row.normal}</td><td>${row.timeout}</td><td>${row.agent_failure || 0}</td></tr>`;
   }).join('')}</tbody></table></div></section>`;
 }
 
@@ -237,8 +233,8 @@ async function renderHistories(histories, task, params, viewHost, ticket) {
   document.getElementById('history-receipt').innerHTML = `<p class="profile-note">Best observed clean value after each recorded evaluation / lower is better / curves end where runs end. Nonfinite observations remain counted. This is not the agent-returned solution.</p><div class="results-table-scroll"><table class="coverage-table"><thead><tr><th>Configuration</th><th>Evaluations</th><th>Best finite value</th><th>Nonfinite</th><th>Terminal state</th></tr></thead><tbody>${rows.map(row => {
     const participant = snapshot.participants.find(p => p.participant_id === row.participant_id);
     const finite = row.values.filter(Number.isFinite);
-    return `<tr><td>${esc(participant.label)}</td><td>${row.evaluations} / ${history.budget}</td><td>${finite.length ? formatNumber(Math.min(...finite)) : 'None'}</td><td>${row.values.length-finite.length}</td><td>${esc(row.terminal_status)}</td></tr>`;
-  }).join('')}</tbody></table></div><details class="results-method"><summary>Selected run provenance</summary><p><a href="${fileURL(problem.history_file)}" download>Download ${esc(problem.problem)} numerical evidence</a></p><ul>${rows.map(row => `<li>${esc(snapshot.participants.find(p => p.participant_id === row.participant_id).label)}<br>Seed <code>${esc(row.instance_seed)}</code><br>Archive <code>${esc(row.archive_id)}</code>${row.attempt_id ? `<br>Attempt <code>${esc(row.attempt_id)}</code><br>Execution identity <code>${esc(row.source_agent_config_id)}</code>` : ''}</li>`).join('')}</ul></details>`;
+    return `<tr><td>${esc(configurationName(participant))}</td><td>${row.evaluations} / ${history.budget}</td><td>${finite.length ? formatNumber(Math.min(...finite)) : 'None'}</td><td>${row.values.length-finite.length}</td><td>${esc(row.terminal_status)}</td></tr>`;
+  }).join('')}</tbody></table></div><details class="results-method"><summary>Selected run provenance</summary><p><a href="${fileURL(problem.history_file)}" download>Download ${esc(problem.problem)} numerical evidence</a></p><ul>${rows.map(row => `<li>${esc(configurationName(snapshot.participants.find(p => p.participant_id === row.participant_id)))}<br>Seed <code>${esc(row.instance_seed)}</code><br>Archive <code>${esc(row.archive_id)}</code>${row.attempt_id ? `<br>Attempt <code>${esc(row.attempt_id)}</code><br>Execution identity <code>${esc(row.source_agent_config_id)}</code>` : ''}</li>`).join('')}</ul></details>`;
 }
 
 async function route() {
@@ -270,6 +266,7 @@ async function route() {
 
 try {
   snapshot = validateSnapshot(await readJSON(dataURL));
+  snapshot = {...snapshot,participants:snapshot.participants.map(presentationParticipant)};
   window.addEventListener('hashchange',route);
   await route();
 } catch (error) {

@@ -1,0 +1,23 @@
+{
+  "schema": "nexteval.model-identity-presentation/1",
+  "registry_sha256": "b3bf9ddd53f42d0df560b07cfba2067c94c06b93e8d66bc4bef52ad5dbe9d0f5",
+  "base_app_sha256": "9717fa94d17de9dc95cc8608f209086e3b1f35c8ea5c72486a50055b2f970410",
+  "template_sha256": "a88d54dbe9454d5cb8c8f0e933a5b77fff81f1141f7dab17a1add41fc8f17b22",
+  "targets": {
+    "dist/results/identities.mjs": {
+      "sha256": "15f671cbf99d9c8b438d5887ab6051db2a3ec08aeecbe0d3025e625c3731b65d",
+      "bytes": 5468
+    },
+    "dist/results/app.mjs": {
+      "sha256": "785b564077b54d3bb1d98cba86894e576ad1bb66948c6dadeccde3ae5d48a42f",
+      "bytes": 31682
+    },
+    "dist/results/archive/ten-repeat/app.mjs": {
+      "sha256": "d5753d2efa1d881dd99d3d80127dc43464a855320cff73dc7be1a5ac7307ff12",
+      "bytes": 31686
+    }
+  },
+  "model_identity_data_pr": "https://github.com/NextEval/nexteval-bench-data/pull/67",
+  "hf_private_revision": "fa4ff1176c10da814e1a27f026150a2138a0f902",
+  "scientific_arrays_modified": false
+}
