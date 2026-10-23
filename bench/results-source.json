@@ -18,7 +18,7 @@
     "results.css": "d030794e288f9549726cc92b4b32866184200dcc4cde7e824c86b629e06f5d8c",
     "plan.mjs": "8714da1a9aae2cd351b1b05150faf1c5341c80f857d7c4aa0627b0792301cf6c",
     "historical.mjs": "cef847b87662f09a3a9e04118ae66089184ba2837d557301aa4652db0237afca",
-    "app.mjs": "9717fa94d17de9dc95cc8608f209086e3b1f35c8ea5c72486a50055b2f970410",
+    "app.mjs": "785b564077b54d3bb1d98cba86894e576ad1bb66948c6dadeccde3ae5d48a42f",
     "data/model-releases.json": "05ee8856099e41681ce99884c66e8c6f37749341897b451b7636e839fcb33a53",
     "data/pricing-snapshot.json": "089efcb5cf6ea5087ff09c84e24429df1fbe5c78ab2404ec9b2434a4bdd59fab",
     "data/results.json": "06162ffed7cd06bb36d92ec2a54f08791e9cbc17813cab4ffa8e7af758f4f64c",
@@ -37,7 +37,7 @@
     "archive/ten-repeat/results.css": "d030794e288f9549726cc92b4b32866184200dcc4cde7e824c86b629e06f5d8c",
     "archive/ten-repeat/plan.mjs": "1dcc7c7216bd4c7375c49ba12993dd29c1cacadb43ef43a39ca2eb7bed56c3c6",
     "archive/ten-repeat/historical.mjs": "cef847b87662f09a3a9e04118ae66089184ba2837d557301aa4652db0237afca",
-    "archive/ten-repeat/app.mjs": "9717fa94d17de9dc95cc8608f209086e3b1f35c8ea5c72486a50055b2f970410",
+    "archive/ten-repeat/app.mjs": "d5753d2efa1d881dd99d3d80127dc43464a855320cff73dc7be1a5ac7307ff12",
     "archive/ten-repeat/data/model-releases.json": "05ee8856099e41681ce99884c66e8c6f37749341897b451b7636e839fcb33a53",
     "archive/ten-repeat/data/pricing-snapshot.json": "089efcb5cf6ea5087ff09c84e24429df1fbe5c78ab2404ec9b2434a4bdd59fab",
     "archive/ten-repeat/data/results.json": "1d7c22f59bda24cc7d23b000a4909d15b335de9b9b5ec65b5fdd303b976ac4e8",
@@ -1920,9 +1920,10 @@
     "data/histories/cmp-82d6424559bfec940ca3dcb3/n10FOLDTRLS.json": "76eac0efb0cfe6acffb4b43a8b111b28930a54c62c761238332b8aa51919d7f0",
     "data/profiles/cmp-145e6c018075f0d33011faaa.json": "6e57f779176d9555b6407babd4960002a83840ab0e66fa9b5cd0ea9fef77510d",
     "data/profiles/cmp-77a9bd1b4eecfd119d05f652.json": "5070a6196c103fa887ea9bc86a18cbcf6bba5e4795e5283cb5d8761041c36105",
-    "data/profiles/cmp-82d6424559bfec940ca3dcb3.json": "caa205446bfc7ddc4b60302368a02e899fa0755e8ad470cd4be2cdccde6b471f"
+    "data/profiles/cmp-82d6424559bfec940ca3dcb3.json": "caa205446bfc7ddc4b60302368a02e899fa0755e8ad470cd4be2cdccde6b471f",
+    "identities.mjs": "15f671cbf99d9c8b438d5887ab6051db2a3ec08aeecbe0d3025e625c3731b65d"
   },
-  "source_commit": "93aef3b1001757edb700609acb6d2fe610d8f431",
+  "source_commit": "721510140472d61fdac761092f62204109d75206",
   "source_prefix": "dist/results",
   "source_kind": "manifest-materialized-static-results",
   "materialization": {
@@ -1947,6 +1948,17 @@
       "base_plan_sha256": "eed63c0838c5e90b4935b49c547a316b23e95ae6f9f99a74d358442f386606c6",
       "source_sha256": "8714da1a9aae2cd351b1b05150faf1c5341c80f857d7c4aa0627b0792301cf6c",
       "helper_sha256": "21ae2633627bdd3331fcc1d6c45aebfe69c3708ee038cf9b8442d0fd48113e4e"
+    },
+    "model_identity_registry": {
+      "registry_sha256": "b3bf9ddd53f42d0df560b07cfba2067c94c06b93e8d66bc4bef52ad5dbe9d0f5",
+      "source": "https://github.com/NextEval/nexteval-bench-data/pull/67",
+      "hf_private_revision": "fa4ff1176c10da814e1a27f026150a2138a0f902",
+      "only_targets": [
+        "dist/results/identities.mjs",
+        "dist/results/app.mjs",
+        "dist/results/archive/ten-repeat/app.mjs"
+      ],
+      "projection_sha256": "992d1cb2229315b6a88e2d95682f5d82ab0a3aa967456d14bd9992edc2af3155"
     }
   }
 }

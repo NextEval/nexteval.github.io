@@ -19,6 +19,7 @@ import urllib.request
 
 from web_artifact import materialize, validate_manifest, storage_pin
 from public_usage_overlay import load_overlay, apply_overlay
+from identity_presentation import load_identity_presentation, identity_effective_manifest, apply_identity_presentation
 
 
 def sha(path):
@@ -66,7 +67,7 @@ def extract_tree(manifest, archive, output):
     return {'files': result['files'], 'source_commit': result['source_commit'], 'all_file_hashes_verified': True}
 
 
-def build(manifest, output, archive=None, overlay=None, plan_source=None):
+def build(manifest, output, archive=None, overlay=None, plan_source=None, identity_registry=None):
     validate_manifest(manifest); storage_pin(manifest); pin = public_pin(manifest)
     if plan_source is not None:
         source = Path(plan_source)
@@ -76,6 +77,8 @@ def build(manifest, output, archive=None, overlay=None, plan_source=None):
             raise ValueError('public_plan_source_hash')
         if manifest['files']['dist/results/plan.mjs']['sha256'] not in ('2052b9fcbc34f2be1be73e668b5949d11c1714085a6737e61c0588f6c327a781','eed63c0838c5e90b4935b49c547a316b23e95ae6f9f99a74d358442f386606c6','8714da1a9aae2cd351b1b05150faf1c5341c80f857d7c4aa0627b0792301cf6c'):
             raise ValueError('unknown_public_plan_predecessor')
+    if identity_registry is not None and overlay is not None: raise ValueError('identity_and_usage_overlay_are_separate')
+    identity = load_identity_presentation(manifest, identity_registry) if identity_registry is not None else None
     output = Path(output)
     if output.is_symlink(): raise ValueError('output_symlink')
     output = output.resolve()
@@ -94,8 +97,9 @@ def build(manifest, output, archive=None, overlay=None, plan_source=None):
             if plan_source is not None:
                 effective = copy.deepcopy(effective)
                 effective['files']['dist/results/plan.mjs'] = {'bytes': source.stat().st_size, 'sha256': sha(source)}
+            if identity is not None: effective = identity_effective_manifest(effective, identity)
             if matches(effective, output):
-                return {'files': len(manifest['files']), 'already_verified': True, 'downloaded': False}
+                return {'files': len(effective['files']), 'already_verified': True, 'downloaded': False}
             output.parent.mkdir(parents=True, exist_ok=True)
             with tempfile.TemporaryDirectory(prefix='.verified-public-', dir=output.parent) as temporary:
                 temp = Path(temporary)
@@ -116,15 +120,19 @@ def build(manifest, output, archive=None, overlay=None, plan_source=None):
                     result["public_aggregate_overlay_verified"] = True
                 if plan_source is not None:
                     child = subprocess.run(['node', str(Path(__file__).with_name('apply-public-plan.mjs')), str(verified)], capture_output=True, text=True, timeout=90)
-                    if child.returncode or not matches(effective, verified): raise ValueError('public_plan_overlay_verification')
+                    if child.returncode: raise ValueError('public_plan_overlay_verification')
                     result['public_plan_overlay_verified'] = True
+                if identity is not None:
+                    apply_identity_presentation(verified, identity)
+                    result['model_identity_registry_sha256'] = identity['lock']['registry_sha256']
+                if not matches(effective, verified): raise ValueError('all_effective_public_file_hashes')
                 previous = temp / 'previous-generated-results'
                 if output.exists(): output.rename(previous)
                 try: verified.rename(output)
                 except Exception:
                     if previous.exists(): previous.rename(output)
                     raise
-                return {**result, 'already_verified': False, 'downloaded': True}
+                return {**result, 'files': len(effective['files']), 'already_verified': False, 'downloaded': True}
 
 
 def main():
@@ -135,10 +143,11 @@ def main():
     parser.add_argument('--archive', help='Explicit offline fixture/origin archive only')
     parser.add_argument('--overrides', help='Hash-bound public aggregate overlay only')
     parser.add_argument('--plan-source', help='Exact reviewed active-plan.mjs only; runs inside original build lock')
+    parser.add_argument('--identity-registry', help='Exact fixed model registry; names-only projection inside build lock')
     args = parser.parse_args()
     manifest = json.loads(Path(args.manifest).read_bytes())
     overlay = load_overlay(manifest, args.overrides, sha(args.manifest)) if args.overrides else None
-    print(json.dumps(build(manifest, args.output, args.archive, overlay, args.plan_source)))
+    print(json.dumps(build(manifest, args.output, args.archive, overlay, args.plan_source, args.identity_registry)))
 
 
 if __name__ == '__main__': main()
