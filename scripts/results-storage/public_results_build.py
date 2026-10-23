@@ -71,13 +71,17 @@ def build(manifest, output, archive=None, overlay=None, plan_source=None, identi
     validate_manifest(manifest); storage_pin(manifest); pin = public_pin(manifest)
     if plan_source is not None:
         source = Path(plan_source)
-        if overlay is not None or not source.is_file() or source.is_symlink() or source.resolve() != Path(__file__).resolve().with_name('active-plan.mjs'):
+        if not source.is_file() or source.is_symlink() or source.resolve() != Path(__file__).resolve().with_name('active-plan.mjs'):
             raise ValueError('only_fixed_public_plan_source')
         if source.stat().st_size > 32768 or sha(source) != '8714da1a9aae2cd351b1b05150faf1c5341c80f857d7c4aa0627b0792301cf6c':
             raise ValueError('public_plan_source_hash')
         if manifest['files']['dist/results/plan.mjs']['sha256'] not in ('2052b9fcbc34f2be1be73e668b5949d11c1714085a6737e61c0588f6c327a781','eed63c0838c5e90b4935b49c547a316b23e95ae6f9f99a74d358442f386606c6','8714da1a9aae2cd351b1b05150faf1c5341c80f857d7c4aa0627b0792301cf6c'):
             raise ValueError('unknown_public_plan_predecessor')
-    if identity_registry is not None and overlay is not None: raise ValueError('identity_and_usage_overlay_are_separate')
+    # Each projection validates its fixed, disjoint targets; final hashes close all three.
+    if overlay is not None:
+        prior = manifest['files']; after = overlay['manifest']['files']
+        if set(prior) != set(after) or any(after[k] != v for k, v in prior.items() if k != 'dist/results/data/website-usage.json'):
+            raise ValueError('only_accounting_overlay_target')
     identity = load_identity_presentation(manifest, identity_registry) if identity_registry is not None else None
     output = Path(output)
     if output.is_symlink(): raise ValueError('output_symlink')
@@ -114,10 +118,6 @@ def build(manifest, output, archive=None, overlay=None, plan_source=None, identi
                             dst.write(block)
                 verified = temp / 'results'
                 result = extract_tree(manifest, archive, verified)
-                if overlay is not None:
-                    apply_overlay(overlay, verified)
-                    if not matches(effective, verified): raise ValueError("aggregate_overlay_final_hashes")
-                    result["public_aggregate_overlay_verified"] = True
                 if plan_source is not None:
                     child = subprocess.run(['node', str(Path(__file__).with_name('apply-public-plan.mjs')), str(verified)], capture_output=True, text=True, timeout=90)
                     if child.returncode: raise ValueError('public_plan_overlay_verification')
@@ -125,6 +125,9 @@ def build(manifest, output, archive=None, overlay=None, plan_source=None, identi
                 if identity is not None:
                     apply_identity_presentation(verified, identity)
                     result['model_identity_registry_sha256'] = identity['lock']['registry_sha256']
+                if overlay is not None:
+                    apply_overlay(overlay, verified)
+                    result["public_aggregate_overlay_verified"] = True
                 if not matches(effective, verified): raise ValueError('all_effective_public_file_hashes')
                 previous = temp / 'previous-generated-results'
                 if output.exists(): output.rename(previous)
