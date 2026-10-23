@@ -20,7 +20,7 @@ test('official medium/high and high Qwen Max model remain planned',()=>{
  assert(planned.some(p=>p.family==='MiMo'&&p.effort==='on'));
 });
 test('all published configurations survive including cancelled historical tiers',()=>{
- assert.equal(data.tasks.reduce((n,t)=>n+t.sources.length,0),97);
+ assert.equal(data.tasks.reduce((n,t)=>n+t.sources.length,0),109);
  for(const task of data.tasks){
   const rows=sortedParticipants(data,task.task_id,planned),ids=new Set(rows.map(p=>p.participant_id));
   assert([...old].every(id=>ids.has(id)),'existing scientific result disappeared');
