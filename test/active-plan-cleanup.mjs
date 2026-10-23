@@ -31,3 +31,10 @@ test('all published configurations survive including cancelled historical tiers'
  }
  assert([...old].some(id=>id.includes('deepseek')&&id.endsWith('--low')),'historical low fixture missing');
 });
+
+test('planning labels have no conditional presentation distinction',()=>{
+ assert.equal(planned.filter(p=>p.condition).length,0,'conditional presentation remains');
+ const rows=planned.filter(p=>p.model==='deepseek-v4.1-flash');
+ assert.equal(rows.length,2);assert.deepEqual(rows.map(p=>p.harness).sort(),['claude-code','codex']);
+ assert(rows.every(p=>p.effort==='high'));
+});
