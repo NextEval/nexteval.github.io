@@ -24,11 +24,11 @@ def privacy(value):
     elif isinstance(value,list):
         for item in value:privacy(item)
 
-def validate_usage(data):
+def validate_usage(data, expected_groups=85):
     require(isinstance(data,dict) and not set(data)-ROOT_KEYS and data.get('schema')=='nexteval.website-usage/1','usage_schema')
     require(data.get('primary_protocol')=={'id':'fixed-original-seed-prefix/3','seed_ordinals':[0,1,2],'expected':276},'selection_protocol')
     require(hash_value(data.get('pricing_sha256')) and hash_value(data.get('source_usage_sha256')),'accounting_source_hashes')
-    require(data.get('pricing_file')=='pricing-snapshot.json' and isinstance(data.get('groups'),list) and len(data['groups'])==85,'usage_membership')
+    require(data.get('pricing_file')=='pricing-snapshot.json' and isinstance(data.get('groups'),list) and len(data['groups'])==expected_groups,'usage_membership')
     privacy(data);seen=set()
     for g in data['groups']:
         require(isinstance(g,dict) and set(g)==GROUP_KEYS,'public_aggregate_fields')
@@ -61,19 +61,28 @@ def load_overlay(manifest,config_path,manifest_sha256):
     require(isinstance(item['source'],str) and re.fullmatch(r'[A-Za-z0-9_-]+\.json',item['source']) is not None,'source_basename')
     source=config_path.parent/item['source'];require(source.is_file() and not source.is_symlink() and source.stat().st_size<=262144,'bounded_public_aggregate')
     raw=source.read_bytes();require(type(item['bytes']) is int and item['bytes']==len(raw) and digest(raw)==item['sha256'],'overlay_source_digest')
-    data=validate_usage(json.loads(raw));require(isinstance(config['selection_bindings'],dict) and len(config['selection_bindings'])==85 and all(hash_value(v) for v in config['selection_bindings'].values()),'selection_bindings')
+    require(isinstance(config['selection_bindings'],dict) and 0<len(config['selection_bindings'])<=2000 and all(hash_value(v) for v in config['selection_bindings'].values()),'selection_bindings');data=validate_usage(json.loads(raw),len(config['selection_bindings']))
     effective=deepcopy(manifest);effective['files'][TARGET]={'bytes':len(raw),'sha256':digest(raw)}
     return {'manifest':effective,'raw':raw,'data':data,'config':config}
 
 def apply_overlay(overlay,output):
     output=Path(output);snapshot_path=output/'data/results.json';snapshot=json.loads(snapshot_path.read_bytes())
     require(digest(snapshot_path.read_bytes())==overlay['config']['source_results_sha256'],'science_changed')
-    sources={t['task_id']:{s.get('primary_selection',{}).get('selection_sha256') for s in t.get('evidence_refs',[])} for t in snapshot['tasks']}
+    sources={}
+    aliases={'codex--gpt-5.5--high--api':'codex--gpt-5.5--high','codex--gpt-5.5--medium--mixed-api40':'codex--gpt-5.5--medium'}
+    for task in snapshot['tasks']:
+        members=[p for p in task['members'] if p!='cobyqa']
+        refs=task.get('evidence_refs',[])
+        require(len(members)==len(refs) and len(set(members))==len(members),'ordered_source_membership')
+        for pid,source in zip(members,refs):
+            claimed=source.get('participant_id',pid)
+            require(aliases.get(claimed,claimed)==aliases.get(pid,pid),'source_participant_binding')
+            sources[(task['task_id'],pid)]=source.get('primary_selection',{}).get('selection_sha256')
     expected={(t['task_id'],s['participant_id']) for t in snapshot['tasks'] for s in t['scores'] if s['participant_id']!='cobyqa'}
     observed={(g['task_id'],g['participant_id']) for g in overlay['data']['groups']};require(observed==expected,'scored_group_membership')
     require(digest((output/'data/pricing-snapshot.json').read_bytes())==overlay['data']['pricing_sha256'],'pricing_changed')
     for g in overlay['data']['groups']:
         key=g['task_id']+'|'+g['participant_id']
-        require(g['selection_sha256'] in sources[g['task_id']] and overlay['config']['selection_bindings'].get(key)==g['selection_sha256'],'exact_selected_source_binding')
+        require(sources.get((g['task_id'],g['participant_id']))==g['selection_sha256'] and overlay['config']['selection_bindings'].get(key)==g['selection_sha256'],'exact_selected_source_binding')
     target=output/'data/website-usage.json';require(target.is_file() and not target.is_symlink(),'existing_public_accounting_file')
     with target.open('wb') as f:f.write(overlay['raw'])
