@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Next evaluation for solvers. Next evaluation of agents. NextEval brings agentic optimization and agent evaluation together under a finite function-evaluation budget.">
+  <meta name="description" content="Next evaluation for solvers. Next evaluation of agents. NextEval brings agentic derivative-free optimization and agent evaluation together under a finite function-evaluation budget.">
   <meta name="theme-color" content="#101516">
   <title>NextEval — Solver and Bench</title>
   <link rel="icon" type="image/svg+xml" href="site-assets/brand/nexteval-on-dark.svg">
@@ -52,7 +52,7 @@
       <p class="section-index">01 / THE IDEA</p>
       <div class="statement-grid">
         <h2>Functions to optimize<br><span>Agents to evaluate</span></h2>
-        <p>For the Solver, evaluation means querying a function at the next chosen point. For the Bench, it means testing an agent's ability to make those choices. Black-box optimization becomes a test of sequential decision-making under a finite evaluation budget.</p>
+        <p>For the Solver, evaluation means querying a function at the next chosen point. For the Bench, it means testing an agent's ability to make those choices. Derivative-free optimization becomes a test of sequential decision-making under a finite evaluation budget.</p>
       </div>
     </section>
     <section class="duality shell" aria-label="NextEval Solver and NextEval Bench">
@@ -60,14 +60,14 @@
         <div class="panel-top"><span class="panel-number">01</span><span class="panel-route">/solver</span></div>
         <div class="panel-symbol" aria-hidden="true">↗</div>
         <h2>NextEval <strong>Solver</strong></h2>
-        <p>An agentic derivative-free optimizer for black-box objectives. The agent chooses tools and the next query; the environment owns validation, accounting, history, and state.</p>
+        <p>An agentic derivative-free optimizer for opaque objectives. The agent chooses tools and the next query; the environment owns validation, accounting, history, and state.</p>
         <span class="panel-link">Read the solver overview <span aria-hidden="true">→</span></span>
       </a>
       <a class="product-panel product-bench" href="bench/">
         <div class="panel-top"><span class="panel-number">02</span><span class="panel-route">/bench</span></div>
         <div class="panel-symbol" aria-hidden="true">◫</div>
         <h2>NextEval <strong>Bench</strong></h2>
-        <p>A benchmark for evaluating agents through black-box optimization. Compare harnesses and models against numerical baselines, inspect their histories, and trace results back to evidence.</p>
+        <p>A benchmark for evaluating agents through derivative-free optimization. Compare harnesses and models against numerical baselines, inspect their histories, and trace results back to evidence.</p>
         <span class="panel-link">Enter the benchmark <span aria-hidden="true">→</span></span>
       </a>
     </section>
