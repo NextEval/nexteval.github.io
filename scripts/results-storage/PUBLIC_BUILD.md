@@ -1,6 +1,6 @@
 # Audited Three-Seed Primary Results
 
-115 groups,92 problems times original seed ordinals0,1,2. Add GLM5.3 Flash Claude Code high Perturbed. Original114 groups and their selected history rows,full85-group ten-repeat archive and retired-plan cleanup retained. Existing95 token and72 cost aggregates retained; new accounting remains UNKNOWN/null (20 total); no invented cost or tokens. Scientific original bundles stay private in HF. Git contains only this exact manifest and small source/tests. Public numerical-view release and every member hash independently checked on SYU. No model/oracle replay,credentials,raw native or hidden reasoning.
+118 groups,92 problems times original seed ordinals0,1,2. Add Haiku medium Rotated, Haiku high Noisy and GPT5.5 high Perturbed. Original115 groups and their selected history rows,full85-group ten-repeat archive and retired-plan cleanup retained. 102 exact-token and74 exact-cost groups;28 price-only gaps and16 incomplete usage groups. Explicitly labeled imputation scenarios never replace exact fields or enter exact Pareto. Two accepted GPT300s records remain300s;14 append-only Haiku reruns retain parents;15 incomplete artifact tails stay identified. No invented metered values. Scientific original bundles stay private in HF. Git contains only this exact manifest and small source/tests. Public numerical-view release and every member hash independently checked on SYU. No model/oracle replay,credentials,raw native or hidden reasoning.
 
-Data comparison catalog: e2aa6f018e1857450b3564ecebadc4a6f21f82e2
-Private HF revision: 7a59fdda34415be93019c6252cd81cb2e21a1e4d
+Data comparison catalog: 55d294343834945680b194db3936ef1a39cd6a04
+Private HF revision: 30b621532125484f2ca94c63c65d422fc7539841
