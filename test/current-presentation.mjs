@@ -14,7 +14,7 @@ const removed=['claude-code--deepseek-v4-flash--low','codex--qwen3.8-flash--low-
 test('all four retired Chinese configurations disappear from presentation, not source records',()=>{
  assert.deepEqual(snapshot.participants.filter(p=>!isDisplayed(p)).map(p=>p.participant_id),removed);
  assert.equal(snapshot.tasks.reduce((n,t)=>n+t.scores.filter(p=>removed.includes(p.participant_id)).length,0),11);
- assert.equal(snapshot.tasks.reduce((n,t)=>n+displayedTask(snapshot,t).scores.filter(p=>!['scipy','reference'].includes(snapshot.participants.find(x=>x.participant_id===p.participant_id).harness)).length,0),159);
+ assert.equal(snapshot.tasks.reduce((n,t)=>n+displayedTask(snapshot,t).scores.filter(p=>!['scipy','reference'].includes(snapshot.participants.find(x=>x.participant_id===p.participant_id).harness)).length,0),168);
  assert(snapshot.participants.filter(p=>p.family==='GPT'||p.model?.includes('claude-')).filter(p=>p.effort==='medium').every(isDisplayed));
  assert(isDisplayed({model:'qwen3.8-max',effort:'high',harness:'codex'}));
  assert(!isDisplayed({model:'qwen3.8-max',effort:'medium',harness:'codex'}));
@@ -53,7 +53,8 @@ test('missing estimate schema, ambiguous identities and wrong denominators fail 
  const task=snapshot.tasks[0],base=consumptionView(snapshot,usage,task,'tokens');
  const missing=structuredClone(usage);delete missing.estimates;
  assert.equal(consumptionView(snapshot,missing,task,'tokens','',true).points.length,base.points.length);
- const first=usage.estimates.rows.find(r=>r.method==='same_family_harness_group_median_proxy');
+ const names={'nexteval-u5-perturbed@1':'Perturbed','nexteval-u5-perturbed-noisy@1':'Noisy','nexteval-u5-perturbed-rotated@1':'Rotated','nexteval-u5-perturbed-random-nan@1':'RandomNaN'};
+ const first=usage.estimates.rows.find(r=>r.feature===names[task.task_id]&&r.known_tokens<276&&isDisplayed({model:r.model,effort:r.effort,harness:r.harness}));
  const duplicate=structuredClone(usage);duplicate.estimates.rows.push(first);
  assert.equal(consumptionView(snapshot,duplicate,task,'tokens','',true).points.length,base.eligible-1);
  const wrong=structuredClone(usage);wrong.estimates.rows.forEach(r=>r.runs=920);
