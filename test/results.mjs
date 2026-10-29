@@ -1,4 +1,5 @@
 import './terminology.mjs';
+import './identity-projection-build.mjs';
 import '../scripts/results-storage/prepare-public-results.mjs';
 import { readFile, readdir } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
