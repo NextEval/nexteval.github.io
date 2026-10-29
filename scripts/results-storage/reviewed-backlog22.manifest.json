@@ -1,12 +1,53 @@
 {
   "artifact": {
-    "bytes": 173260755,
+    "bytes": 173265654,
     "file_count": 1921,
-    "sha256": "9b313bc050cdfb0f56dc999b2c26f9b0a7d166fc8d78071012eafdefb59da76a",
-    "unpacked_bytes": 538767176
+    "sha256": "567e7102bd005dc995e1a81688b186c8c2eefb5fc64fc0c2597764a769ee2f0c",
+    "unpacked_bytes": 538826217
   },
   "derivation": {
     "clean_reconstruction_sha256": "50fab3401de7652e235d7e7f3639fc9b4e128b2429ad33daa3c6d5ff75f3c73c",
+    "display_completion": {
+      "changed_files": [
+        "dist/results/plan.mjs",
+        "dist/results/data/website-usage.json",
+        "dist/results/data/model-releases.json"
+      ],
+      "cost_calibration": {
+        "claude-code": {
+          "donor_groups": 20,
+          "donor_median_relative_error": 0.12272692177794658,
+          "donor_p90_relative_error": 0.32091659191274213,
+          "mix": {
+            "cache_read": 0.8990038944149341,
+            "cache_write": 0.06767210372822016,
+            "output": 0.03206956792901463,
+            "uncached_input": 0.0012544339278310695
+          },
+          "mix_source": "measured category split of one complete Fable 5.1 Claude Code trial",
+          "scale": 0.7357434399880156
+        },
+        "codex": {
+          "donor_groups": 46,
+          "donor_median_relative_error": 0.10978754854318894,
+          "donor_p90_relative_error": 0.24786240561810344,
+          "mix": {
+            "cache_read": 0.9543118464812582,
+            "cache_write": 0.0,
+            "output": 0.04568803567816935,
+            "uncached_input": 0.0
+          },
+          "mix_source": "non-negative least squares over complete donor groups",
+          "scale": 0.9762340386654036
+        }
+      },
+      "cost_scenarios": "every scored group without exact cost has a labelled API-equivalent cost scenario; exact fields unchanged",
+      "date": "2026-10-30",
+      "estimate_rows": 96,
+      "plan": "45 configurations: adds Haiku 5.5, GPT-6 Astra and GPT-6.1 Sol; retired DeepSeek V4 Flash keeps only Claude Code",
+      "release_dates": "15 model IDs added from official first-release sources; no excluded models remain",
+      "scientific_files_unchanged": true
+    },
     "full_ten_repeat_archive_preserved": true,
     "groups": 170,
     "owner_selection": true,
@@ -7603,8 +7644,8 @@
       "sha256": "f3591bb41fb5c2b5bfd7e81f42c0864e91e241ed71c66f5e04a439327ef8c87e"
     },
     "dist/results/data/model-releases.json": {
-      "bytes": 4815,
-      "sha256": "05ee8856099e41681ce99884c66e8c6f37749341897b451b7636e839fcb33a53"
+      "bytes": 5649,
+      "sha256": "a92590e9bb9ecc0b1959bc98af0be6a0ceff590b1bd3cf5e804c00b5887cbea2"
     },
     "dist/results/data/pricing-snapshot.json": {
       "bytes": 21805,
@@ -7631,8 +7672,8 @@
       "sha256": "bdcbf70a80b17c7895915dd4832fb688091953e9aa75b1c678de513a4bbfff94"
     },
     "dist/results/data/website-usage.json": {
-      "bytes": 155673,
-      "sha256": "4362ea448696a80fde660679c40bac56990502180309da3413a95281e0a11e73"
+      "bytes": 213643,
+      "sha256": "66a4233c5915513bdcd7e97906d5a8acb65b877dbde782e5529219a3000c58e2"
     },
     "dist/results/evidence.mjs": {
       "bytes": 6194,
@@ -7671,8 +7712,8 @@
       "sha256": "c6a7c4832b41cc08aa956825a22e8a47ba0ef988f62515e2f123c9bfbea4fa9a"
     },
     "dist/results/plan.mjs": {
-      "bytes": 2464,
-      "sha256": "8714da1a9aae2cd351b1b05150faf1c5341c80f857d7c4aa0627b0792301cf6c"
+      "bytes": 2701,
+      "sha256": "1e3113fefe8c9a4c5facf10c97b661e724535b313e75cdf5dd4fa30033b800dd"
     },
     "dist/results/primary-evidence.mjs": {
       "bytes": 1850,
@@ -7705,17 +7746,17 @@
   },
   "materialization_ready": true,
   "public_distribution": {
-    "asset_id": 688650300,
-    "bytes": 173260755,
+    "asset_id": 689694228,
+    "bytes": 173265654,
     "hf_private_unchanged": true,
-    "name": "public-web-results-9b313bc050cdfb0f56dc999b2c26f9b0a7d166fc8d78071012eafdefb59da76a.tar.gz",
+    "name": "public-web-results-567e7102bd005dc995e1a81688b186c8c2eefb5fc64fc0c2597764a769ee2f0c.tar.gz",
     "provider": "github-release-public-view",
-    "release_id": 427899781,
+    "release_id": 428317735,
     "repository": "NextEval/nexteval.github.io",
     "sensitivity": "approved-public-web-view",
-    "sha256": "9b313bc050cdfb0f56dc999b2c26f9b0a7d166fc8d78071012eafdefb59da76a",
-    "tag": "web-primary170-pr37-20261029",
-    "url": "https://github.com/NextEval/nexteval.github.io/releases/download/web-primary170-pr37-20261029/public-web-results-9b313bc050cdfb0f56dc999b2c26f9b0a7d166fc8d78071012eafdefb59da76a.tar.gz"
+    "sha256": "567e7102bd005dc995e1a81688b186c8c2eefb5fc64fc0c2597764a769ee2f0c",
+    "tag": "web-primary170-display-20261030",
+    "url": "https://github.com/NextEval/nexteval.github.io/releases/download/web-primary170-display-20261030/public-web-results-567e7102bd005dc995e1a81688b186c8c2eefb5fc64fc0c2597764a769ee2f0c.tar.gz"
   },
   "publication_gate": "Website/Pages PR CI merge and independent render acceptance pending",
   "publication_ready": false,
@@ -7727,10 +7768,10 @@
     "scope": "Original reviewed UI and archived histories; owner-selected PR37 numerical primary comparison"
   },
   "storage": {
-    "path": "releases/primary170-pr37-20261029/public-web-results-9b313bc050cdfb0f56dc999b2c26f9b0a7d166fc8d78071012eafdefb59da76a.tar.gz",
+    "path": "releases/display-complete-20261030/public-web-results-567e7102bd005dc995e1a81688b186c8c2eefb5fc64fc0c2597764a769ee2f0c.tar.gz",
     "private": true,
     "provider": "huggingface",
     "repo_id": "NextEval/nexteval-bench-data",
-    "revision": "e5ebdbd9a49d2eb5de1074fe5883129207363d13"
+    "revision": "db3a45156d94c528528828daba4e55ef7ed993f9"
   }
 }

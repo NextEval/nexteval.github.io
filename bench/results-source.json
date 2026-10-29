@@ -1,7 +1,7 @@
 {
   "files": {
-    "app.mjs": "8ee341958c157b536dc611d95ac486efd81955748a8e2e186821606889c940b4",
-    "archive/ten-repeat/app.mjs": "d25fd760c5461be9bdefbc96deb3adeee1fd9f5d34ee3dfa78a2e5bb835fe1f2",
+    "app.mjs": "8afc28e241cab9f34d9c032af760053643e9313e5bff97bed4c9f6eccbc7e868",
+    "archive/ten-repeat/app.mjs": "bd42457220ef1c8bc1b9dfb933a58c436795ca1e52a8eb11b831af90dc9310f9",
     "archive/ten-repeat/chart.mjs": "c0ca5926486aeab299d402e5e231c2fd1c1fdd4fc4a2b323de2992e6fba2c7ed",
     "archive/ten-repeat/check.mjs": "8e5940dbeea3aa41f478918c25f12a5152bb819e9a5dc922ec00ff5d2c29bd62",
     "archive/ten-repeat/data/evidence/reviewed-terminal-687be6eb72c31b6254a5517f1be6c3decd4043db37850f9d14f404f3d999e084.json": "687be6eb72c31b6254a5517f1be6c3decd4043db37850f9d14f404f3d999e084",
@@ -1896,14 +1896,14 @@
     "data/histories/cmp-f115420310d95730ecff391b/ZANGWIL2.json": "be93bd97328c825c681febf1bb9742aa99f4921e9833785d60d70f803434026a",
     "data/histories/cmp-f115420310d95730ecff391b/index.json": "22c7728547d9ee033d977984fb38e9439b642b9cdee39036cf47df5c8bf67f34",
     "data/histories/cmp-f115420310d95730ecff391b/n10FOLDTRLS.json": "f3591bb41fb5c2b5bfd7e81f42c0864e91e241ed71c66f5e04a439327ef8c87e",
-    "data/model-releases.json": "05ee8856099e41681ce99884c66e8c6f37749341897b451b7636e839fcb33a53",
+    "data/model-releases.json": "a92590e9bb9ecc0b1959bc98af0be6a0ceff590b1bd3cf5e804c00b5887cbea2",
     "data/pricing-snapshot.json": "089efcb5cf6ea5087ff09c84e24429df1fbe5c78ab2404ec9b2434a4bdd59fab",
     "data/profiles/cmp-1a01ccdbe6db2a263280cfef.json": "cc26da06f78c7edb0eda6c18536882ffcd7244800909b5dd3064868dffb0529c",
     "data/profiles/cmp-603d5a04180f31e62d3ee767.json": "740ecd89a4989e94bf903e90144aeaef343ee44a919abdd93f1914eb6585d5f3",
     "data/profiles/cmp-e2b74bcda6ad9afc16996695.json": "a95a64b92b4365fb4e1fcfab70067c76fa32af7700dadb6d2d98eac9668f8480",
     "data/profiles/cmp-f115420310d95730ecff391b.json": "083cb4ad253bbb85a65c41f2e1123f53c2ba172e0c5ce2bdd41c103d103ca20d",
     "data/results.json": "bdcbf70a80b17c7895915dd4832fb688091953e9aa75b1c678de513a4bbfff94",
-    "data/website-usage.json": "4362ea448696a80fde660679c40bac56990502180309da3413a95281e0a11e73",
+    "data/website-usage.json": "66a4233c5915513bdcd7e97906d5a8acb65b877dbde782e5529219a3000c58e2",
     "evidence.mjs": "54649274cdad23f442d31eb43d0a566fcdf5eebefc473d4290abbadac336abce",
     "historical.mjs": "cef847b87662f09a3a9e04118ae66089184ba2837d557301aa4652db0237afca",
     "icons.mjs": "8cfd8776c2d608e8ddb785d493113b1a0d6fce371f31afd3d39bd04d64234dc2",
@@ -1913,8 +1913,8 @@
     "mimo-evidence.mjs": "acf9163a8b1d3317e6252d621e6c91cb7a8aca627ebe22cf05c5755107cc0b52",
     "model.mjs": "657a8a31033cab16dbb71530444eaa84717ac47b41857d26071126fbee5d5c35",
     "pareto.mjs": "c2c0a6fef09331010dc1c58b58ff7ffd522853542ee0eea2ce80597124492f3b",
-    "plan.mjs": "8714da1a9aae2cd351b1b05150faf1c5341c80f857d7c4aa0627b0792301cf6c",
-    "presentation.mjs": "0247dba9d952379b6f7e33e09a8f44558899a37ec60d8a43db007acdfbd885e4",
+    "plan.mjs": "1e3113fefe8c9a4c5facf10c97b661e724535b313e75cdf5dd4fa30033b800dd",
+    "presentation.mjs": "1b9b919e219239a975ea6c76cec981f001f048950c42d780cddba130919c5ef2",
     "primary-evidence.mjs": "802c1b3bdca398d907b88f688945a97b1cefa85887bb53a6187d61e53a01b030",
     "primary-protocol-tests.mjs": "fcbd6310dc5ebaf7b93da1e76ef397703acbefcc993f2d736778d81982361dc2",
     "releases.mjs": "a69507ca4b3ab5fb926cfed81b533106277b63d14e08ccef6881ba528977f95f",
@@ -1927,11 +1927,11 @@
     "current_display": {
       "archived_records_unchanged": true,
       "chinese_tiers": "high or thinking-on",
-      "projection_lock_sha256": "aa204729d38f5d2c30e6a13c07f395d3e353e833cd6c765ac0c34c84418666c4",
+      "projection_lock_sha256": "72ba90789597a78ab3bac810f8a81585623e8477a5f2bfe1dfddfd8e689c3280",
       "retired_tier_history_display": false
     },
     "data_registry_commit": "f47cfae52c5ef7f69f6d987c1e7bd85f0a909459",
-    "manifest_sha256": "9b7afcc75eb71265fd298396593ff8b58731d17d8f366fcdc77476a26e0abc9d",
+    "manifest_sha256": "2ca12f95269d94413161b20a7e5d1f0c2db09bd7b721c9dbdc96194b9531d462",
     "model_identity_registry": {
       "hf_private_revision": "fa4ff1176c10da814e1a27f026150a2138a0f902",
       "only_targets": [
@@ -1943,22 +1943,22 @@
       "registry_sha256": "b3bf9ddd53f42d0df560b07cfba2067c94c06b93e8d66bc4bef52ad5dbe9d0f5",
       "source": "https://github.com/NextEval/nexteval-bench-data/pull/67"
     },
-    "private_hf_revision": "e5ebdbd9a49d2eb5de1074fe5883129207363d13",
+    "private_hf_revision": "db3a45156d94c528528828daba4e55ef7ed993f9",
     "public_distribution": {
-      "asset_id": 688650300,
-      "bytes": 173260755,
+      "asset_id": 689694228,
+      "bytes": 173265654,
       "hf_private_unchanged": true,
-      "name": "public-web-results-9b313bc050cdfb0f56dc999b2c26f9b0a7d166fc8d78071012eafdefb59da76a.tar.gz",
+      "name": "public-web-results-567e7102bd005dc995e1a81688b186c8c2eefb5fc64fc0c2597764a769ee2f0c.tar.gz",
       "provider": "github-release-public-view",
-      "release_id": 427899781,
+      "release_id": 428317735,
       "repository": "NextEval/nexteval.github.io",
       "sensitivity": "approved-public-web-view",
-      "sha256": "9b313bc050cdfb0f56dc999b2c26f9b0a7d166fc8d78071012eafdefb59da76a",
-      "tag": "web-primary170-pr37-20261029",
-      "url": "https://github.com/NextEval/nexteval.github.io/releases/download/web-primary170-pr37-20261029/public-web-results-9b313bc050cdfb0f56dc999b2c26f9b0a7d166fc8d78071012eafdefb59da76a.tar.gz"
+      "sha256": "567e7102bd005dc995e1a81688b186c8c2eefb5fc64fc0c2597764a769ee2f0c",
+      "tag": "web-primary170-display-20261030",
+      "url": "https://github.com/NextEval/nexteval.github.io/releases/download/web-primary170-display-20261030/public-web-results-567e7102bd005dc995e1a81688b186c8c2eefb5fc64fc0c2597764a769ee2f0c.tar.gz"
     }
   },
-  "source_commit": "756ffb228acf1f2da1ff90944136423a4640d970",
+  "source_commit": "04b64dcb8b928c04a12a6f13c8640dd3efd1131d",
   "source_kind": "manifest-materialized-static-results",
   "source_path": "dist/results",
   "source_prefix": "dist/results",

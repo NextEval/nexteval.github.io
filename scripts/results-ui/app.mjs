@@ -108,7 +108,7 @@ async function pareto(params, ticket) {
   const family = PLAN.families.some(f => f.family === params.get('family')) ? params.get('family') : '';
   const metric = ['tokens','release_date'].includes(params.get('metric')) ? params.get('metric') : 'cost';
   const released = metric === 'release_date';
-  const includeEstimates = !released && params.get('estimates') === '1';
+  const includeEstimates = !released && params.get('estimates') !== '0';
   const scale = params.get('scale') === 'linear' ? 'linear' : 'log';
   const metricControl = `<select id="pareto-metric" aria-label="X axis"><option value="cost" ${metric === 'cost' ? 'selected' : ''}>Mean API-equivalent USD / run</option><option value="tokens" ${metric === 'tokens' ? 'selected' : ''}>Mean total tokens / run</option><option value="release_date" ${released ? 'selected' : ''}>Model release date (UTC)</option></select>`;
   const estimateControl = released ? '' : `<label><input type="checkbox" id="pareto-estimates" ${includeEstimates ? 'checked' : ''}>Include estimates</label>`;
