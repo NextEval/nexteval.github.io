@@ -21,6 +21,7 @@ from web_artifact import materialize, validate_manifest, storage_pin
 from public_usage_overlay import load_overlay, apply_overlay
 from identity_presentation import load_identity_presentation, identity_effective_manifest, apply_identity_presentation
 import responsive_css
+import presentation_overlay
 
 
 def sha(path):
@@ -68,7 +69,7 @@ def extract_tree(manifest, archive, output):
     return {'files': result['files'], 'source_commit': result['source_commit'], 'all_file_hashes_verified': True}
 
 
-def build(manifest, output, archive=None, overlay=None, plan_source=None, identity_registry=None, mobile_header=False):
+def build(manifest, output, archive=None, overlay=None, plan_source=None, identity_registry=None, mobile_header=False, current_ui=False):
     validate_manifest(manifest); storage_pin(manifest); pin = public_pin(manifest)
     if plan_source is not None:
         source = Path(plan_source)
@@ -104,6 +105,8 @@ def build(manifest, output, archive=None, overlay=None, plan_source=None, identi
                 effective['files']['dist/results/plan.mjs'] = {'bytes': source.stat().st_size, 'sha256': sha(source)}
             if identity is not None: effective = identity_effective_manifest(effective, identity)
             if mobile_header: effective = responsive_css.effective_manifest(effective)
+            presentation = presentation_overlay.load(effective) if current_ui else None
+            if presentation is not None: effective = presentation_overlay.effective_manifest(effective, presentation)
             if matches(effective, output):
                 return {'files': len(effective['files']), 'already_verified': True, 'downloaded': False}
             output.parent.mkdir(parents=True, exist_ok=True)
@@ -133,6 +136,9 @@ def build(manifest, output, archive=None, overlay=None, plan_source=None, identi
                 if mobile_header:
                     responsive_css.apply(verified)
                     result['mobile_header_projection_verified'] = True
+                if presentation is not None:
+                    presentation_overlay.apply(verified, presentation)
+                    result['current_tiers_and_estimate_ui_verified'] = True
                 if not matches(effective, verified): raise ValueError('all_effective_public_file_hashes')
                 previous = temp / 'previous-generated-results'
                 if output.exists(): output.rename(previous)
@@ -153,10 +159,11 @@ def main():
     parser.add_argument('--plan-source', help='Exact reviewed active-plan.mjs only; runs inside original build lock')
     parser.add_argument('--identity-registry', help='Exact fixed model registry; names-only projection inside build lock')
     parser.add_argument('--mobile-header', action='store_true', help='Exact hash-bound responsive header CSS only')
+    parser.add_argument('--current-ui', action='store_true', help='Fixed hash-bound display and estimate UI sources only')
     args = parser.parse_args()
     manifest = json.loads(Path(args.manifest).read_bytes())
     overlay = load_overlay(manifest, args.overrides, sha(args.manifest)) if args.overrides else None
-    print(json.dumps(build(manifest, args.output, args.archive, overlay, args.plan_source, args.identity_registry, args.mobile_header)))
+    print(json.dumps(build(manifest, args.output, args.archive, overlay, args.plan_source, args.identity_registry, args.mobile_header, args.current_ui)))
 
 
 if __name__ == '__main__': main()
