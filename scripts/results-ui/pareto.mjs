@@ -112,8 +112,7 @@ export class ParetoChart {
       const group = node('g',{class:`pareto-point${selected ? ' selected' : ''}${point.estimated ? ' estimated' : ''}`,tabindex:'0',role:'button',
         'data-participant':id,'aria-pressed':String(selected),'aria-label':`${point.estimated ? 'Estimated, not metered. ' : ''}${this.label(point.participant)} (${point.participant.effort}), ${this.harness(point.participant)}, score ${point.score.toFixed(2)}, ${released ? 'released '+point.release.released_at : (this.metric === 'cost' ? dollarNumber(point.x) : compactNumber(point.x))+' per run'}`,transform:`translate(${x(point.x)},${y(point.score)})`});
       group.append(node('circle',{r:20,class:'pareto-target'}));
-      if (point.estimated) group.append(node('path',{d:'M0,-6 L6,0 L0,6 L-6,0 Z',fill:'none',stroke:'#e7bf72','stroke-width':2,class:'pareto-estimate-dot'}));
-      else group.append(node('circle',{r:efficient ? 6 : 3.5,class:efficient ? 'pareto-dot efficient' : 'pareto-dot'}));
+      group.append(node('circle',{r:efficient ? 6 : 3.5,class:efficient ? 'pareto-dot efficient' : 'pareto-dot'}));
       group.append(node('title',{},`${point.estimated ? 'Estimated, not metered: ' : ''}${this.label(point.participant)} / ${point.participant.harness} / ${point.participant.effort}`));
       const choose = () => { this.selected = id; this.onSelect(point); this.render(); this.host.querySelector(`[data-participant="${CSS.escape(id)}"]`)?.focus({preventScroll:true}); };
       group.addEventListener('click',choose);

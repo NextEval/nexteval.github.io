@@ -29,7 +29,7 @@ def load(manifest):
     assets['archive/ten-repeat/index.html'] = source['archive-index.html']
     assets['archive/ten-repeat/app.mjs'] = source['app.mjs'].replace(
         b"from './identities.mjs'", b"from '../../identities.mjs'").replace(
-        b"from './presentation.mjs'", b"from '../../presentation.mjs'")
+        b"from './presentation.mjs", b"from '../../presentation.mjs")
     assets['archive/ten-repeat/pareto.mjs'] = source['pareto.mjs']
     if {name: pin(raw) for name, raw in assets.items()} != lock['targets']:
         raise ValueError('presentation_target_hash')

@@ -11,8 +11,9 @@ ten-repeat app uses the same policy; no retired-tier toggle is provided. Histori
 entry pages redirect to current results rather than displaying archived tiers.
 
 Consumption defaults to metered-only data. Include estimates adds separately
-marked hollow-diamond planning estimates from the existing approved accounting
-snapshot. The solid frontier always uses metered points only. A dashed scenario
+marked planning estimates from the existing approved accounting
+snapshot. All plotted points use circles, per the owner's display decision.
+The solid frontier always uses metered points only. A dashed scenario
 frontier may depend on estimates and is not a measured efficiency claim.
 
 No token totals, prices, billing data, release dates or numerical scores are

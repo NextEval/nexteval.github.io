@@ -1,7 +1,7 @@
 {
   "files": {
-    "app.mjs": "a0c0e844154edccaa98d7c43d04b79b046e6c6fdda5fa8c65db0cad7cfe9bf93",
-    "archive/ten-repeat/app.mjs": "ff6ef3249c229f52d11670225422bd7d19d725e096b015df32811a11d0160caf",
+    "app.mjs": "8ee341958c157b536dc611d95ac486efd81955748a8e2e186821606889c940b4",
+    "archive/ten-repeat/app.mjs": "d25fd760c5461be9bdefbc96deb3adeee1fd9f5d34ee3dfa78a2e5bb835fe1f2",
     "archive/ten-repeat/chart.mjs": "c0ca5926486aeab299d402e5e231c2fd1c1fdd4fc4a2b323de2992e6fba2c7ed",
     "archive/ten-repeat/check.mjs": "8e5940dbeea3aa41f478918c25f12a5152bb819e9a5dc922ec00ff5d2c29bd62",
     "archive/ten-repeat/data/evidence/reviewed-terminal-687be6eb72c31b6254a5517f1be6c3decd4043db37850f9d14f404f3d999e084.json": "687be6eb72c31b6254a5517f1be6c3decd4043db37850f9d14f404f3d999e084",
@@ -953,7 +953,7 @@
     "archive/ten-repeat/index.html": "b9de77f6e85e774f6d7e0c1ca9b082b494f7191dc64824961b9338a0fec25f75",
     "archive/ten-repeat/mimo-evidence.mjs": "acf9163a8b1d3317e6252d621e6c91cb7a8aca627ebe22cf05c5755107cc0b52",
     "archive/ten-repeat/model.mjs": "9b8eba46f0a4f11fb1f2d9587eb853d1beadaa01a83eb69feeeaa83a3d7f3556",
-    "archive/ten-repeat/pareto.mjs": "15ca65b51e37319a60f479d0ea2d7b51040d68125f45124cd7b7b47555de1e1c",
+    "archive/ten-repeat/pareto.mjs": "c2c0a6fef09331010dc1c58b58ff7ffd522853542ee0eea2ce80597124492f3b",
     "archive/ten-repeat/plan.mjs": "1dcc7c7216bd4c7375c49ba12993dd29c1cacadb43ef43a39ca2eb7bed56c3c6",
     "archive/ten-repeat/releases.mjs": "a69507ca4b3ab5fb926cfed81b533106277b63d14e08ccef6881ba528977f95f",
     "archive/ten-repeat/results.css": "d030794e288f9549726cc92b4b32866184200dcc4cde7e824c86b629e06f5d8c",
@@ -1909,10 +1909,10 @@
     "icons.mjs": "8cfd8776c2d608e8ddb785d493113b1a0d6fce371f31afd3d39bd04d64234dc2",
     "identities.mjs": "15f671cbf99d9c8b438d5887ab6051db2a3ec08aeecbe0d3025e625c3731b65d",
     "incremental-pareto-audit.mjs": "3faa7408a28734e4b3fe200af4434b884e98b7c1eb5b6f5f6369accdcf5b125f",
-    "index.html": "f8b741a9e23032483d4ff1b19650c880ad29e5419605ced771925433ad4ab430",
+    "index.html": "e3ed85e17cb7f0d65edebcf03207ef7ba9e9c9afb10e19aa78d91277cd178bae",
     "mimo-evidence.mjs": "acf9163a8b1d3317e6252d621e6c91cb7a8aca627ebe22cf05c5755107cc0b52",
     "model.mjs": "657a8a31033cab16dbb71530444eaa84717ac47b41857d26071126fbee5d5c35",
-    "pareto.mjs": "15ca65b51e37319a60f479d0ea2d7b51040d68125f45124cd7b7b47555de1e1c",
+    "pareto.mjs": "c2c0a6fef09331010dc1c58b58ff7ffd522853542ee0eea2ce80597124492f3b",
     "plan.mjs": "8714da1a9aae2cd351b1b05150faf1c5341c80f857d7c4aa0627b0792301cf6c",
     "presentation.mjs": "0247dba9d952379b6f7e33e09a8f44558899a37ec60d8a43db007acdfbd885e4",
     "primary-evidence.mjs": "802c1b3bdca398d907b88f688945a97b1cefa85887bb53a6187d61e53a01b030",
@@ -1920,14 +1920,14 @@
     "releases.mjs": "a69507ca4b3ab5fb926cfed81b533106277b63d14e08ccef6881ba528977f95f",
     "results.css": "7d12fdf56113dbe7808ba8fae147a6e1fe7470fbc1e7e429ab9170caf29dd17f",
     "scores.mjs": "4345bc8747616937350eb2227759e8fe8c2e1c28cc76781899f698885d6dcd19",
-    "usage-estimates.html": "41f1e87ba3cc97580423188032ae882cccbac6a081bcd107dead843bdcf6c381",
+    "usage-estimates.html": "9095045222c7371937f01b20b5b6095796becea8eb642e309eb93d87b605285e",
     "usage.mjs": "72f6a4ca783cadc0d98f09c704363981142ebd616fc11bc3cfb7d4440dda349c"
   },
   "materialization": {
     "current_display": {
       "archived_records_unchanged": true,
       "chinese_tiers": "high or thinking-on",
-      "projection_lock_sha256": "57272a16f67e6b3a89e1789a1034c7d4ff23d6d24e020f98b5d577971dda7141",
+      "projection_lock_sha256": "aa204729d38f5d2c30e6a13c07f395d3e353e833cd6c765ac0c34c84418666c4",
       "retired_tier_history_display": false
     },
     "data_registry_commit": "f47cfae52c5ef7f69f6d987c1e7bd85f0a909459",
@@ -1958,7 +1958,7 @@
       "url": "https://github.com/NextEval/nexteval.github.io/releases/download/web-primary170-pr37-20261029/public-web-results-9b313bc050cdfb0f56dc999b2c26f9b0a7d166fc8d78071012eafdefb59da76a.tar.gz"
     }
   },
-  "source_commit": "9cf20d9fb471da13bbb398777b68a2c8cde9935d",
+  "source_commit": "756ffb228acf1f2da1ff90944136423a4640d970",
   "source_kind": "manifest-materialized-static-results",
   "source_path": "dist/results",
   "source_prefix": "dist/results",

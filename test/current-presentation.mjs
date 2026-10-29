@@ -3,9 +3,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
-import {isDisplayed,displayedTask,displayedChart,consumptionView,releaseView} from '../bench/results/presentation.mjs';
-import {paretoData} from '../bench/results/usage.mjs';
-import {chartData,historyChartData} from '../bench/results/model.mjs';
+const {isDisplayed,displayedTask,displayedChart,consumptionView,releaseView}=await import('../bench/results/presentation.mjs');
+const {paretoData}=await import('../bench/results/usage.mjs');
+const {chartData,historyChartData}=await import('../bench/results/model.mjs');
 const root=new URL('../bench/results/',import.meta.url);
 const read=name=>JSON.parse(readFileSync(new URL(name,root)));
 const snapshot=read('data/results.json'),usage=read('data/website-usage.json');
@@ -83,6 +83,9 @@ test('the actual app applies tier policy to each view and wires estimate control
   'id="pareto-estimates"','point.estimated'])assert(source.includes(fragment),fragment);
  assert(!readFileSync(new URL('index.html',root),'utf8').includes('Full ten-repeat archive'));
  assert(readFileSync(new URL('archive/ten-repeat/index.html',root),'utf8').includes("location.replace('../../index.html#matrix')"));
+ const pareto=readFileSync(new URL('pareto.mjs',root),'utf8');
+ assert(!pareto.includes('pareto-estimate-dot'));
+ assert(pareto.includes("node('circle',{r:efficient ? 6 : 3.5"));
 });
 test('UI overlay rejects tampered manifests, sources and symbolic-link targets',()=>{
  execFileSync('python3',['-m','unittest','test_presentation_overlay.py'],{cwd:new URL('../scripts/results-storage/',import.meta.url),stdio:'pipe'});
