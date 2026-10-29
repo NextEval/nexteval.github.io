@@ -1,0 +1,16 @@
+name: Verify NextEval Pages
+on: [pull_request]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node test/assets.cjs
+      - run: node test/results.mjs
+      - run: node test/primary-pareto-coverage.mjs
+      - run: node test/active-plan-cleanup.mjs

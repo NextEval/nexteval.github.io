@@ -4,6 +4,15 @@ from pathlib import Path
 
 def digest(raw):return hashlib.sha256(raw).hexdigest()
 
+def identity_input_state(manifest,lock):
+    files=manifest['files']
+    apps=('dist/results/app.mjs','dist/results/archive/ten-repeat/app.mjs')
+    if all(files.get(k,{}).get('sha256')==lock['base_app_sha256'] for k in apps) and 'dist/results/identities.mjs' not in files:
+        return 'base'
+    if all(files.get(k)==pin for k,pin in lock['targets'].items()):
+        return 'projected'
+    raise ValueError('identity_app_preimage')
+
 def transform_app(source,import_path):
     begin=source.index('const labelFor = p => {');end=source.index('const detailFor =',begin)
     source=source[:begin]+"const labelFor = modelName;\nconst harnessFor = harnessName;\n"+source[end:]
@@ -29,11 +38,11 @@ def load_identity_presentation(manifest,registry_source):
         if p.is_symlink() or not p.is_file() or digest(p.read_bytes())!=pin:raise ValueError('identity_source_hash')
     base=fixture.read_text();body='export const MODEL_IDENTITIES = Object.freeze('+json.dumps(registry,ensure_ascii=True,separators=(',',':'))+');\n'+template.read_text()
     assets={'dist/results/identities.mjs':body.encode()}
+    state=identity_input_state(manifest,lock)
     for target,relative in [('dist/results/app.mjs','./identities.mjs'),('dist/results/archive/ten-repeat/app.mjs','../../identities.mjs')]:
-        if manifest['files'][target]['sha256']!=lock['base_app_sha256']:raise ValueError('identity_app_preimage')
         assets[target]=transform_app(base,relative)
     if {k:{'sha256':digest(v),'bytes':len(v)} for k,v in assets.items()}!=lock['targets']:raise ValueError('identity_projection_hash')
-    return {'assets':assets,'lock':lock}
+    return {'assets':assets,'lock':lock,'input_state':state}
 
 def identity_effective_manifest(manifest,projection):
     effective=copy.deepcopy(manifest)
@@ -42,6 +51,11 @@ def identity_effective_manifest(manifest,projection):
 
 def apply_identity_presentation(output,projection):
     output=Path(output)
+    if projection.get('input_state')=='projected':
+        for name,raw in projection['assets'].items():
+            p=output/name.removeprefix('dist/results/')
+            if p.is_symlink() or not p.is_file() or p.read_bytes()!=raw:raise ValueError('identity_projected_target_mismatch')
+        return
     for name in projection['assets']:
         relative=name.removeprefix('dist/results/')
         if relative not in ('app.mjs','archive/ten-repeat/app.mjs','identities.mjs'):raise ValueError('identity_target_not_allowed')
