@@ -34,14 +34,15 @@ function estimateFor(usage,participant,task,metric) {
   const row=rows[0];
   let value=metric==='tokens' ? row.estimated_token_mean : row.estimated_api_equivalent_cost_mean_usd;
   const range=metric==='tokens' ? row.missing_token_observed_min_max_scenarios || row.cross_feature_reference_mean_range : null;
-  let method=row.method;
+  let method=metric==='cost' ? row.cost_method || row.method : row.method;
   if (!finite(value) && metric==='tokens' && row.method==='same_exact_configuration_other_feature_scenario'
       && Array.isArray(range) && range.length===2 && range.every(finite) && range[0]<=range[1]) {
     value=(range[0]+range[1])/2;method='same_configuration_other_feature_range_midpoint';
   }
   if (!finite(value)) return null;
   if (metric==='cost' && !/^\d{4}-\d{2}-\d{2}$/.test(usage.pricing_as_of || '')) return null;
-  return {value,method,reliability:row.reliability || 'planning_only',range,
+  const reliability=(metric==='cost' && row.cost_reliability) || row.reliability || 'planning_only';
+  return {value,method,reliability,range,
     warning:'Estimate, not recovered metered usage. Donor ranges are not confidence intervals.'};
 }
 export function consumptionView(snapshot,usage,task,metric='cost',family='',includeEstimates=false) {

@@ -34,7 +34,7 @@
   "sources": {
     "app.mjs": {
       "bytes": 34446,
-      "sha256": "8ee341958c157b536dc611d95ac486efd81955748a8e2e186821606889c940b4"
+      "sha256": "8afc28e241cab9f34d9c032af760053643e9313e5bff97bed4c9f6eccbc7e868"
     },
     "archive-index.html": {
       "bytes": 402,
@@ -49,8 +49,8 @@
       "sha256": "c2c0a6fef09331010dc1c58b58ff7ffd522853542ee0eea2ce80597124492f3b"
     },
     "presentation.mjs": {
-      "bytes": 4428,
-      "sha256": "0247dba9d952379b6f7e33e09a8f44558899a37ec60d8a43db007acdfbd885e4"
+      "bytes": 4544,
+      "sha256": "1b9b919e219239a975ea6c76cec981f001f048950c42d780cddba130919c5ef2"
     },
     "usage-estimates.html": {
       "bytes": 3891,
@@ -60,11 +60,11 @@
   "targets": {
     "app.mjs": {
       "bytes": 34446,
-      "sha256": "8ee341958c157b536dc611d95ac486efd81955748a8e2e186821606889c940b4"
+      "sha256": "8afc28e241cab9f34d9c032af760053643e9313e5bff97bed4c9f6eccbc7e868"
     },
     "archive/ten-repeat/app.mjs": {
       "bytes": 34454,
-      "sha256": "d25fd760c5461be9bdefbc96deb3adeee1fd9f5d34ee3dfa78a2e5bb835fe1f2"
+      "sha256": "bd42457220ef1c8bc1b9dfb933a58c436795ca1e52a8eb11b831af90dc9310f9"
     },
     "archive/ten-repeat/index.html": {
       "bytes": 402,
@@ -83,8 +83,8 @@
       "sha256": "c2c0a6fef09331010dc1c58b58ff7ffd522853542ee0eea2ce80597124492f3b"
     },
     "presentation.mjs": {
-      "bytes": 4428,
-      "sha256": "0247dba9d952379b6f7e33e09a8f44558899a37ec60d8a43db007acdfbd885e4"
+      "bytes": 4544,
+      "sha256": "1b9b919e219239a975ea6c76cec981f001f048950c42d780cddba130919c5ef2"
     },
     "usage-estimates.html": {
       "bytes": 3891,

@@ -37,12 +37,17 @@ test('token scenarios cover every active group without modifying measured usage 
  }
  assert.equal(JSON.stringify({snapshot,usage}),before);
 });
-test('dollar estimates do not fabricate prices for the 52 new planning proxies',()=>{
+test('dollar scenarios cover every active group from published list prices, outside the measured frontier',()=>{
+ const methods=new Set(['same_group_observed_cost_mean_imputation_not_actual_bill','tokens_x_calibrated_harness_category_mix_x_list_price']);
  for(const task of snapshot.tasks){
+  const measured=consumptionView(snapshot,usage,task,'cost');
   const data=consumptionView(snapshot,usage,task,'cost','',true);
-  assert(data.points.length<data.eligible);
-  assert(data.points.filter(p=>p.estimated).every(p=>p.estimate.method==='same_group_observed_mean_imputation'));
+  assert.equal(data.points.length,data.eligible);
+  assert.deepEqual(data.frontier,measured.frontier);
+  assert(data.points.filter(p=>p.estimated).every(p=>Number.isFinite(p.x)&&p.x>0&&methods.has(p.estimate.method)));
  }
+ const rows=usage.estimates.rows.filter(r=>r.cost_method==='tokens_x_calibrated_harness_category_mix_x_list_price');
+ assert(rows.length>0&&rows.every(r=>r.cost_price_sources.length>0&&r.cost_price_sources.every(u=>u.startsWith('https://'))));
 });
 test('missing estimate schema, ambiguous identities and wrong denominators fail closed',()=>{
  const task=snapshot.tasks[0],base=consumptionView(snapshot,usage,task,'tokens');
@@ -58,12 +63,12 @@ test('invalid or negative proxy values cannot produce plotted points',()=>{
  const bad=structuredClone(usage);for(const row of bad.estimates.rows){row.estimated_token_mean=-1;row.method='invalid';}
  for(const task of snapshot.tasks)assert.equal(consumptionView(snapshot,bad,task,'tokens','',true).estimatedCount,0);
 });
-test('release-date plots filter tiers but never invent missing dates',()=>{
+test('release-date plots cover every active group with sourced first-release dates',()=>{
  const releases=read('data/model-releases.json');
  for(const task of snapshot.tasks){
   const view=releaseView(snapshot,releases,task);
-  assert.equal(view.points.length,17);assert(view.points.every(p=>isDisplayed(p.participant)));
-  assert(view.omitted>0);
+  assert.equal(view.points.length,view.eligible);assert.equal(view.omitted,0);
+  assert(view.points.every(p=>isDisplayed(p.participant)&&p.release.sources.length>0));
  }
 });
 test('profiles and histories omit retired curves without changing raw exports',()=>{
