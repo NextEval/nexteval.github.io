@@ -7,7 +7,8 @@ scores and fixed comparison targets are not deleted or recomputed.
 
 The UI projection applies the policy to Matrix, profile curves, history curves,
 history tables, coverage, release-date plots and consumption plots. The older
-ten-repeat app uses the same policy; no retired-tier toggle is provided.
+ten-repeat app uses the same policy; no retired-tier toggle is provided. Historical
+entry pages redirect to current results rather than displaying archived tiers.
 
 Consumption defaults to metered-only data. Include estimates adds separately
 marked hollow-diamond planning estimates from the existing approved accounting
@@ -19,6 +20,6 @@ invented. A same-configuration cross-feature token range may be displayed at its
 explicitly labeled midpoint; donor ranges are not confidence intervals. Missing
 or ambiguous identities and mismatched denominators remain omitted.
 
-The build projects only seven fixed UI files with exact source/target/preimage
+The build projects only eight fixed UI files with exact source/target/preimage
 hashes. Scientific and accounting JSON files remain byte-identical. Normal CI,
 Pages deployment and desktop/mobile browser acceptance are required to publish.

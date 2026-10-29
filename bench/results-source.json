@@ -950,7 +950,7 @@
     "archive/ten-repeat/evidence.mjs": "54649274cdad23f442d31eb43d0a566fcdf5eebefc473d4290abbadac336abce",
     "archive/ten-repeat/historical.mjs": "cef847b87662f09a3a9e04118ae66089184ba2837d557301aa4652db0237afca",
     "archive/ten-repeat/icons.mjs": "8cfd8776c2d608e8ddb785d493113b1a0d6fce371f31afd3d39bd04d64234dc2",
-    "archive/ten-repeat/index.html": "60f89083ffbf8302bc9d0c36c5e00cbd7d27c72f223ff29f4aa91ed5182b4b86",
+    "archive/ten-repeat/index.html": "b9de77f6e85e774f6d7e0c1ca9b082b494f7191dc64824961b9338a0fec25f75",
     "archive/ten-repeat/mimo-evidence.mjs": "acf9163a8b1d3317e6252d621e6c91cb7a8aca627ebe22cf05c5755107cc0b52",
     "archive/ten-repeat/model.mjs": "9b8eba46f0a4f11fb1f2d9587eb853d1beadaa01a83eb69feeeaa83a3d7f3556",
     "archive/ten-repeat/pareto.mjs": "15ca65b51e37319a60f479d0ea2d7b51040d68125f45124cd7b7b47555de1e1c",
@@ -1927,7 +1927,7 @@
     "current_display": {
       "archived_records_unchanged": true,
       "chinese_tiers": "high or thinking-on",
-      "projection_lock_sha256": "9e0059b1175d3982d357a9db98c39c41e52dc9a323a976c05cce5352bc3e5642",
+      "projection_lock_sha256": "57272a16f67e6b3a89e1789a1034c7d4ff23d6d24e020f98b5d577971dda7141",
       "retired_tier_history_display": false
     },
     "data_registry_commit": "f47cfae52c5ef7f69f6d987c1e7bd85f0a909459",
@@ -1958,7 +1958,7 @@
       "url": "https://github.com/NextEval/nexteval.github.io/releases/download/web-primary170-pr37-20261029/public-web-results-9b313bc050cdfb0f56dc999b2c26f9b0a7d166fc8d78071012eafdefb59da76a.tar.gz"
     }
   },
-  "source_commit": "8ee7fc64a61a85c21bd86acc62b732e0886d4f5a",
+  "source_commit": "9cf20d9fb471da13bbb398777b68a2c8cde9935d",
   "source_kind": "manifest-materialized-static-results",
   "source_path": "dist/results",
   "source_prefix": "dist/results",

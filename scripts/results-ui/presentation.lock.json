@@ -8,6 +8,10 @@
       "bytes": 31686,
       "sha256": "d5753d2efa1d881dd99d3d80127dc43464a855320cff73dc7be1a5ac7307ff12"
     },
+    "archive/ten-repeat/index.html": {
+      "bytes": 1188,
+      "sha256": "60f89083ffbf8302bc9d0c36c5e00cbd7d27c72f223ff29f4aa91ed5182b4b86"
+    },
     "archive/ten-repeat/pareto.mjs": {
       "bytes": 9627,
       "sha256": "c6a7c4832b41cc08aa956825a22e8a47ba0ef988f62515e2f123c9bfbea4fa9a"
@@ -31,6 +35,10 @@
     "app.mjs": {
       "bytes": 34383,
       "sha256": "a0c0e844154edccaa98d7c43d04b79b046e6c6fdda5fa8c65db0cad7cfe9bf93"
+    },
+    "archive-index.html": {
+      "bytes": 402,
+      "sha256": "b9de77f6e85e774f6d7e0c1ca9b082b494f7191dc64824961b9338a0fec25f75"
     },
     "index.html": {
       "bytes": 1275,
@@ -57,6 +65,10 @@
     "archive/ten-repeat/app.mjs": {
       "bytes": 34391,
       "sha256": "ff6ef3249c229f52d11670225422bd7d19d725e096b015df32811a11d0160caf"
+    },
+    "archive/ten-repeat/index.html": {
+      "bytes": 402,
+      "sha256": "b9de77f6e85e774f6d7e0c1ca9b082b494f7191dc64824961b9338a0fec25f75"
     },
     "archive/ten-repeat/pareto.mjs": {
       "bytes": 10293,

@@ -5,8 +5,8 @@ import json
 from pathlib import Path
 
 TARGETS = ('app.mjs', 'archive/ten-repeat/app.mjs', 'pareto.mjs',
-           'archive/ten-repeat/pareto.mjs', 'index.html', 'usage-estimates.html', 'presentation.mjs')
-SOURCES = ('app.mjs', 'pareto.mjs', 'index.html', 'usage-estimates.html', 'presentation.mjs')
+           'archive/ten-repeat/pareto.mjs', 'index.html', 'usage-estimates.html', 'presentation.mjs', 'archive/ten-repeat/index.html')
+SOURCES = ('app.mjs', 'pareto.mjs', 'index.html', 'usage-estimates.html', 'presentation.mjs', 'archive-index.html')
 PREFIX = 'dist/results/'
 def pin(raw):
     return {'bytes': len(raw), 'sha256': hashlib.sha256(raw).hexdigest()}
@@ -25,7 +25,8 @@ def load(manifest):
         if pin(raw) != lock['sources'][name]:
             raise ValueError('presentation_source_hash')
         source[name] = raw
-    assets = dict(source)
+    assets = {name: raw for name, raw in source.items() if name != 'archive-index.html'}
+    assets['archive/ten-repeat/index.html'] = source['archive-index.html']
     assets['archive/ten-repeat/app.mjs'] = source['app.mjs'].replace(
         b"from './identities.mjs'", b"from '../../identities.mjs'").replace(
         b"from './presentation.mjs'", b"from '../../presentation.mjs'")

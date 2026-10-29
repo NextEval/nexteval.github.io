@@ -82,6 +82,7 @@ test('the actual app applies tier policy to each view and wires estimate control
   'displayedChart(historyChartData(','consumptionView(snapshot,usage','releaseView(snapshot,releases',
   'id="pareto-estimates"','point.estimated'])assert(source.includes(fragment),fragment);
  assert(!readFileSync(new URL('index.html',root),'utf8').includes('Full ten-repeat archive'));
+ assert(readFileSync(new URL('archive/ten-repeat/index.html',root),'utf8').includes("location.replace('../../index.html#matrix')"));
 });
 test('UI overlay rejects tampered manifests, sources and symbolic-link targets',()=>{
  execFileSync('python3',['-m','unittest','test_presentation_overlay.py'],{cwd:new URL('../scripts/results-storage/',import.meta.url),stdio:'pipe'});
