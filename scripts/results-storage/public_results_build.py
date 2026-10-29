@@ -20,6 +20,7 @@ import urllib.request
 from web_artifact import materialize, validate_manifest, storage_pin
 from public_usage_overlay import load_overlay, apply_overlay
 from identity_presentation import load_identity_presentation, identity_effective_manifest, apply_identity_presentation
+import responsive_css
 
 
 def sha(path):
@@ -67,7 +68,7 @@ def extract_tree(manifest, archive, output):
     return {'files': result['files'], 'source_commit': result['source_commit'], 'all_file_hashes_verified': True}
 
 
-def build(manifest, output, archive=None, overlay=None, plan_source=None, identity_registry=None):
+def build(manifest, output, archive=None, overlay=None, plan_source=None, identity_registry=None, mobile_header=False):
     validate_manifest(manifest); storage_pin(manifest); pin = public_pin(manifest)
     if plan_source is not None:
         source = Path(plan_source)
@@ -102,6 +103,7 @@ def build(manifest, output, archive=None, overlay=None, plan_source=None, identi
                 effective = copy.deepcopy(effective)
                 effective['files']['dist/results/plan.mjs'] = {'bytes': source.stat().st_size, 'sha256': sha(source)}
             if identity is not None: effective = identity_effective_manifest(effective, identity)
+            if mobile_header: effective = responsive_css.effective_manifest(effective)
             if matches(effective, output):
                 return {'files': len(effective['files']), 'already_verified': True, 'downloaded': False}
             output.parent.mkdir(parents=True, exist_ok=True)
@@ -128,6 +130,9 @@ def build(manifest, output, archive=None, overlay=None, plan_source=None, identi
                 if overlay is not None:
                     apply_overlay(overlay, verified)
                     result["public_aggregate_overlay_verified"] = True
+                if mobile_header:
+                    responsive_css.apply(verified)
+                    result['mobile_header_projection_verified'] = True
                 if not matches(effective, verified): raise ValueError('all_effective_public_file_hashes')
                 previous = temp / 'previous-generated-results'
                 if output.exists(): output.rename(previous)
@@ -147,10 +152,11 @@ def main():
     parser.add_argument('--overrides', help='Hash-bound public aggregate overlay only')
     parser.add_argument('--plan-source', help='Exact reviewed active-plan.mjs only; runs inside original build lock')
     parser.add_argument('--identity-registry', help='Exact fixed model registry; names-only projection inside build lock')
+    parser.add_argument('--mobile-header', action='store_true', help='Exact hash-bound responsive header CSS only')
     args = parser.parse_args()
     manifest = json.loads(Path(args.manifest).read_bytes())
     overlay = load_overlay(manifest, args.overrides, sha(args.manifest)) if args.overrides else None
-    print(json.dumps(build(manifest, args.output, args.archive, overlay, args.plan_source, args.identity_registry)))
+    print(json.dumps(build(manifest, args.output, args.archive, overlay, args.plan_source, args.identity_registry, args.mobile_header)))
 
 
 if __name__ == '__main__': main()

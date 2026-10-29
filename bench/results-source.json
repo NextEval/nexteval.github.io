@@ -1917,7 +1917,7 @@
     "primary-evidence.mjs": "802c1b3bdca398d907b88f688945a97b1cefa85887bb53a6187d61e53a01b030",
     "primary-protocol-tests.mjs": "fcbd6310dc5ebaf7b93da1e76ef397703acbefcc993f2d736778d81982361dc2",
     "releases.mjs": "a69507ca4b3ab5fb926cfed81b533106277b63d14e08ccef6881ba528977f95f",
-    "results.css": "d030794e288f9549726cc92b4b32866184200dcc4cde7e824c86b629e06f5d8c",
+    "results.css": "7d12fdf56113dbe7808ba8fae147a6e1fe7470fbc1e7e429ab9170caf29dd17f",
     "scores.mjs": "4345bc8747616937350eb2227759e8fe8c2e1c28cc76781899f698885d6dcd19",
     "usage-estimates.html": "edd4ead50c7f9bdb6ca76c11ee8363becc5d8fbbfd932f5c61ae58abc26f8700",
     "usage.mjs": "72f6a4ca783cadc0d98f09c704363981142ebd616fc11bc3cfb7d4440dda349c"
@@ -1951,7 +1951,7 @@
       "url": "https://github.com/NextEval/nexteval.github.io/releases/download/web-primary170-pr37-20261029/public-web-results-9b313bc050cdfb0f56dc999b2c26f9b0a7d166fc8d78071012eafdefb59da76a.tar.gz"
     }
   },
-  "source_commit": "3f41f6ea09b466b80636c27c0919247c7f549493",
+  "source_commit": "09898d76345f530bf11ee4759c5e6bded78d816b",
   "source_kind": "manifest-materialized-static-results",
   "source_path": "dist/results",
   "source_prefix": "dist/results",
