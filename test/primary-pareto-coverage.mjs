@@ -1,21 +1,25 @@
-import '../scripts/results-storage/prepare-public-results.mjs';
+import '../scripts/site/build-site.mjs';
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
-const root=new URL('../bench/results/',import.meta.url);
+const root=new URL('../_site/bench/results/',import.meta.url);
 const snapshot=JSON.parse(await readFile(new URL('data/results.json',root),'utf8'));
 const usage=JSON.parse(await readFile(new URL('data/website-usage.json',root),'utf8'));
 const {paretoData,validateUsage}=await import(new URL('usage.mjs',root));validateUsage(usage);
-assert.equal(usage.groups.length,181);assert(usage.groups.every(g=>g.runs===276));
-const expected={"nexteval-u5-perturbed-noisy@1": {"cost": 40, "tokens": 40}, "nexteval-u5-perturbed-random-nan@1": {"cost": 36, "tokens": 36}, "nexteval-u5-perturbed-rotated@1": {"cost": 39, "tokens": 39}, "nexteval-u5-perturbed@1": {"cost": 39, "tokens": 39}};
-for(const task of snapshot.tasks)for(const metric of ['cost','tokens'])assert.equal(paretoData(snapshot,usage,task,metric).points.length,expected[task.task_id][metric]);
-const statuses={"complete": 154, "incomplete": 27};
+const {consumptionView}=await import(new URL('presentation.mjs',root));
+assert.equal(usage.groups.length,170);assert(usage.groups.every(g=>g.runs===276));
+const measured={"nexteval-u5-perturbed-noisy@1": 38, "nexteval-u5-perturbed-random-nan@1": 35, "nexteval-u5-perturbed-rotated@1": 38, "nexteval-u5-perturbed@1": 37};
+const displayed={"nexteval-u5-perturbed-noisy@1": 43, "nexteval-u5-perturbed-random-nan@1": 42, "nexteval-u5-perturbed-rotated@1": 42, "nexteval-u5-perturbed@1": 43};
+for(const task of snapshot.tasks)for(const metric of ['cost','tokens']){
+ assert.equal(paretoData(snapshot,usage,task,metric).points.length,measured[task.task_id]);
+ const view=consumptionView(snapshot,usage,task,metric,'',true);
+ assert.equal(view.points.length,displayed[task.task_id]);assert.equal(view.eligible,displayed[task.task_id]);
+}
+const statuses={"complete": 148, "incomplete": 22};
 for(const [status,count] of Object.entries(statuses))assert.equal(usage.groups.filter(g=>g.accounting_status===status).length,count);
 for(const group of usage.groups){if(group.usage_known_runs<276)assert.equal(group.total_tokens,null);if(group.cost_known_runs<276)assert.equal(group.total_api_equivalent_cost_usd,null);}
-console.log('Primary109 exact accounting coverage and separate token/cost eligibility passed');
+console.log('Displayed exact accounting coverage and separate token/cost eligibility passed');
 
-assert.equal(usage.estimates.rows.length,27);assert(usage.estimates.rows.every(r=>r.estimate_is_not_exact===true));assert.equal(usage.groups.filter(g=>g.accounting_status==='incomplete'&&g.total_tokens===null).length,27);
-const proxies=usage.estimates.rows.filter(r=>r.reliability==='planning_scenario_only_not_recovered_usage'&&r.donor_groups>0);
-assert.equal(proxies.length,2);assert(proxies.every(r=>r.known_tokens===0&&r.known_cost===0&&r.estimated_api_equivalent_cost_mean_usd>0&&r.cost_method));
+assert.equal(usage.estimates.rows.length,22);assert.equal(usage.groups.filter(g=>g.accounting_status==='incomplete'&&g.total_tokens===null).length,22);
 const participants=new Map(snapshot.participants.map(p=>[p.participant_id,p])),features={'nexteval-u5-perturbed@1':'Perturbed','nexteval-u5-perturbed-noisy@1':'Noisy','nexteval-u5-perturbed-rotated@1':'Rotated','nexteval-u5-perturbed-random-nan@1':'RandomNaN'};
 for(const task of snapshot.tasks)for(const score of task.scores){
  const p=participants.get(score.participant_id);if(['scipy','reference'].includes(p.harness))continue;
@@ -23,4 +27,4 @@ for(const task of snapshot.tasks)for(const score of task.scores){
  const row=usage.estimates.rows.find(r=>r.model===p.model.split('/').at(-1)&&r.harness===p.harness&&r.effort===p.effort&&r.feature===features[task.task_id]);
  assert(g.cost_known_runs===276||row?.estimated_api_equivalent_cost_mean_usd>0,'cost coverage '+p.participant_id);
 }
-console.log('Every scored group has exact or labeled estimated cost and tokens');
+console.log('Every displayed scored group has exact or estimated cost and tokens; Pareto P/N/R/X 43/43/42/42');

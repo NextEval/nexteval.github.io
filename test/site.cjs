@@ -68,7 +68,7 @@ async function main() {
           assert.equal(await session.getByRole('link', { name: 'Results and traces' }).getAttribute('href'), 'guide/#results');
         }
         if (route === '/') {
-          assert.deepEqual(await page.locator('.pipeline-step strong').allTextContents(), ['Solve', 'Preserve', 'Select', 'Compare']);
+          assert.deepEqual(await page.locator('.pipeline-step strong').allTextContents(), ['Solve', 'Record', 'Select', 'Compare']);
         }
         const metrics = await page.evaluate(() => {
           const rect = selector => { const r = document.querySelector(selector).getBoundingClientRect(); return { x: r.x, y: r.y, right: r.right, bottom: r.bottom, width: r.width, height: r.height }; };

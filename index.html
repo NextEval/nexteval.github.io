@@ -44,7 +44,7 @@
             <a class="button button-primary" href="solver/">Explore Solver <span aria-hidden="true">↗</span></a>
             <a class="button button-quiet" href="bench/">Open Bench <span aria-hidden="true">↗</span></a>
           </div>
-          <p class="hero-footnote">Opaque objectives · finite evaluation budgets · auditable trajectories</p>
+          <p class="hero-footnote">Opaque objectives · finite evaluation budgets · recorded evaluation histories</p>
         </div>
       </div>
     </section>
@@ -67,23 +67,23 @@
         <div class="panel-top"><span class="panel-number">02</span><span class="panel-route">/bench</span></div>
         <div class="panel-symbol" aria-hidden="true">◫</div>
         <h2>NextEval <strong>Bench</strong></h2>
-        <p>A benchmark for evaluating agents through derivative-free optimization. Compare harnesses and models against numerical baselines, inspect their histories, and trace results back to evidence.</p>
+        <p>A benchmark for evaluating agents through derivative-free optimization. Compare harnesses and models against numerical baselines and inspect their evaluation histories.</p>
         <span class="panel-link">Enter the benchmark <span aria-hidden="true">→</span></span>
       </a>
     </section>
     <section class="pipeline shell">
       <div class="pipeline-heading">
         <p class="section-index">02 / THE RELATION</p>
-        <h2>From solver runs<br><span>to benchmark evidence</span></h2>
+        <h2>From solver runs<br><span>to benchmark results</span></h2>
       </div>
       <div class="pipeline-track">
         <div class="pipeline-step"><span>01</span><strong>Solve</strong><p>A solver run produces a history of objective evaluations.</p></div>
         <div class="pipeline-rule" aria-hidden="true"></div>
-        <div class="pipeline-step"><span>02</span><strong>Preserve</strong><p>Keep the configuration and source evidence attached to each run.</p></div>
+        <div class="pipeline-step"><span>02</span><strong>Record</strong><p>Keep each run's configuration with its evaluation history.</p></div>
         <div class="pipeline-rule" aria-hidden="true"></div>
         <div class="pipeline-step"><span>03</span><strong>Select</strong><p>Fix the task set and participant configurations for a comparison.</p></div>
         <div class="pipeline-rule" aria-hidden="true"></div>
-        <div class="pipeline-step"><span>04</span><strong>Compare</strong><p>Bench turns those histories into profiles, with the source records still accessible.</p></div>
+        <div class="pipeline-step"><span>04</span><strong>Compare</strong><p>Bench turns those histories into scores and performance profiles.</p></div>
       </div>
     </section>
     <section class="principles shell">
@@ -91,7 +91,7 @@
       <div class="principle-grid">
         <article><span class="principle-mark">A</span><h3>Opaque by default</h3><p>The solver receives an objective, not its identity, implementation, or known optimum.</p></article>
         <article><span class="principle-mark">B</span><h3>Budget is the clock</h3><p>Progress is measured in real function evaluations, not wall-clock speed.</p></article>
-        <article><span class="principle-mark">C</span><h3>Evidence stays attached</h3><p>Profiles are derived views; source-local histories and provenance remain inspectable.</p></article>
+        <article><span class="principle-mark">C</span><h3>Same comparison for everyone</h3><p>Every configuration in a task is scored against the same targets and the same COBYQA reference.</p></article>
       </div>
     </section>
     <section class="closing shell">

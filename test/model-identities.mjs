@@ -1,5 +1,5 @@
-import '../scripts/results-storage/prepare-public-results.mjs';
-const resultPath='bench/results';
+import '../scripts/site/build-site.mjs';
+const resultPath='_site/bench/results';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -18,12 +18,13 @@ test('harness is exactly the framework, not API or machine provenance',()=>{
  assert.equal(actual.harnessFor({harness:'codex',participant_id:'codex--qwen3.8-flash--low--collaborator-macos'}),'Codex');
  assert.equal(actual.harnessFor({harness:'claude-code'}),'Claude Code');
 });
-test('all primary and archived participants resolve without changing raw IDs',()=>{
- for(const path of ['data/results.json','archive/ten-repeat/data/results.json']){
-  const data=JSON.parse(readFileSync(resolve(resultPath,path)));const before=JSON.stringify(data);
-  for(const row of data.participants){labels.modelName(row);labels.harnessName(row);}
-  assert.equal(JSON.stringify(data),before);
+test('the shipped identities module matches the registry for every shipped participant',async()=>{
+ const shipped=await import(resolve(resultPath,'identities.mjs'));
+ const data=JSON.parse(readFileSync(resolve(resultPath,'data/results.json')));const before=JSON.stringify(data);
+ for(const row of data.participants){
+  assert.equal(shipped.modelName(row),labels.modelName(row));assert.equal(shipped.harnessName(row),labels.harnessName(row));
  }
+ assert.equal(JSON.stringify(data),before);
 });
 test('missing future aliases reject instead of leaking route prefixes',()=>{
  assert.throws(()=>labels.modelName({model:'openai/gpt-6.2-sol'}),/Unregistered/);

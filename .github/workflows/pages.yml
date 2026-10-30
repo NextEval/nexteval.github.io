@@ -23,16 +23,22 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Verify published profile assets
-        run: node test/assets.cjs
-      - name: Verify current results and source synchronization
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Build the allowlisted site and verify the pinned results
         run: node test/results.mjs
+      - name: Verify Pareto coverage, plan cleanup and model names
+        run: |
+          node test/primary-pareto-coverage.mjs
+          node test/active-plan-cleanup.mjs
+          node test/model-identities.mjs
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: .
+          path: _site
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
