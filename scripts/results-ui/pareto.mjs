@@ -103,7 +103,9 @@ export class ParetoChart {
       const group = node('g',{class:`pareto-point${selected ? ' selected' : ''}${point.estimated ? ' estimated' : ''}`,tabindex:'0',role:'button',
         'data-participant':id,'aria-pressed':String(selected),'aria-label':`${point.estimated ? 'Estimated, not metered. ' : ''}${this.label(point.participant)} (${point.participant.effort}), ${this.harness(point.participant)}, score ${point.score.toFixed(2)}, ${released ? 'released '+point.release.released_at : (this.metric === 'cost' ? dollarNumber(point.x) : compactNumber(point.x))+' per run'}`,transform:`translate(${x(point.x)},${y(point.score)})`});
       group.append(node('circle',{r:20,class:'pareto-target'}));
-      group.append(node('circle',{r:efficient ? 6 : 3.5,class:efficient ? 'pareto-dot efficient' : 'pareto-dot'}));
+      const dot = {r:efficient ? 6 : 3.5,class:efficient ? 'pareto-dot efficient' : 'pareto-dot'};
+      if (point.estimated) dot.style = `fill:var(--result-bg,#121417);stroke:${efficient ? '#1dd3df' : '#858d92'};stroke-width:1.5`;
+      group.append(node('circle',dot));
       const show = () => this.tooltip(point, x(point.x), y(point.score), released, width);
       group.addEventListener('pointerenter',show);
       group.addEventListener('focus',show);

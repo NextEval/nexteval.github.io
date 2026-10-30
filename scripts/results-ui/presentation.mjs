@@ -62,9 +62,11 @@ export function consumptionView(snapshot,usage,task,metric='cost',family='',incl
     }
   }
   points.sort((a,b)=>b.score-a.score || a.x-b.x || a.participant.participant_id.localeCompare(b.participant.participant_id));
+  // One frontier over every displayed point; estimated points stay marked and the measured frontier is kept.
+  const estimated=points.some(p=>p.estimated);
   return {...measured,points,measuredCount:measured.points.length,
     estimatedCount:points.filter(p=>p.estimated).length,omitted:measured.eligible-points.length,
-    scenarioFrontier:points.some(p=>p.estimated) ? paretoFrontier(points) : []};
+    frontier:estimated ? paretoFrontier(points) : measured.frontier,measuredFrontier:measured.frontier,scenarioFrontier:[]};
 }
 export function releaseView(snapshot,releases,task,family='',usage=null) {
   return releaseData(snapshot,releases,displayedTask(snapshot,task),family,usage);

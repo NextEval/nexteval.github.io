@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
 const {isDisplayed,displayedTask,displayedChart,consumptionView,releaseView}=await import('../bench/results/presentation.mjs');
-const {paretoData}=await import('../bench/results/usage.mjs');
+const {paretoData,paretoFrontier}=await import('../bench/results/usage.mjs');
 const {chartData,historyChartData}=await import('../bench/results/model.mjs');
 const root=new URL('../bench/results/',import.meta.url);
 const read=name=>JSON.parse(readFileSync(new URL(name,root)));
@@ -28,8 +28,9 @@ test('token scenarios cover every active group without modifying measured usage 
   assert.equal(scenario.points.length,scenario.eligible);
   assert.equal(scenario.measuredCount,measured.points.length);
   assert.equal(scenario.estimatedCount,scenario.points.length-measured.points.length);
-  assert.deepEqual(scenario.frontier,measured.frontier);
-  assert(scenario.scenarioFrontier.length>0);
+  assert.deepEqual(scenario.frontier,paretoFrontier(scenario.points));
+  assert.deepEqual(scenario.measuredFrontier,measured.frontier);
+  assert.deepEqual(scenario.scenarioFrontier,[]);
   assert(scenario.points.filter(p=>p.estimated).every(p=>Number.isFinite(p.x)&&p.estimate.warning.includes('not recovered')));
   assert(scenario.points.every(p=>isDisplayed(p.participant)));
   const exact=paretoData(snapshot,usage,displayedTask(snapshot,task),'tokens');
@@ -37,16 +38,17 @@ test('token scenarios cover every active group without modifying measured usage 
  }
  assert.equal(JSON.stringify({snapshot,usage}),before);
 });
-test('dollar scenarios cover every active group from published list prices, outside the measured frontier',()=>{
- const methods=new Set(['same_group_observed_cost_mean_imputation_not_actual_bill','tokens_x_calibrated_harness_category_mix_x_list_price']);
+test('dollar scenarios cover every active group from published list prices, inside one marked frontier',()=>{
+ const methods=new Set(['same_group_measured_cost_per_token','same_configuration_other_feature_cost_per_token']);
  for(const task of snapshot.tasks){
   const measured=consumptionView(snapshot,usage,task,'cost');
   const data=consumptionView(snapshot,usage,task,'cost','',true);
   assert.equal(data.points.length,data.eligible);
-  assert.deepEqual(data.frontier,measured.frontier);
+  assert.deepEqual(data.frontier,paretoFrontier(data.points));
+  assert.deepEqual(data.measuredFrontier,measured.frontier);
   assert(data.points.filter(p=>p.estimated).every(p=>Number.isFinite(p.x)&&p.x>0&&methods.has(p.estimate.method)));
  }
- const rows=usage.estimates.rows.filter(r=>r.cost_method==='tokens_x_calibrated_harness_category_mix_x_list_price');
+ const rows=usage.estimates.rows.filter(r=>methods.has(r.cost_method));
  assert(rows.length>0&&rows.every(r=>r.cost_price_sources.length>0&&r.cost_price_sources.every(u=>u.startsWith('https://'))));
 });
 test('missing estimate schema, ambiguous identities and wrong denominators fail closed',()=>{
