@@ -75,7 +75,7 @@ def build(manifest, output, archive=None, overlay=None, plan_source=None, identi
         source = Path(plan_source)
         if not source.is_file() or source.is_symlink() or source.resolve() != Path(__file__).resolve().with_name('active-plan.mjs'):
             raise ValueError('only_fixed_public_plan_source')
-        if source.stat().st_size > 32768 or sha(source) != '1e3113fefe8c9a4c5facf10c97b661e724535b313e75cdf5dd4fa30033b800dd':
+        if source.stat().st_size > 32768 or sha(source) != '9f58948a73bce4ab667366ccc1493e6d50fc3f5d38e00ba6fdb56ee4a943ad54':
             raise ValueError('public_plan_source_hash')
         if manifest['files']['dist/results/plan.mjs']['sha256'] not in ('2052b9fcbc34f2be1be73e668b5949d11c1714085a6737e61c0588f6c327a781','eed63c0838c5e90b4935b49c547a316b23e95ae6f9f99a74d358442f386606c6','8714da1a9aae2cd351b1b05150faf1c5341c80f857d7c4aa0627b0792301cf6c','1e3113fefe8c9a4c5facf10c97b661e724535b313e75cdf5dd4fa30033b800dd'):
             raise ValueError('unknown_public_plan_predecessor')

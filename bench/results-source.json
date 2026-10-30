@@ -1913,7 +1913,7 @@
     "mimo-evidence.mjs": "acf9163a8b1d3317e6252d621e6c91cb7a8aca627ebe22cf05c5755107cc0b52",
     "model.mjs": "657a8a31033cab16dbb71530444eaa84717ac47b41857d26071126fbee5d5c35",
     "pareto.mjs": "c2c0a6fef09331010dc1c58b58ff7ffd522853542ee0eea2ce80597124492f3b",
-    "plan.mjs": "1e3113fefe8c9a4c5facf10c97b661e724535b313e75cdf5dd4fa30033b800dd",
+    "plan.mjs": "9f58948a73bce4ab667366ccc1493e6d50fc3f5d38e00ba6fdb56ee4a943ad54",
     "presentation.mjs": "1b9b919e219239a975ea6c76cec981f001f048950c42d780cddba130919c5ef2",
     "primary-evidence.mjs": "802c1b3bdca398d907b88f688945a97b1cefa85887bb53a6187d61e53a01b030",
     "primary-protocol-tests.mjs": "fcbd6310dc5ebaf7b93da1e76ef397703acbefcc993f2d736778d81982361dc2",
@@ -1958,7 +1958,7 @@
       "url": "https://github.com/NextEval/nexteval.github.io/releases/download/web-primary179-fable-glm-20261030/public-web-results-9e10aa24f90f025ae951f5d22e6b80d26961024c913af5dd0afb1690a2fac77c.tar.gz"
     }
   },
-  "source_commit": "58b60196fb3b1e9f7ca62f8898edbbb73d272f16",
+  "source_commit": "484eddfda21d90131b4265620f9e777464aabbd8",
   "source_kind": "manifest-materialized-static-results",
   "source_path": "dist/results",
   "source_prefix": "dist/results",
