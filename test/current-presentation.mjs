@@ -93,7 +93,7 @@ test('the actual app applies tier policy to each view and wires estimate control
  assert(readFileSync(new URL('archive/ten-repeat/index.html',root),'utf8').includes("location.replace('../../index.html#matrix')"));
  const pareto=readFileSync(new URL('pareto.mjs',root),'utf8');
  assert(!pareto.includes('pareto-estimate-dot'));
- assert(pareto.includes("node('circle',{r:efficient ? 6 : 3.5"));
+ assert(pareto.includes("r:efficient ? 6 : 3.5") && pareto.includes('if (point.estimated) dot.style'));
 });
 test('UI overlay rejects tampered manifests, sources and symbolic-link targets',()=>{
  execFileSync('python3',['-m','unittest','test_presentation_overlay.py'],{cwd:new URL('../scripts/results-storage/',import.meta.url),stdio:'pipe'});
