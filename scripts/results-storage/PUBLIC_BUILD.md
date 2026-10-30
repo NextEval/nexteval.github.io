@@ -10,3 +10,12 @@ Noisy is recomputed with OptiProfiler 1.3.4 over the enlarged comparison, so exi
 Usage is repriced with the 2026-10-30 official standard price snapshot `public-standard-20261030-r2`. Rows from the 2026-10-09 snapshot were re-checked and are unchanged; displayed models missing from that snapshot were added from official pages; DeepSeek uses the standard peak rate instead of the off-peak discount, and Qwen 3.8 Max uses the Beijing region rate. 154 exact-token and 154 exact-cost groups; the other 27 groups have a labelled estimate in the separate `estimates` block, and their exact fields stay null. The website plots every displayed configuration with exact or estimated usage under one Pareto frontier (Perturbed/Noisy/Rotated/RandomNaN: 43/43/42/42, equal to the score matrix). Original scientific bundles stay private in HF. Git holds the exact public artifact manifest and small source/tests; raw native text, credentials, hidden reasoning and submitted point vectors are not public.
 
 Private HF revision: 0d90f91948cb58b0a27d6c4484b4da4f6be4e5d2
+
+## Pages deploy (slim site)
+
+Pages no longer hydrates or deploys this full view. `node scripts/site/build-site.mjs` builds `_site/` and the deploy uploads only `_site/`:
+
+- tracked files under an allowlist: the root pages (`index.html`, `site.css`, `site.js`, `slogan.css`, `navigation.js`), `solver/`, `site-assets/`, `bench/index.html`, the `bench/archive.html` and `bench/ten-repeat.html` redirects, `bench/vendor/` and `bench/assets/brand/`;
+- `bench/results/` from the slim release pinned in `bench/results-source.json`: the only asset of GitHub release `site-primary181-repriced-20261030` (public, no token), checked file by file against the pinned sha256 values. The same files are in the private HF dataset `NextEval/nexteval-bench-web` at the pinned revision.
+
+The slim bundle is built in the website repository (`scripts/results-storage/site_projection.py`, see its `PUBLIC_BUILD.md`). It keeps the result views and drops downloads, evidence, provenance, the ten-repeat archive, historical-assisted data, `usage-estimates.html`, the price snapshot and node check scripts. `scripts/`, `test/`, `audit/`, legacy `bench/` JavaScript and CSS and the old `bench/assets/` curves are not deployed. The overlay scripts in this directory are the record of the full-view build and are not used by the Pages build.

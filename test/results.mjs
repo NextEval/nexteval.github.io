@@ -1,34 +1,46 @@
 import './terminology.mjs';
-import './identity-projection-build.mjs';
-import './mobile-header.mjs';
 import './current-presentation.mjs';
 import './primary-archive-entry.mjs';
 import './bootstrap-imports.mjs';
-import '../scripts/results-storage/prepare-public-results.mjs';
+import { source, ALLOWED_FILES, ALLOWED_DIRS } from '../scripts/site/build-site.mjs';
+import { checkSite } from '../scripts/site/site-check.mjs';
 import { readFile, readdir } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { join } from 'node:path';
 import assert from 'node:assert/strict';
-// Load generated modules only after the verified hydration side effect finishes.
-const {checkBundle} = await import('../bench/results/check.mjs');
 
-const root = fileURLToPath(new URL('../',import.meta.url));
-const manifest = JSON.parse(await readFile(join(root,'bench/results-source.json'),'utf8'));
-assert.equal(manifest.source_repository,'NextEval/nexteval-bench-website');
-for (const [file,hash] of Object.entries(manifest.files)) {
-  assert(!file.startsWith('/') && !file.split('/').includes('..'));
-  const bytes = await readFile(join(root,'bench/results',file));
-  assert.equal(createHash('sha256').update(bytes).digest('hex'),hash,`Unsynchronized component: ${file}`);
-}
+const root = fileURLToPath(new URL('../', import.meta.url));
+const site = join(root, '_site');
+assert.equal(source.schema, 'nexteval.site-source/1');
+assert.equal(source.source_repository, 'NextEval/nexteval-bench-website');
 async function allFiles(dir) {
-  const files=[];
-  for (const entry of await readdir(dir,{withFileTypes:true})) {
+  const files = [];
+  for (const entry of await readdir(dir, { withFileTypes: true })) {
     assert(!entry.isSymbolicLink());
-    if (entry.isDirectory()) files.push(...(await allFiles(join(dir,entry.name))).map(p=>entry.name+'/'+p));
+    if (entry.isDirectory()) files.push(...(await allFiles(join(dir, entry.name))).map(p => entry.name + '/' + p));
     else files.push(entry.name);
   }
   return files.sort();
 }
-assert.deepEqual(await allFiles(join(root,'bench/results')),Object.keys(manifest.files).sort(),'Unexpected mirrored file');
-console.log(await checkBundle());
+for (const [file, pin] of Object.entries(source.files)) {
+  assert(!file.startsWith('/') && !file.split('/').includes('..'));
+  const bytes = await readFile(join(site, 'bench/results', file));
+  assert.equal(bytes.length, pin.bytes, `Unsynchronized result file: ${file}`);
+  assert.equal(createHash('sha256').update(bytes).digest('hex'), pin.sha256, `Unsynchronized result file: ${file}`);
+}
+assert.deepEqual(await allFiles(join(site, 'bench/results')), Object.keys(source.files).sort(), 'Unexpected result file');
+
+const published = await allFiles(site);
+for (const path of published) assert(ALLOWED_FILES.includes(path) || ALLOWED_DIRS.some(dir => path.startsWith(dir)) || path.startsWith('bench/results/'), 'Unexpected published file: ' + path);
+for (const removed of ['scripts/', 'test/', 'audit/', 'README.md', 'bench/results-source.json', 'bench/app.js', 'bench/identity.html',
+  'bench/assets/comparisons/', 'bench/assets/curves/', 'bench/assets/catalog/', 'bench/assets/provenance.json', 'bench/assets/gpt-performance.pdf',
+  'bench/results/archive/', 'bench/results/usage-estimates.html', 'bench/results/check.mjs', 'bench/results/evidence.mjs',
+  'bench/results/data/evidence/', 'bench/results/data/historical-assisted/', 'bench/results/data/pricing-snapshot.json'])
+  assert(!published.some(path => path === removed || path.startsWith(removed)), 'Removed file is still published: ' + removed);
+for (const page of ['index.html', 'bench/index.html', 'bench/archive.html', 'bench/ten-repeat.html', 'bench/results/index.html']) {
+  const text = await readFile(join(site, page), 'utf8');
+  for (const pattern of [/download/i, /evidence/i, /provenance/i, /nexteval-bench-data/, /github\.com\/NextEval\/nexteval-bench"/, /usage-estimates/])
+    assert(!pattern.test(text), `${page} ${pattern}`);
+}
+console.log(JSON.stringify({ published: published.length, ...(await checkSite(join(site, 'bench/results'))) }));

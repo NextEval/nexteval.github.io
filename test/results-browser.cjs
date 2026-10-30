@@ -6,12 +6,12 @@ const os = require('node:os');
 const { chromium } = require('playwright');
 
 async function main() {
-  const root=path.resolve(__dirname,'..');
+  const root=path.resolve(__dirname,'../_site');
   const output=process.env.SITE_TEST_ARTIFACTS || await fs.mkdtemp(path.join(os.tmpdir(),'nexteval-results-'));
   await fs.mkdir(output,{recursive:true});
   const dataRoot=process.env.RESULTS_DATA_DIRECTORY || path.join(root,'bench/results/data');
   const data=JSON.parse(await fs.readFile(path.join(dataRoot,'results.json'),'utf8'));
-  const {relativeScore,referenceScore}=await import('../bench/results/scores.mjs');
+  const {relativeScore,referenceScore}=await import('../_site/bench/results/scores.mjs');
   const mime={'.html':'text/html','.css':'text/css','.mjs':'text/javascript','.js':'text/javascript','.svg':'image/svg+xml','.json':'application/json','.png':'image/png','.gz':'application/gzip'};
   const server=http.createServer(async(req,res)=>{
     const pathname=decodeURIComponent(new URL(req.url,'http://localhost').pathname);
@@ -87,15 +87,14 @@ async function main() {
       assert.equal(await page.locator('#history-problem option').count(),task.grid.problems);
       assert.equal(await page.locator('#history-repeat option').count(),task.grid.repetitions);
       for(const width of [390,1440])await layout('history-'+task.task_id,width);
-      await page.selectOption('#history-repeat','9');
+      await page.selectOption('#history-repeat',String(task.grid.repetitions-1));
       await page.locator('#history-chart svg[role="img"]').waitFor();
       await page.locator('.back-link').first().click();
       await page.locator('.results-matrix').waitFor();
     }
     await page.goto(base+'/bench/#profiles',{waitUntil:'networkidle'});
-    await page.waitForURL(/archive\.html#profiles/);
-    assert.match(page.url(),/archive\.html#profiles/);
-    await page.locator('#profiles').waitFor();
+    await page.waitForURL(/\/bench\/#matrix$/);
+    await page.locator('.results-matrix').waitFor();
     assert.deepEqual(faults,[]);
     await fs.writeFile(path.join(output,'qa.json'),JSON.stringify({snapshot:data.snapshot_id,screenshots,faults},null,2));
     console.log(JSON.stringify({output,snapshot:data.snapshot_id,screenshots:screenshots.length,faults},null,2));

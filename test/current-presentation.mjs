@@ -1,21 +1,21 @@
-import '../scripts/results-storage/prepare-public-results.mjs';
+import '../scripts/site/build-site.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
-import {execFileSync} from 'node:child_process';
-const {isDisplayed,displayedTask,displayedChart,consumptionView,releaseView,usageFigures}=await import('../bench/results/presentation.mjs');
-const {paretoData,paretoFrontier}=await import('../bench/results/usage.mjs');
-const {chartData,historyChartData}=await import('../bench/results/model.mjs');
-const root=new URL('../bench/results/',import.meta.url);
+const {isDisplayed,displayedTask,displayedChart,consumptionView,releaseView,usageFigures}=await import('../_site/bench/results/presentation.mjs');
+const {paretoData,paretoFrontier}=await import('../_site/bench/results/usage.mjs');
+const {chartData,historyChartData}=await import('../_site/bench/results/model.mjs');
+const root=new URL('../_site/bench/results/',import.meta.url);
 const read=name=>JSON.parse(readFileSync(new URL(name,root)));
 const snapshot=read('data/results.json'),usage=read('data/website-usage.json');
 const removed=['claude-code--deepseek-v4-flash--low','codex--qwen3.8-flash--low--collaborator-macos',
  'claude-code--qwen3.8-flash--medium','claude-code--mimo-v2.6-flash--off'];
-test('all four retired Chinese configurations disappear from presentation, not source records',()=>{
- assert.deepEqual(snapshot.participants.filter(p=>!isDisplayed(p)).map(p=>p.participant_id),removed);
- assert.equal(snapshot.tasks.reduce((n,t)=>n+t.scores.filter(p=>removed.includes(p.participant_id)).length,0),11);
- assert.equal(snapshot.tasks.reduce((n,t)=>n+displayedTask(snapshot,t).scores.filter(p=>!['scipy','reference'].includes(snapshot.participants.find(x=>x.participant_id===p.participant_id).harness)).length,0),170);
- assert(snapshot.participants.filter(p=>p.family==='GPT'||p.model?.includes('claude-')).filter(p=>p.effort==='medium').every(isDisplayed));
+const harness=id=>snapshot.participants.find(p=>p.participant_id===id).harness;
+test('retired Chinese configurations are not shipped; displayed groups stay 170',()=>{
+ assert(snapshot.participants.every(isDisplayed));
+ assert(!snapshot.participants.some(p=>removed.includes(p.participant_id)));
+ assert(!snapshot.tasks.some(t=>t.members.some(id=>removed.includes(id))));
+ assert.equal(snapshot.tasks.reduce((n,t)=>n+displayedTask(snapshot,t).scores.filter(p=>!['scipy','reference'].includes(harness(p.participant_id))).length,0),170);
  assert(isDisplayed({model:'qwen3.8-max',effort:'high',harness:'codex'}));
  assert(!isDisplayed({model:'qwen3.8-max',effort:'medium',harness:'codex'}));
  assert(!isDisplayed({model:'mimo-v2.6-pro',effort:'off',harness:'codex'}));
@@ -29,9 +29,7 @@ test('token scenarios cover every active group without modifying measured usage 
   assert.equal(scenario.measuredCount,measured.points.length);
   assert.equal(scenario.estimatedCount,scenario.points.length-measured.points.length);
   assert.deepEqual(scenario.frontier,paretoFrontier(scenario.points));
-  assert(!('measuredFrontier' in scenario) && !('scenarioFrontier' in scenario));
   assert(scenario.points.filter(p=>p.estimated).every(p=>Number.isFinite(p.x)&&p.estimate.warning.includes('not recovered')));
-  assert(scenario.points.every(p=>isDisplayed(p.participant)));
   const exact=paretoData(snapshot,usage,displayedTask(snapshot,task),'tokens');
   assert.deepEqual(measured.points,exact.points);
  }
@@ -60,13 +58,15 @@ test('the detail panel reports the plotted value for every point, measured or no
  }
 });
 test('missing estimate schema, ambiguous identities and wrong denominators fail closed',()=>{
- const task=snapshot.tasks[0],base=consumptionView(snapshot,usage,task,'tokens');
+ const task=snapshot.tasks.find(t=>consumptionView(snapshot,usage,t,'tokens','',true).estimatedCount>0);
+ const base=consumptionView(snapshot,usage,task,'tokens'),full=consumptionView(snapshot,usage,task,'tokens','',true);
  const missing=structuredClone(usage);delete missing.estimates;
  assert.equal(consumptionView(snapshot,missing,task,'tokens','',true).points.length,base.points.length);
- const names={'nexteval-u5-perturbed@1':'Perturbed','nexteval-u5-perturbed-noisy@1':'Noisy','nexteval-u5-perturbed-rotated@1':'Rotated','nexteval-u5-perturbed-random-nan@1':'RandomNaN'};
- const first=usage.estimates.rows.find(r=>r.feature===names[task.task_id]&&r.known_tokens<276&&isDisplayed({model:r.model,effort:r.effort,harness:r.harness}));
+ const point=full.points.find(p=>p.estimated),bare=point.participant.model.split('/').at(-1);
+ const first=usage.estimates.rows.find(r=>r.model===bare&&r.harness===point.participant.harness&&r.effort===point.participant.effort&&r.runs===task.grid.cells&&
+  ({'nexteval-u5-perturbed@1':'Perturbed','nexteval-u5-perturbed-noisy@1':'Noisy','nexteval-u5-perturbed-rotated@1':'Rotated','nexteval-u5-perturbed-random-nan@1':'RandomNaN'})[task.task_id]===r.feature);
  const duplicate=structuredClone(usage);duplicate.estimates.rows.push(first);
- assert.equal(consumptionView(snapshot,duplicate,task,'tokens','',true).points.length,base.eligible-1);
+ assert.equal(consumptionView(snapshot,duplicate,task,'tokens','',true).points.length,full.points.length-1);
  const wrong=structuredClone(usage);wrong.estimates.rows.forEach(r=>r.runs=920);
  assert.equal(consumptionView(snapshot,wrong,task,'tokens','',true).points.length,base.points.length);
 });
@@ -82,17 +82,17 @@ test('release-date plots cover every active group with sourced first-release dat
   assert(view.points.every(p=>isDisplayed(p.participant)&&p.release.sources.length>0));
  }
 });
-test('profiles and histories omit retired curves without changing raw exports',()=>{
+test('profiles and histories carry exactly the displayed curves',()=>{
  const task=snapshot.tasks[0],profiles=read('data/'+task.profiles_file),participants=snapshot.participants;
  const data=chartData(profiles,task,participants,'performance',profiles.tolerances[0].tolerance);
- const result=displayedChart(data,participants);
- assert.equal(result.series.length,displayedTask(snapshot,task).scores.length);
+ assert.equal(displayedChart(data,participants).series.length,data.series.length);
  assert.equal(data.series.length,task.members.length);
  const index=read('data/'+task.history_file),history=read('data/'+index.problems[0].history_file);
- const h=historyChartData(history,participants,0),visible=displayedChart(h,participants);
- assert.equal(visible.series.length,result.series.length);assert.equal(h.series.length,task.members.length);
+ const h=historyChartData(history,participants,0);
+ assert.equal(displayedChart(h,participants).series.length,h.series.length);assert.equal(h.series.length,task.members.length);
 });
-test('the actual app applies tier policy to each view and always includes estimates without marking them',()=>{
+const CAPTION='Usage for some configurations is estimated.';
+test('the shipped app applies tier policy and includes estimates with one caption, no per-point marking',()=>{
  const source=readFileSync(new URL('app.mjs',root),'utf8');
  for(const fragment of ['plannedParticipants()).filter(isDisplayed)','displayedChart(chartData(',
   'displayedChart(historyChartData(','consumptionView(snapshot,usage,task,metric,family,true)','releaseView(snapshot,releases',
@@ -100,13 +100,12 @@ test('the actual app applies tier policy to each view and always includes estima
  const start=source.indexOf('async function pareto('),rest=source.slice(start+1);
  const view=source.slice(start,start+1+rest.search(/\n(async )?function /));
  assert(view.length>1000 && view.includes('new ParetoChart('));
- for(const pattern of [/estimated/i,/estimates/i,/scenario/i,/hollow/i,/ measured \+/,/MEASURED/])assert(!pattern.test(view),String(pattern));
- assert(!readFileSync(new URL('index.html',root),'utf8').includes('Full ten-repeat archive'));
- assert(readFileSync(new URL('archive/ten-repeat/index.html',root),'utf8').includes("location.replace('../../index.html#matrix')"));
+ assert.equal(source.split(CAPTION).length,2,'exactly one usage caption');
+ assert.equal(view.split(CAPTION).length,2,'the caption is on the Pareto view');
+ const other=source.replace(CAPTION,'').replace('point.estimate?.sources','');
+ for(const pattern of [/estimat/i,/scenario/i,/hollow/i,/ measured \+/,/MEASURED/])assert(!pattern.test(other),String(pattern));
+ assert(readFileSync(new URL('index.html',root),'utf8').includes("location.replace('../'"));
  const pareto=readFileSync(new URL('pareto.mjs',root),'utf8');
  for(const pattern of [/estimat/i,/scenario/i,/dasharray/])assert(!pattern.test(pareto),String(pattern));
  assert(pareto.includes("r:efficient ? 6 : 3.5"));
-});
-test('UI overlay rejects tampered manifests, sources and symbolic-link targets',()=>{
- execFileSync('python3',['-m','unittest','test_presentation_overlay.py'],{cwd:new URL('../scripts/results-storage/',import.meta.url),stdio:'pipe'});
 });
