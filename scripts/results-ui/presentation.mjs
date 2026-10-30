@@ -42,8 +42,17 @@ function estimateFor(usage,participant,task,metric) {
   if (!finite(value)) return null;
   if (metric==='cost' && !/^\d{4}-\d{2}-\d{2}$/.test(usage.pricing_as_of || '')) return null;
   const reliability=(metric==='cost' && row.cost_reliability) || row.reliability || 'planning_only';
-  return {value,method,reliability,range,
+  return {value,method,reliability,range,sources:metric==='cost' ? row.cost_price_sources || [] : [],
     warning:'Estimate, not recovered metered usage. Donor ranges are not confidence intervals.'};
+}
+export function usageFigures(usage,point,task) {
+  const g=point.group || {},runs=task.grid.cells;
+  const mean=(metric,value)=>finite(value) ? value : estimateFor(usage,point.participant,task,metric)?.value ?? null;
+  const tokens=mean('tokens',g.mean_total_tokens_per_run),cost=mean('cost',g.mean_api_equivalent_cost_usd_per_run);
+  return {tokens,cost,
+    totalTokens:finite(g.mean_total_tokens_per_run) && finite(g.total_tokens) ? g.total_tokens : tokens===null ? null : Math.round(tokens*runs),
+    totalCost:finite(g.mean_api_equivalent_cost_usd_per_run) && finite(g.total_api_equivalent_cost_usd) ? g.total_api_equivalent_cost_usd : cost===null ? null : cost*runs,
+    pricedAt:g.pricing_as_of || usage?.pricing_as_of || null};
 }
 export function consumptionView(snapshot,usage,task,metric='cost',family='',includeEstimates=false) {
   const visible=displayedTask(snapshot,task);
@@ -64,7 +73,7 @@ export function consumptionView(snapshot,usage,task,metric='cost',family='',incl
   points.sort((a,b)=>b.score-a.score || a.x-b.x || a.participant.participant_id.localeCompare(b.participant.participant_id));
   return {...measured,points,measuredCount:measured.points.length,
     estimatedCount:points.filter(p=>p.estimated).length,omitted:measured.eligible-points.length,
-    scenarioFrontier:points.some(p=>p.estimated) ? paretoFrontier(points) : []};
+    frontier:paretoFrontier(points)};
 }
 export function releaseView(snapshot,releases,task,family='',usage=null) {
   return releaseData(snapshot,releases,displayedTask(snapshot,task),family,usage);
