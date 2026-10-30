@@ -45,8 +45,8 @@
       "sha256": "e3ed85e17cb7f0d65edebcf03207ef7ba9e9c9afb10e19aa78d91277cd178bae"
     },
     "pareto.mjs": {
-      "bytes": 10129,
-      "sha256": "c2c0a6fef09331010dc1c58b58ff7ffd522853542ee0eea2ce80597124492f3b"
+      "bytes": 11231,
+      "sha256": "df9094b6cdfebfbcb2fbb3b8d9b5735a9f4cfa0f58702f92fa35f3cf6e0cb682"
     },
     "presentation.mjs": {
       "bytes": 4544,
@@ -71,16 +71,16 @@
       "sha256": "b9de77f6e85e774f6d7e0c1ca9b082b494f7191dc64824961b9338a0fec25f75"
     },
     "archive/ten-repeat/pareto.mjs": {
-      "bytes": 10129,
-      "sha256": "c2c0a6fef09331010dc1c58b58ff7ffd522853542ee0eea2ce80597124492f3b"
+      "bytes": 11231,
+      "sha256": "df9094b6cdfebfbcb2fbb3b8d9b5735a9f4cfa0f58702f92fa35f3cf6e0cb682"
     },
     "index.html": {
       "bytes": 1283,
       "sha256": "e3ed85e17cb7f0d65edebcf03207ef7ba9e9c9afb10e19aa78d91277cd178bae"
     },
     "pareto.mjs": {
-      "bytes": 10129,
-      "sha256": "c2c0a6fef09331010dc1c58b58ff7ffd522853542ee0eea2ce80597124492f3b"
+      "bytes": 11231,
+      "sha256": "df9094b6cdfebfbcb2fbb3b8d9b5735a9f4cfa0f58702f92fa35f3cf6e0cb682"
     },
     "presentation.mjs": {
       "bytes": 4544,

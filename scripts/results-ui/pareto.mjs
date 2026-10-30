@@ -39,28 +39,21 @@ function crossesBox([a,b], box) {
   return true;
 }
 export function layoutLabels(labels, points, bounds, segments = []) {
+  // Labels sit directly beside their point or are omitted; omitted points show their label on hover/focus.
   const placed = [];
   for (const label of labels) {
     const {x,y,width,height} = label;
     const candidates = [];
     const add = (left,top) => candidates.push({left,top,right:left+width,bottom:top+height});
-    for (const dy of [-height/2,-height-12,12]) {
-      add(x+12,y+dy); add(x-width-12,y+dy);
+    for (const dy of [-height/2,-height-6,6]) {
+      add(x+10,y+dy); add(x-width-10,y+dy);
     }
-    const localCount = candidates.length;
-    // Prefer aligned, adjacent labels before searching elsewhere in a dense cluster.
-    for (let top=bounds.top; top+height<=bounds.bottom; top+=8) {
-      for (let left=bounds.left; left+width<=bounds.right; left+=12) add(left,top);
-    }
-    const distance = b => Math.hypot(Math.max(b.left-x,0,x-b.right),Math.max(b.top-y,0,y-b.bottom));
-    const local = candidates.splice(0,localCount);
-    candidates.sort((a,b)=>distance(a)-distance(b) || Math.abs(a.top+height/2-y)-Math.abs(b.top+height/2-y));
-    candidates.unshift(...local);
+    add(x-width/2,y-height-10); add(x-width/2,y+10);
     const box = candidates.find(b => b.left>=bounds.left && b.right<=bounds.right && b.top>=bounds.top && b.bottom<=bounds.bottom
-      && !placed.some(p=>intersects(b,{left:p.left-5,right:p.right+5,top:p.top-5,bottom:p.bottom+5}))
+      && !placed.some(p=>intersects(b,{left:p.left-4,right:p.right+4,top:p.top-2,bottom:p.bottom+2}))
       && !segments.some(s=>crossesBox(s,{left:b.left-3,right:b.right+3,top:b.top-3,bottom:b.bottom+3}))
-      && !points.some(p=>intersects(b,{left:p.x-10,right:p.x+10,top:p.y-10,bottom:p.y+10})));
-    if (box) placed.push({...label,...box,leader:distance(box)>20});
+      && !points.some(p=>p.x!==x || p.y!==y ? intersects(b,{left:p.x-6,right:p.x+6,top:p.y-6,bottom:p.y+6}) : false));
+    if (box) placed.push({...label,...box});
   }
   return placed;
 }
@@ -102,8 +95,6 @@ export class ParetoChart {
     const scenario=[...new Map((this.data.scenarioFrontier || []).map(p=>[JSON.stringify([p.x,p.score]),p])).values()];
     if (scenario.length>1) svg.append(node('path',{d:scenario.map((p,i)=>`${i ? 'L' : 'M'}${x(p.x)},${y(p.score)}`).join(''),
       class:'pareto-scenario-frontier',fill:'none',stroke:'#e7bf72','stroke-width':2,'stroke-dasharray':'5 5'}));
-    const leaders = node('g',{'aria-hidden':'true',class:'pareto-leaders'});
-    svg.append(leaders);
     const groups = new Map();
     this.data.points.forEach(point => {
       const id = point.participant.participant_id;
@@ -113,7 +104,11 @@ export class ParetoChart {
         'data-participant':id,'aria-pressed':String(selected),'aria-label':`${point.estimated ? 'Estimated, not metered. ' : ''}${this.label(point.participant)} (${point.participant.effort}), ${this.harness(point.participant)}, score ${point.score.toFixed(2)}, ${released ? 'released '+point.release.released_at : (this.metric === 'cost' ? dollarNumber(point.x) : compactNumber(point.x))+' per run'}`,transform:`translate(${x(point.x)},${y(point.score)})`});
       group.append(node('circle',{r:20,class:'pareto-target'}));
       group.append(node('circle',{r:efficient ? 6 : 3.5,class:efficient ? 'pareto-dot efficient' : 'pareto-dot'}));
-      group.append(node('title',{},`${point.estimated ? 'Estimated, not metered: ' : ''}${this.label(point.participant)} / ${point.participant.harness} / ${point.participant.effort}`));
+      const show = () => this.tooltip(point, x(point.x), y(point.score), released, width);
+      group.addEventListener('pointerenter',show);
+      group.addEventListener('focus',show);
+      group.addEventListener('pointerleave',() => this.tooltip(null));
+      group.addEventListener('blur',() => this.tooltip(null));
       const choose = () => { this.selected = id; this.onSelect(point); this.render(); this.host.querySelector(`[data-participant="${CSS.escape(id)}"]`)?.focus({preventScroll:true}); };
       group.addEventListener('click',choose);
       group.addEventListener('keydown',event => { if (['Enter',' '].includes(event.key)) { event.preventDefault(); choose(); } });
@@ -134,13 +129,35 @@ export class ParetoChart {
     const segments = frontier.slice(1).map((p,i)=>[{x:x(frontier[i].x),y:y(frontier[i].score)},{x:x(p.x),y:y(p.score)}]);
     for (const label of layoutLabels(labels,points,{left,top,right,bottom},segments)) {
       const dx = label.left-label.x, dy = label.top-label.y;
-      if (label.leader) leaders.append(node('line',{x1:label.x,y1:label.y,x2:Math.max(label.left,Math.min(label.x,label.right)),y2:Math.max(label.top,Math.min(label.y,label.bottom))}));
       const text = node('text',{x:dx,y:dy+12,class:`pareto-label${label.efficient ? ' efficient' : ''}`});
       text.append(node('tspan',{x:dx},label.title));
       text.append(node('tspan',{x:dx,dy:15,class:'pareto-harness'},this.harness(label.point.participant)));
       groups.get(label.id).append(text);
     }
-    this.host.replaceChildren(svg);
+    this.tip = document.createElement('div');
+    this.tip.className = 'pareto-tooltip';
+    this.tip.setAttribute('role','tooltip');
+    Object.assign(this.tip.style,{position:'absolute',display:'none',pointerEvents:'none',zIndex:'2',padding:'6px 9px',
+      borderRadius:'6px',border:'1px solid rgba(160,176,182,.35)',background:'rgba(13,17,19,.96)',
+      font:`12px/1.45 ${font}`,whiteSpace:'nowrap',boxShadow:'0 4px 14px rgba(0,0,0,.35)'});
+    if (getComputedStyle(this.host).position === 'static') this.host.style.position = 'relative';
+    this.host.replaceChildren(svg,this.tip);
+  }
+  tooltip(point, px, py, released, width) {
+    if (!this.tip) return;
+    if (!point) { this.tip.style.display = 'none'; return; }
+    const value = released ? 'released '+point.release.released_at
+      : (this.metric === 'cost' ? dollarNumber(point.x) : compactNumber(point.x)+' tokens')+' per run';
+    const rows = [[`${this.label(point.participant)} (${point.participant.effort})`,'font-weight:600'],
+      [this.harness(point.participant),'opacity:.75'], [`score ${point.score.toFixed(2)} / ${value}`,'']];
+    if (point.estimated) rows.push(['Estimated, not metered','color:#e7bf72']);
+    this.tip.replaceChildren(...rows.map(([text,style]) => {
+      const line = document.createElement('div'); line.textContent = text; line.style.cssText = style; return line; }));
+    this.tip.style.display = 'block';
+    const scale = this.host.clientWidth/width, tipWidth = this.tip.offsetWidth;
+    const left = px*scale+12+tipWidth > this.host.clientWidth ? px*scale-12-tipWidth : px*scale+12;
+    this.tip.style.left = Math.max(0,left)+'px';
+    this.tip.style.top = Math.max(0,py*scale-this.tip.offsetHeight-8)+'px';
   }
   destroy() { this.destroyed = true; this.observer.disconnect(); }
 }

@@ -953,7 +953,7 @@
     "archive/ten-repeat/index.html": "b9de77f6e85e774f6d7e0c1ca9b082b494f7191dc64824961b9338a0fec25f75",
     "archive/ten-repeat/mimo-evidence.mjs": "acf9163a8b1d3317e6252d621e6c91cb7a8aca627ebe22cf05c5755107cc0b52",
     "archive/ten-repeat/model.mjs": "9b8eba46f0a4f11fb1f2d9587eb853d1beadaa01a83eb69feeeaa83a3d7f3556",
-    "archive/ten-repeat/pareto.mjs": "c2c0a6fef09331010dc1c58b58ff7ffd522853542ee0eea2ce80597124492f3b",
+    "archive/ten-repeat/pareto.mjs": "df9094b6cdfebfbcb2fbb3b8d9b5735a9f4cfa0f58702f92fa35f3cf6e0cb682",
     "archive/ten-repeat/plan.mjs": "1dcc7c7216bd4c7375c49ba12993dd29c1cacadb43ef43a39ca2eb7bed56c3c6",
     "archive/ten-repeat/releases.mjs": "a69507ca4b3ab5fb926cfed81b533106277b63d14e08ccef6881ba528977f95f",
     "archive/ten-repeat/results.css": "d030794e288f9549726cc92b4b32866184200dcc4cde7e824c86b629e06f5d8c",
@@ -1912,7 +1912,7 @@
     "index.html": "e3ed85e17cb7f0d65edebcf03207ef7ba9e9c9afb10e19aa78d91277cd178bae",
     "mimo-evidence.mjs": "acf9163a8b1d3317e6252d621e6c91cb7a8aca627ebe22cf05c5755107cc0b52",
     "model.mjs": "657a8a31033cab16dbb71530444eaa84717ac47b41857d26071126fbee5d5c35",
-    "pareto.mjs": "c2c0a6fef09331010dc1c58b58ff7ffd522853542ee0eea2ce80597124492f3b",
+    "pareto.mjs": "df9094b6cdfebfbcb2fbb3b8d9b5735a9f4cfa0f58702f92fa35f3cf6e0cb682",
     "plan.mjs": "9f58948a73bce4ab667366ccc1493e6d50fc3f5d38e00ba6fdb56ee4a943ad54",
     "presentation.mjs": "1b9b919e219239a975ea6c76cec981f001f048950c42d780cddba130919c5ef2",
     "primary-evidence.mjs": "802c1b3bdca398d907b88f688945a97b1cefa85887bb53a6187d61e53a01b030",
@@ -1927,7 +1927,7 @@
     "current_display": {
       "archived_records_unchanged": true,
       "chinese_tiers": "high or thinking-on",
-      "projection_lock_sha256": "72ba90789597a78ab3bac810f8a81585623e8477a5f2bfe1dfddfd8e689c3280",
+      "projection_lock_sha256": "24206750c4f5101823fd7d08e04674f4b217ae898274e4c4394774ffd2b28552",
       "retired_tier_history_display": false
     },
     "data_registry_commit": "f47cfae52c5ef7f69f6d987c1e7bd85f0a909459",
@@ -1958,7 +1958,7 @@
       "url": "https://github.com/NextEval/nexteval.github.io/releases/download/web-primary179-fable-glm-20261030/public-web-results-9e10aa24f90f025ae951f5d22e6b80d26961024c913af5dd0afb1690a2fac77c.tar.gz"
     }
   },
-  "source_commit": "484eddfda21d90131b4265620f9e777464aabbd8",
+  "source_commit": "9eda98a7cdad71a29a701a28a9d66ffe6cd97450",
   "source_kind": "manifest-materialized-static-results",
   "source_path": "dist/results",
   "source_prefix": "dist/results",
