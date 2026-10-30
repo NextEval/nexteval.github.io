@@ -16,7 +16,7 @@
   <header class="site-header" data-product="solver">
     <a class="site-brand" href="../../" aria-label="NextEval home"><img src="../../site-assets/brand/nexteval-on-dark.svg" alt="" width="30" height="30"><span>NextEval</span></a>
     <div class="header-path"><span class="path-divider" aria-hidden="true">/</span><details class="nav-switcher product-switcher"><summary>Solver <i data-lucide="chevron-down" aria-hidden="true"></i></summary><nav class="switcher-panel" aria-label="Products"><a href="../../">Overview</a><a href="../" aria-current="location">Solver</a><a href="../../bench/">Bench</a><a class="menu-external" href="https://github.com/NextEval" target="_blank" rel="noopener">GitHub <i data-lucide="arrow-up-right" aria-hidden="true"></i></a></nav></details><span class="path-divider" aria-hidden="true">/</span><details class="nav-switcher context-switcher"><summary><span data-current-view>Python API</span><i data-lucide="chevron-down" aria-hidden="true"></i></summary><nav class="switcher-panel" aria-label="Solver navigation"><a href="../">Overview</a><a href="../guide/">User Guide</a><a href="./" aria-current="page">Python API</a></nav></details></div>
-    <a class="header-source" href="https://github.com/NextEval/nexteval" target="_blank" rel="noopener">GitHub <i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
+    <a class="header-source" href="https://github.com/NextEval" target="_blank" rel="noopener">GitHub <i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
   </header>
   <main class="api-shell shell">
     <header class="api-heading">
@@ -67,7 +67,7 @@ print(result.status, result.message)</code></pre>
 export ANTHROPIC_MODEL="your-model-id"
 export ANTHROPIC_AUTH_TOKEN="your-token"</code></pre>
           <p>The endpoint must support tool calls. Keep credentials out of code and trace files. This website does not receive your credentials or run the solver.</p>
-          <p>OpenAI-compatible and Azure providers use their own configurations. External harnesses may manage their own authentication. See <a href="https://github.com/NextEval/nexteval/blob/main/docs/usage.md#provider-configuration">provider configuration</a> and the <a href="https://github.com/NextEval/nexteval/blob/main/docs/support-matrix.md">harness support matrix</a>.</p>
+          <p>OpenAI-compatible and Azure providers use their own configurations. External harnesses may manage their own authentication.</p>
         </section>
         <section id="solve">
           <h2>solve</h2>
@@ -89,7 +89,6 @@ export ANTHROPIC_AUTH_TOKEN="your-token"</code></pre>
             <div><dt><code>trace</code></dt><dd><code>"off"</code>, <code>"summary"</code>, <code>"trajectory"</code>, <code>"debug"</code>, or <code>"develop"</code>. Persistent tracing is opt-in.</dd></div>
             <div><dt><code>runner_options</code></dt><dd>Settings for the built-in task runner, such as token limits, compaction, and retries.</dd></div>
           </dl>
-          <p><a href="https://github.com/NextEval/nexteval/blob/main/docs/options.md">All solver options <span aria-hidden="true">&#8599;</span></a></p>
         </section>
         <section id="result">
           <h2>DFOResult</h2>
@@ -113,10 +112,9 @@ export ANTHROPIC_AUTH_TOKEN="your-token"</code></pre>
     options=None,
 ) -&gt; DFOResult</code></pre>
           <p>A <code>runner.run(task, gateway)</code> owns a complete task. A <code>policy.decide(observation, context)</code> owns a stepwise decision. Both use the same protected objective ledger and budget accounting.</p>
-          <div class="api-resources"><a href="https://github.com/NextEval/nexteval/blob/main/docs/interop.md">Interoperability</a><a href="https://github.com/NextEval/nexteval/blob/main/docs/execution-modes.md">Execution modes</a><a href="https://github.com/NextEval/nexteval/blob/main/docs/trace-contract.md">Trace contract</a></div>
         </section>
         <p>For benchmark results across packaged tasks, see <a href="../../bench/#matrix">NextEval Bench</a>.</p>
-        <p class="api-provenance">Reference checked against <a href="https://github.com/NextEval/nexteval/blob/cb58fd74901de2476fe15b60ee4cfc993ca04095/src/nexteval/api.py">Solver cb58fd7</a>. <a href="https://github.com/NextEval/nexteval/blob/main/docs/api.md">Latest source reference <span aria-hidden="true">&#8599;</span></a></p>
+        <p class="api-provenance">Reference checked against Solver cb58fd7.</p>
       </div>
     </div>
   </main>

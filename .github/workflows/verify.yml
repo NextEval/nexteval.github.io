@@ -14,3 +14,4 @@ jobs:
       - run: node test/primary-pareto-coverage.mjs
       - run: node test/active-plan-cleanup.mjs
       - run: node test/model-identities.mjs
+      - run: node test/public-links.mjs
