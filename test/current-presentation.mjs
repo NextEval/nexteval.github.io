@@ -14,7 +14,7 @@ const removed=['claude-code--deepseek-v4-flash--low','codex--qwen3.8-flash--low-
 test('all four retired Chinese configurations disappear from presentation, not source records',()=>{
  assert.deepEqual(snapshot.participants.filter(p=>!isDisplayed(p)).map(p=>p.participant_id),removed);
  assert.equal(snapshot.tasks.reduce((n,t)=>n+t.scores.filter(p=>removed.includes(p.participant_id)).length,0),11);
- assert.equal(snapshot.tasks.reduce((n,t)=>n+displayedTask(snapshot,t).scores.filter(p=>!['scipy','reference'].includes(snapshot.participants.find(x=>x.participant_id===p.participant_id).harness)).length,0),168);
+ assert.equal(snapshot.tasks.reduce((n,t)=>n+displayedTask(snapshot,t).scores.filter(p=>!['scipy','reference'].includes(snapshot.participants.find(x=>x.participant_id===p.participant_id).harness)).length,0),170);
  assert(snapshot.participants.filter(p=>p.family==='GPT'||p.model?.includes('claude-')).filter(p=>p.effort==='medium').every(isDisplayed));
  assert(isDisplayed({model:'qwen3.8-max',effort:'high',harness:'codex'}));
  assert(!isDisplayed({model:'qwen3.8-max',effort:'medium',harness:'codex'}));
