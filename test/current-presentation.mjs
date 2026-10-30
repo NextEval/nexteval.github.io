@@ -3,7 +3,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
-const {isDisplayed,displayedTask,displayedChart,consumptionView,releaseView}=await import('../bench/results/presentation.mjs');
+const {isDisplayed,displayedTask,displayedChart,consumptionView,releaseView,usageFigures}=await import('../bench/results/presentation.mjs');
 const {paretoData,paretoFrontier}=await import('../bench/results/usage.mjs');
 const {chartData,historyChartData}=await import('../bench/results/model.mjs');
 const root=new URL('../bench/results/',import.meta.url);
@@ -29,8 +29,7 @@ test('token scenarios cover every active group without modifying measured usage 
   assert.equal(scenario.measuredCount,measured.points.length);
   assert.equal(scenario.estimatedCount,scenario.points.length-measured.points.length);
   assert.deepEqual(scenario.frontier,paretoFrontier(scenario.points));
-  assert.deepEqual(scenario.measuredFrontier,measured.frontier);
-  assert.deepEqual(scenario.scenarioFrontier,[]);
+  assert(!('measuredFrontier' in scenario) && !('scenarioFrontier' in scenario));
   assert(scenario.points.filter(p=>p.estimated).every(p=>Number.isFinite(p.x)&&p.estimate.warning.includes('not recovered')));
   assert(scenario.points.every(p=>isDisplayed(p.participant)));
   const exact=paretoData(snapshot,usage,displayedTask(snapshot,task),'tokens');
@@ -38,18 +37,27 @@ test('token scenarios cover every active group without modifying measured usage 
  }
  assert.equal(JSON.stringify({snapshot,usage}),before);
 });
-test('dollar scenarios cover every active group from published list prices, inside one marked frontier',()=>{
+test('dollar scenarios cover every active group from published list prices, inside the single frontier',()=>{
  const methods=new Set(['same_group_measured_cost_per_token','same_configuration_other_feature_cost_per_token']);
  for(const task of snapshot.tasks){
-  const measured=consumptionView(snapshot,usage,task,'cost');
   const data=consumptionView(snapshot,usage,task,'cost','',true);
   assert.equal(data.points.length,data.eligible);
   assert.deepEqual(data.frontier,paretoFrontier(data.points));
-  assert.deepEqual(data.measuredFrontier,measured.frontier);
   assert(data.points.filter(p=>p.estimated).every(p=>Number.isFinite(p.x)&&p.x>0&&methods.has(p.estimate.method)));
  }
  const rows=usage.estimates.rows.filter(r=>methods.has(r.cost_method));
  assert(rows.length>0&&rows.every(r=>r.cost_price_sources.length>0&&r.cost_price_sources.every(u=>u.startsWith('https://'))));
+});
+test('the detail panel reports the plotted value for every point, measured or not',()=>{
+ for(const task of snapshot.tasks)for(const metric of ['cost','tokens']){
+  const data=consumptionView(snapshot,usage,task,metric,'',true);
+  for(const point of data.points){
+   const figures=usageFigures(usage,point,task);
+   assert.equal(figures[metric],point.x,point.participant.participant_id);
+   assert(Number.isFinite(figures[metric==='cost' ? 'totalCost' : 'totalTokens']));
+   assert.equal(figures.pricedAt,usage.pricing_as_of);
+  }
+ }
 });
 test('missing estimate schema, ambiguous identities and wrong denominators fail closed',()=>{
  const task=snapshot.tasks[0],base=consumptionView(snapshot,usage,task,'tokens');
@@ -84,16 +92,20 @@ test('profiles and histories omit retired curves without changing raw exports',(
  const h=historyChartData(history,participants,0),visible=displayedChart(h,participants);
  assert.equal(visible.series.length,result.series.length);assert.equal(h.series.length,task.members.length);
 });
-test('the actual app applies tier policy to each view and wires estimate controls',()=>{
+test('the actual app applies tier policy to each view and always includes estimates without marking them',()=>{
  const source=readFileSync(new URL('app.mjs',root),'utf8');
  for(const fragment of ['plannedParticipants()).filter(isDisplayed)','displayedChart(chartData(',
-  'displayedChart(historyChartData(','consumptionView(snapshot,usage','releaseView(snapshot,releases',
-  'id="pareto-estimates"','point.estimated'])assert(source.includes(fragment),fragment);
+  'displayedChart(historyChartData(','consumptionView(snapshot,usage,task,metric,family,true)','releaseView(snapshot,releases',
+  'usageFigures(usage,point,task)'])assert(source.includes(fragment),fragment);
+ const start=source.indexOf('async function pareto('),rest=source.slice(start+1);
+ const view=source.slice(start,start+1+rest.search(/\n(async )?function /));
+ assert(view.length>1000 && view.includes('new ParetoChart('));
+ for(const pattern of [/estimated/i,/estimates/i,/scenario/i,/hollow/i,/ measured \+/,/MEASURED/])assert(!pattern.test(view),String(pattern));
  assert(!readFileSync(new URL('index.html',root),'utf8').includes('Full ten-repeat archive'));
  assert(readFileSync(new URL('archive/ten-repeat/index.html',root),'utf8').includes("location.replace('../../index.html#matrix')"));
  const pareto=readFileSync(new URL('pareto.mjs',root),'utf8');
- assert(!pareto.includes('pareto-estimate-dot'));
- assert(pareto.includes("r:efficient ? 6 : 3.5") && pareto.includes('if (point.estimated) dot.style'));
+ for(const pattern of [/estimat/i,/scenario/i,/dasharray/])assert(!pattern.test(pareto),String(pattern));
+ assert(pareto.includes("r:efficient ? 6 : 3.5"));
 });
 test('UI overlay rejects tampered manifests, sources and symbolic-link targets',()=>{
  execFileSync('python3',['-m','unittest','test_presentation_overlay.py'],{cwd:new URL('../scripts/results-storage/',import.meta.url),stdio:'pipe'});

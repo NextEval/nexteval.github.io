@@ -38,24 +38,78 @@ function crossesBox([a,b], box) {
   }
   return true;
 }
+const ADJACENT = 10, CONNECTOR = 16, GAPS = [10,16,24,34,46,60,78,100,126];
+function ring(label, gap, adjacentOnly) {
+  const {x,y,width,height} = label, out = [];
+  const add = (left,top) => out.push({left,top,right:left+width,bottom:top+height,gap});
+  for (const dy of [-height/2,-height-6,6]) { add(x+gap,y+dy); add(x-width-gap,y+dy); }
+  add(x-width/2,y-height-gap); add(x-width/2,y+gap);
+  if (adjacentOnly) return out;
+  const d = gap*.7;
+  add(x+d,y-height-d); add(x-width-d,y-height-d); add(x+d,y+d); add(x-width-d,y+d);
+  add(x,y-height-gap); add(x-width,y-height-gap); add(x,y+gap); add(x-width,y+gap);
+  return out;
+}
+function connector(label, box) {
+  const ex = Math.min(Math.max(label.x,box.left),box.right), ey = Math.min(Math.max(label.y,box.top),box.bottom);
+  const length = Math.hypot(ex-label.x,ey-label.y);
+  if (length < 8) return null;
+  const trim = 7;
+  return {x1:label.x+(ex-label.x)*trim/length,y1:label.y+(ey-label.y)*trim/length,x2:ex,y2:ey};
+}
 export function layoutLabels(labels, points, bounds, segments = []) {
-  // Labels sit directly beside their point or are omitted; omitted points show their label on hover/focus.
-  const placed = [];
-  for (const label of labels) {
-    const {x,y,width,height} = label;
-    const candidates = [];
-    const add = (left,top) => candidates.push({left,top,right:left+width,bottom:top+height});
-    for (const dy of [-height/2,-height-6,6]) {
-      add(x+10,y+dy); add(x-width-10,y+dy);
+  // Frontier labels are always placed: beside the point if possible, else farther out with a short connector.
+  // Other labels sit beside their point only where nothing frontier-related is covered; the rest show on hover/focus.
+  const placed = [], leaders = [];
+  const inside = b => b.left>=bounds.left && b.right<=bounds.right && b.top>=bounds.top && b.bottom<=bounds.bottom;
+  const freeOfLabels = b => !placed.some(p=>intersects(b,{left:p.left-4,right:p.right+4,top:p.top-2,bottom:p.bottom+2}));
+  const freeOfLines = b => ![...segments,...leaders].some(s=>crossesBox(s,{left:b.left-3,right:b.right+3,top:b.top-3,bottom:b.bottom+3}));
+  const freeOfPoints = (b,label,which) => !points.some(p=>(which ? which(p) : true)
+    && intersects(b,p.x===label.x && p.y===label.y ? {left:p.x-3,right:p.x+3,top:p.y-3,bottom:p.y+3} : {left:p.x-6,right:p.x+6,top:p.y-6,bottom:p.y+6}));
+  const keep = (label,box) => {
+    const entry = {...label,...box};
+    delete entry.gap;
+    const leader = box.gap > CONNECTOR && connector(label,box);
+    if (leader) {
+      entry.leader = leader;
+      leaders.push([{x:leader.x1,y:leader.y1},{x:leader.x2,y:leader.y2}]);
     }
-    add(x-width/2,y-height-10); add(x-width/2,y+10);
-    const box = candidates.find(b => b.left>=bounds.left && b.right<=bounds.right && b.top>=bounds.top && b.bottom<=bounds.bottom
-      && !placed.some(p=>intersects(b,{left:p.left-4,right:p.right+4,top:p.top-2,bottom:p.bottom+2}))
-      && !segments.some(s=>crossesBox(s,{left:b.left-3,right:b.right+3,top:b.top-3,bottom:b.bottom+3}))
-      && !points.some(p=>p.x!==x || p.y!==y ? intersects(b,{left:p.x-6,right:p.x+6,top:p.y-6,bottom:p.y+6}) : false));
-    if (box) placed.push({...label,...box});
+    placed.push(entry);
+  };
+  const frontierPoint = p => labels.some(l=>l.efficient && l.x===p.x && l.y===p.y);
+  const near = GAPS.filter(g=>g<=CONNECTOR), short = GAPS.filter(g=>g>CONNECTOR && g<=34);
+  const tiers = [
+    [near,(b,l)=>freeOfLabels(b) && freeOfLines(b) && freeOfPoints(b,l)],
+    [short,(b,l)=>freeOfLabels(b) && freeOfLines(b) && freeOfPoints(b,l)],
+    [near,(b,l)=>freeOfLabels(b) && freeOfPoints(b,l)],
+    [GAPS,(b,l)=>freeOfLabels(b) && freeOfLines(b) && freeOfPoints(b,l)],
+    [GAPS,(b,l)=>freeOfLabels(b) && freeOfPoints(b,l)],
+    [GAPS,(b,l)=>freeOfLabels(b) && freeOfPoints(b,l,frontierPoint)]
+  ];
+  for (const label of labels.filter(l=>l.efficient)) {
+    let box = null;
+    for (const [gaps,ok] of tiers) {
+      box = gaps.flatMap(gap=>ring(label,gap,false)).find(b=>inside(b) && ok(b,label));
+      if (box) break;
+    }
+    keep(label,box || fallback(label,bounds,placed));
+  }
+  for (const label of labels.filter(l=>!l.efficient)) {
+    const box = ring(label,ADJACENT,true).find(b=>inside(b) && freeOfLabels(b) && freeOfLines(b) && freeOfPoints(b,label));
+    if (box) keep(label,box);
   }
   return placed;
+}
+function fallback(label, bounds, placed) {
+  const {width,height} = label;
+  const clamp = (value,low,high) => Math.max(low,Math.min(value,Math.max(low,high)));
+  const options = GAPS.flatMap(gap=>ring(label,gap,false)).map(b=>{
+    const left = clamp(b.left,bounds.left,bounds.right-width), top = clamp(b.top,bounds.top,bounds.bottom-height);
+    return {left,top,right:left+width,bottom:top+height,gap:Math.max(b.gap,Math.hypot(left-b.left,top-b.top)+b.gap)};
+  });
+  const overlap = b => placed.reduce((n,p)=>n+Math.max(0,Math.min(b.right,p.right)-Math.max(b.left,p.left))
+    *Math.max(0,Math.min(b.bottom,p.bottom)-Math.max(b.top,p.top)),0);
+  return options.reduce((best,b)=>overlap(b)<overlap(best) ? b : best);
 }
 
 export class ParetoChart {
@@ -92,20 +146,15 @@ export class ParetoChart {
       const path = frontier.map((p,i) => `${i ? 'L' : 'M'}${x(p.x)},${y(p.score)}`).join('');
       svg.append(node('path',{d:path,class:'pareto-frontier',fill:'none'}));
     }
-    const scenario=[...new Map((this.data.scenarioFrontier || []).map(p=>[JSON.stringify([p.x,p.score]),p])).values()];
-    if (scenario.length>1) svg.append(node('path',{d:scenario.map((p,i)=>`${i ? 'L' : 'M'}${x(p.x)},${y(p.score)}`).join(''),
-      class:'pareto-scenario-frontier',fill:'none',stroke:'#e7bf72','stroke-width':2,'stroke-dasharray':'5 5'}));
     const groups = new Map();
     this.data.points.forEach(point => {
       const id = point.participant.participant_id;
       const efficient = this.data.frontier.includes(point);
       const selected = id === this.selected;
-      const group = node('g',{class:`pareto-point${selected ? ' selected' : ''}${point.estimated ? ' estimated' : ''}`,tabindex:'0',role:'button',
-        'data-participant':id,'aria-pressed':String(selected),'aria-label':`${point.estimated ? 'Estimated, not metered. ' : ''}${this.label(point.participant)} (${point.participant.effort}), ${this.harness(point.participant)}, score ${point.score.toFixed(2)}, ${released ? 'released '+point.release.released_at : (this.metric === 'cost' ? dollarNumber(point.x) : compactNumber(point.x))+' per run'}`,transform:`translate(${x(point.x)},${y(point.score)})`});
+      const group = node('g',{class:`pareto-point${selected ? ' selected' : ''}`,tabindex:'0',role:'button',
+        'data-participant':id,'aria-pressed':String(selected),'aria-label':`${this.label(point.participant)} (${point.participant.effort}), ${this.harness(point.participant)}, score ${point.score.toFixed(2)}, ${released ? 'released '+point.release.released_at : (this.metric === 'cost' ? dollarNumber(point.x) : compactNumber(point.x))+' per run'}`,transform:`translate(${x(point.x)},${y(point.score)})`});
       group.append(node('circle',{r:20,class:'pareto-target'}));
-      const dot = {r:efficient ? 6 : 3.5,class:efficient ? 'pareto-dot efficient' : 'pareto-dot'};
-      if (point.estimated) dot.style = `fill:var(--result-bg,#121417);stroke:${efficient ? '#1dd3df' : '#858d92'};stroke-width:1.5`;
-      group.append(node('circle',dot));
+      group.append(node('circle',{r:efficient ? 6 : 3.5,class:efficient ? 'pareto-dot efficient' : 'pareto-dot'}));
       const show = () => this.tooltip(point, x(point.x), y(point.score), released, width);
       group.addEventListener('pointerenter',show);
       group.addEventListener('focus',show);
@@ -131,6 +180,8 @@ export class ParetoChart {
     const segments = frontier.slice(1).map((p,i)=>[{x:x(frontier[i].x),y:y(frontier[i].score)},{x:x(p.x),y:y(p.score)}]);
     for (const label of layoutLabels(labels,points,{left,top,right,bottom},segments)) {
       const dx = label.left-label.x, dy = label.top-label.y;
+      if (label.leader) groups.get(label.id).append(node('line',{x1:label.leader.x1-label.x,y1:label.leader.y1-label.y,
+        x2:label.leader.x2-label.x,y2:label.leader.y2-label.y,class:'pareto-leader',stroke:'#5d6a70','stroke-width':1}));
       const text = node('text',{x:dx,y:dy+12,class:`pareto-label${label.efficient ? ' efficient' : ''}`});
       text.append(node('tspan',{x:dx},label.title));
       text.append(node('tspan',{x:dx,dy:15,class:'pareto-harness'},this.harness(label.point.participant)));
@@ -152,7 +203,6 @@ export class ParetoChart {
       : (this.metric === 'cost' ? dollarNumber(point.x) : compactNumber(point.x)+' tokens')+' per run';
     const rows = [[`${this.label(point.participant)} (${point.participant.effort})`,'font-weight:600'],
       [this.harness(point.participant),'opacity:.75'], [`score ${point.score.toFixed(2)} / ${value}`,'']];
-    if (point.estimated) rows.push(['Estimated, not metered','color:#e7bf72']);
     this.tip.replaceChildren(...rows.map(([text,style]) => {
       const line = document.createElement('div'); line.textContent = text; line.style.cssText = style; return line; }));
     this.tip.style.display = 'block';
