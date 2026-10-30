@@ -33,6 +33,8 @@ jobs:
           node test/primary-pareto-coverage.mjs
           node test/active-plan-cleanup.mjs
           node test/model-identities.mjs
+      - name: Verify links to NextEval repositories are public
+        run: node test/public-links.mjs
       - name: Configure Pages
         uses: actions/configure-pages@v5
       - name: Upload artifact

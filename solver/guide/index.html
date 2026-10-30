@@ -15,7 +15,7 @@
   <header class="site-header" data-product="solver">
     <a class="site-brand" href="../../" aria-label="NextEval home"><img src="../../site-assets/brand/nexteval-on-dark.svg" alt="" width="30" height="30"><span>NextEval</span></a>
     <div class="header-path"><span class="path-divider" aria-hidden="true">/</span><details class="nav-switcher product-switcher"><summary>Solver <i data-lucide="chevron-down" aria-hidden="true"></i></summary><nav class="switcher-panel" aria-label="Products"><a href="../../">Overview</a><a href="../" aria-current="location">Solver</a><a href="../../bench/">Bench</a><a class="menu-external" href="https://github.com/NextEval" target="_blank" rel="noopener">GitHub <i data-lucide="arrow-up-right" aria-hidden="true"></i></a></nav></details><span class="path-divider" aria-hidden="true">/</span><details class="nav-switcher context-switcher"><summary><span data-current-view>User Guide</span><i data-lucide="chevron-down" aria-hidden="true"></i></summary><nav class="switcher-panel" aria-label="Solver navigation"><a href="../">Overview</a><a href="./" aria-current="page">User Guide</a><a href="../api/">Python API</a></nav></details></div>
-    <a class="header-source" href="https://github.com/NextEval/nexteval" target="_blank" rel="noopener">GitHub <i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
+    <a class="header-source" href="https://github.com/NextEval" target="_blank" rel="noopener">GitHub <i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
   </header>
   <main class="api-shell shell">
     <header class="api-heading"><p class="eyebrow">NEXTEVAL SOLVER / GET STARTED</p><h1>User Guide</h1><p>Connect an agent to an objective. Run a complete optimization session, then inspect the evaluations it actually made.</p></header>
@@ -24,7 +24,7 @@
       <div class="api-body">
         <section id="installation">
           <h2>Installation</h2>
-          <p>Use Python 3.10 or later. These examples target NextEval 1.0.0 at <a href="https://github.com/NextEval/nexteval/tree/cb58fd74901de2476fe15b60ee4cfc993ca04095">cb58fd7</a>. The built-in provider clients need only the package's NumPy dependency; no Codex or Claude Code installation is needed for this route.</p>
+          <p>Use Python 3.10 or later. These examples target NextEval 1.0.0 at cb58fd7. The built-in provider clients need only the package's NumPy dependency; no Codex or Claude Code installation is needed for this route.</p>
           <pre aria-label="Installation commands" tabindex="0"><code>python3 -m venv .venv
 source .venv/bin/activate
 python -m pip install \
@@ -88,7 +88,7 @@ python optimize.py --problem rosenbrock --provider openai --maxfev 100</code></p
         <section id="codex">
           <h2>Codex sessions</h2>
           <p><strong>Research integration, not a bundled Solver adapter.</strong> A Codex task runner keeps a complete CLI conversation connected to the same numerical gateway. The public Solver supports <code>runner=...</code>, but does not export a general-purpose <code>CodexRunner</code>.</p>
-          <p>The accessible-to-collaborators <a href="https://github.com/NextEval/nexteval-research/blob/d18c37ee620aad2a83e38a86154d867242c25022/docs/codex-qwen-task-runner.md">research adapter guide</a> documents <code>benchmarks.codex_qwen.CodexQwenRunner</code>. It requires access to that private repository, <code>codex</code> on PATH, and <code>zstd</code> if the CLI compresses requests. The recorded compatibility environment used Python 3.12, Codex CLI 0.153.4 and Solver 60f4bb0. Compatibility with Solver cb58fd7 is not yet live-validated.</p>
+          <p>The accessible-to-collaborators research adapter guide documents <code>benchmarks.codex_qwen.CodexQwenRunner</code>. It requires access to the private research repository, <code>codex</code> on PATH, and <code>zstd</code> if the CLI compresses requests. The recorded compatibility environment used Python 3.12, Codex CLI 0.153.4 and Solver 60f4bb0. Compatibility with Solver cb58fd7 is not yet live-validated.</p>
           <p>This adapter fixes Qwen 3.8 Flash on the DashScope coding endpoint and reads <code>DASHSCOPE_API_KEY</code>. Its <code>reasoning_effort</code> accepts <code>none</code>, <code>low</code> or <code>medium</code>; <code>none</code> requests thinking off. It creates a private temporary Codex home, rather than automatically using your normal ChatGPT login.</p>
           <pre data-language="python" aria-label="Research Codex integration pattern" tabindex="0"><code># Requires the pinned research checkout on PYTHONPATH.
 # Integration pattern; not a current-version live verification.
@@ -109,7 +109,7 @@ result = run(problem="sphere", runner=runner, maxfev=80)</code></pre>
         <section id="claude-code">
           <h2>Claude Code sessions</h2>
           <p><strong>Research integration, not a bundled Solver adapter.</strong> The historical complete-session route uses the Claude Agent SDK and exposes NextEval's task tools over MCP. It is different from a one-shot subprocess invoked once per solver decision.</p>
-          <p>The private research <a href="https://github.com/NextEval/nexteval-research/blob/d18c37ee620aad2a83e38a86154d867242c25022/benchmarks/results/ntvl-deepseek-v4-noisy-maxdim5-20260910/reproduce/original/claude_runner.py">frozen ClaudeCodeRunner</a> fixes the Volcano coding endpoint and accepts only its registered DeepSeek V4 Flash/Pro models. It reads <code>ANTHROPIC_AUTH_TOKEN</code>. The <a href="https://github.com/NextEval/nexteval-research/blob/d18c37ee620aad2a83e38a86154d867242c25022/benchmarks/results/ntvl-deepseek-v4-noisy-maxdim5-20260910/reproduce/original/requirements-pinned.txt">archived requirements</a> include <code>claude-agent-sdk==0.2.152</code>, <code>httpx2==2.12.0</code> and Solver 60f4bb0. Keep this historical environment separate from the current installation.</p>
+          <p>The private research frozen ClaudeCodeRunner fixes the Volcano coding endpoint and accepts only its registered DeepSeek V4 Flash/Pro models. It reads <code>ANTHROPIC_AUTH_TOKEN</code>. The archived requirements include <code>claude-agent-sdk==0.2.152</code>, <code>httpx2==2.12.0</code> and Solver 60f4bb0. Keep this historical environment separate from the current installation.</p>
           <pre data-language="python" aria-label="Research Claude Code integration pattern" tabindex="0"><code># Requires the reviewed research adapter and its dependencies.
 # Integration pattern; not a current-version live verification.
 from pathlib import Path
@@ -138,7 +138,7 @@ result = run(problem="sphere", runner=runner, maxfev=80)</code></pre>
   summary.json
   events.jsonl</code></pre>
           <p><code>trace="trajectory"</code> enables this persistent Solver Trace, and <code>result.trace_path</code> gives the actual directory. <code>trace="summary"</code> omits the event stream; <code>trace="off"</code> disables persistent evidence. Diagnostic <code>log_level</code> is separate from trace capture.</p>
-          <p>The kernel owns evaluation records. An external agent transcript or Harbor/ATIF trajectory is a separate artifact, not a replacement for the ledger. Keep raw traces private until reviewed for sensitive objective/model content. See the <a href="https://github.com/NextEval/nexteval/blob/cb58fd74901de2476fe15b60ee4cfc993ca04095/docs/trace-contract.md">Solver Trace contract</a>.</p>
+          <p>The kernel owns evaluation records. An external agent transcript or Harbor/ATIF trajectory is a separate artifact, not a replacement for the ledger. Keep raw traces private until reviewed for sensitive objective/model content.</p>
         </section>
         <section id="errors">
           <h2>Troubleshooting</h2>
