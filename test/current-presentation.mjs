@@ -11,11 +11,11 @@ const snapshot=read('data/results.json'),usage=read('data/website-usage.json');
 const removed=['claude-code--deepseek-v4-flash--low','codex--qwen3.8-flash--low--collaborator-macos',
  'claude-code--qwen3.8-flash--medium','claude-code--mimo-v2.6-flash--off'];
 const harness=id=>snapshot.participants.find(p=>p.participant_id===id).harness;
-test('retired Chinese configurations are not shipped; displayed groups stay 170',()=>{
+test('retired Chinese configurations are not shipped; displayed groups stay 171',()=>{
  assert(snapshot.participants.every(isDisplayed));
  assert(!snapshot.participants.some(p=>removed.includes(p.participant_id)));
  assert(!snapshot.tasks.some(t=>t.members.some(id=>removed.includes(id))));
- assert.equal(snapshot.tasks.reduce((n,t)=>n+displayedTask(snapshot,t).scores.filter(p=>!['scipy','reference'].includes(harness(p.participant_id))).length,0),170);
+ assert.equal(snapshot.tasks.reduce((n,t)=>n+displayedTask(snapshot,t).scores.filter(p=>!['scipy','reference'].includes(harness(p.participant_id))).length,0),171);
  assert(isDisplayed({model:'qwen3.8-max',effort:'high',harness:'codex'}));
  assert(!isDisplayed({model:'qwen3.8-max',effort:'medium',harness:'codex'}));
  assert(!isDisplayed({model:'mimo-v2.6-pro',effort:'off',harness:'codex'}));
