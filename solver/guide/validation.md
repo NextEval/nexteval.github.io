@@ -1,56 +1,46 @@
 # Solver User Guide validation
 
-Checked on 2026-09-22. This is a documentation and offline integration receipt,
-not an optimization benchmark or a live model-provider receipt.
+Checked on 2026-11-05. This is a documentation and offline integration check,
+not an optimization benchmark or a live model-provider test.
 
-## Source and environment
+## Environment
 
-- Solver source: `cb58fd74901de2476fe15b60ee4cfc993ca04095` (1.0.0).
-- Clean virtual environment: macOS, Python 3.12.7, NumPy 2.5.3.
-- Installed directly from the pinned public Git URL, not an editable checkout.
-- Research references: `d18c37ee620aad2a83e38a86154d867242c25022`.
-  The research repository is private; its archived adapters are not part of the
-  public Solver package. Their historical Solver pin is `60f4bb0`.
+- NextEval Solver 1.0.0, installed with `python -m pip install` from its source
+  directory into a clean virtual environment (not an editable install).
+- Python 3.13.0, NumPy 2.5.4.
 
 ## Offline checks
 
-Run from this website checkout with the pinned Solver installed:
+Run from a checkout of this repository with Solver 1.0.0 installed:
 
 ```sh
 python test/guide.py
 ```
 
-All five test methods passed:
+All six tests passed:
 
-1. Both downloadable objectives (sphere and Rosenbrock), both built-in provider
-   clients (OpenAI-compatible and Anthropic-compatible): real request serialization
-   to a local HTTP fixture, two scripted tool turns, three recorded evaluations,
-   finite incumbents, no invalid actions, persistent manifest/summary/events.
-2. Evaluation budget truncation: exactly two objective calls with `maxfev=2`.
-3. `model="env"` selects the Anthropic-compatible Messages route.
-4. An offline external-runner contract fixture works without provider credentials
-   and preserves the evaluation ledger. This fixture is neither Codex nor Claude Code.
-5. Missing provider configuration fails without a provider request.
+1. Both downloadable objectives (sphere and Rosenbrock) with both built-in
+   provider clients (OpenAI-compatible and Anthropic-compatible): real request
+   serialization to a local HTTP fixture, two scripted tool turns, three
+   recorded evaluations, finite results, no invalid actions, and a complete
+   trace (manifest, summary and events).
+2. Evaluation budget: exactly two objective calls with `maxfev=2`.
+3. An external runner works without provider credentials and keeps the
+   Solver's evaluation records. It is a scripted runner, not an agent tool.
+4. The scripted runner example on the guide page, run as published: three
+   evaluations, no model requests and no provider request.
+5. `model="env"` selects the Anthropic-compatible Messages route.
+6. Missing provider configuration fails before any provider request.
 
-The test process clears provider environment values, uses a dummy fixture
-credential and restricts socket connections to loopback. No real account tokens
-or paid provider calls are used. The dummy credential is also checked against
-persisted trace JSON files to catch accidental credential logging.
-
-## Browser checks
-
-`node test/site.cjs` covers scoped navigation, API/guide routes at eight viewport
-widths, code copying, downloadable example and validation files, section links,
-Python syntax, Bench task links and existing charts. `node test/bench.cjs` covers
-the separate Bench interactions and both archived features.
+The test clears provider environment variables, uses a dummy credential and
+allows socket connections only to the loopback address. No real credentials
+and no paid provider calls are used. The written trace files are also searched
+for the dummy credential to catch credential logging.
 
 ## Not established by these checks
 
-- Real provider availability, authentication, quotas, thinking receipts or model quality.
-- Codex/Claude Code research-adapter compatibility with Solver `cb58fd7`.
-- Generic GPT/Claude subscription or coding-plan integration.
-- Windows/Linux execution of these examples.
-- Isolation against hostile code or a hosted Bench execution API.
-
-No frozen experiment bundle, paper result, Solver source or research adapter was
-changed for this publication.
+- Real provider availability, authentication, usage limits, thinking settings
+  or model quality.
+- Runners for agent tools such as Codex or Claude Code.
+- The Windows PowerShell commands.
+- Isolation against hostile code, or a hosted Bench execution service.

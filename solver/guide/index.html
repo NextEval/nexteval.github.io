@@ -20,22 +20,21 @@
   <main class="api-shell shell">
     <header class="api-heading"><p class="eyebrow">NEXTEVAL SOLVER / GET STARTED</p><h1>User Guide</h1><p>Connect an agent to an objective. Run a complete optimization session, then inspect the evaluations it actually made.</p></header>
     <div class="api-layout">
-      <nav class="api-toc" aria-label="User Guide sections"><a href="#installation">Installation</a><a href="#routes">Model and harness</a><a href="#provider">Model provider setup</a><a href="#first-run">First run</a><a href="#codex">Codex sessions</a><a href="#claude-code">Claude Code sessions</a><a href="#limits">Budgets and limits</a><a href="#results">Results and traces</a><a href="#errors">Troubleshooting</a><a href="#validation">Validation status</a></nav>
+      <nav class="api-toc" aria-label="User Guide sections"><a href="#installation">Installation</a><a href="#routes">Model and harness</a><a href="#provider">Model provider setup</a><a href="#first-run">First run</a><a href="#external">External agent sessions</a><a href="#limits">Budgets and limits</a><a href="#results">Results and traces</a><a href="#errors">Troubleshooting</a><a href="#validation">Validation status</a></nav>
       <div class="api-body">
         <section id="installation">
           <h2>Installation</h2>
-          <p>Use Python 3.10 or later. These examples target NextEval 1.0.0 at cb58fd7. The built-in provider clients need only the package's NumPy dependency; no Codex or Claude Code installation is needed for this route.</p>
+          <p>Use Python 3.10 or later. These examples target NextEval Solver 1.0.0, whose only runtime dependency is NumPy. The built-in provider clients need nothing else; no Codex or Claude Code installation is needed for this route.</p>
+          <p>The package is not yet published on a public package index. Install it from the source directory or wheel file you were given; replace <code>./nexteval</code> below with its path.</p>
           <pre aria-label="Installation commands" tabindex="0"><code>python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install \
-  "git+https://github.com/NextEval/nexteval.git@cb58fd74901de2476fe15b60ee4cfc993ca04095"
+python -m pip install ./nexteval
 python -c "import nexteval; print(nexteval.__version__)"</code></pre>
-          <p>The NextEval repository is not public yet, so this install command works only for accounts with access to it.</p>
-          <p>On Windows PowerShell, create the environment with <code>py -m venv .venv</code> and activate it with <code>.venv\Scripts\Activate.ps1</code>. The remaining Python commands are the same. The clean-environment checks below were run on macOS, not Windows.</p>
+          <p>The last command prints <code>1.0.0</code>. On Windows PowerShell, create the environment with <code>py -m venv .venv</code> and activate it with <code>.venv\Scripts\Activate.ps1</code>. The remaining Python commands are the same.</p>
         </section>
         <section id="routes">
           <h2>Model and harness</h2>
-          <dl class="api-definitions"><div><dt>Solver Python API</dt><dd><code>solve</code> and <code>minimize</code> accept your objective, starting point and numerical options.</dd></div><div><dt>Model provider API</dt><dd>The external service that returns model responses. A provider client owns its endpoint, credentials and wire format.</dd></div><div><dt>Harness</dt><dd>The session controller that connects model responses to numerical tools. Use the built-in <code>ToolCallingTaskRunner</code>, or supply an external <code>runner</code>.</dd></div><div><dt>Bench task protocol</dt><dd>Separate task, participant and evaluation records for comparisons. See <a href="../../bench/#tasks">NextEval Bench</a>; it is not required to optimize your own function.</dd></div></dl>
+          <dl class="api-definitions"><div><dt>Solver Python API</dt><dd><code>solve</code> and <code>minimize</code> accept your objective, starting point and numerical options.</dd></div><div><dt>Model provider API</dt><dd>The external service that returns model responses. A provider client owns its endpoint, credentials and wire format.</dd></div><div><dt>Harness</dt><dd>The session loop that connects model responses to numerical tools. Use the built-in <code>ToolCallingTaskRunner</code>, or supply an external <code>runner</code>.</dd></div><div><dt>Bench task protocol</dt><dd>Separate task, participant and evaluation records for comparisons. See <a href="../../bench/#tasks">NextEval Bench</a>; it is not required to optimize your own function.</dd></div></dl>
           <p>With <code>execution_mode="task"</code> and no custom runner, NextEval constructs the built-in harness. <code>runner_options</code> configures that harness. With <code>runner=...</code>, configure the supplied object directly: it owns model selection, authentication and thinking settings. There is no universal <code>harness="codex"</code> or <code>harness="cc"</code> argument.</p>
           <p>OpenAI-compatible transport is not Codex. Anthropic-compatible transport is not Claude Code. Changing only a provider URL does not change the harness.</p>
         </section>
@@ -52,13 +51,13 @@ export NEXTEVAL_OPENAI_API_KEY="&lt;provided-by-your-credential-manager&gt;"</co
 export ANTHROPIC_MODEL="your-model-id"
 export ANTHROPIC_AUTH_TOKEN="&lt;provided-by-your-credential-manager&gt;"</code></pre>
           <p>Use <code>AnthropicCompatClient()</code>. The shortcut <code>model="env"</code> also selects this client; it does not automatically detect your provider. On PowerShell, use <code>$env:VARIABLE="value"</code> instead of <code>export</code>.</p>
-          <h3>Thinking and coding plans</h3>
-          <p>Thinking options are provider- and model-specific. A missing field may mean the provider's default, not thinking off. Record both the requested setting and the available response receipts before comparing runs.</p>
-          <p>A coding-plan API credential is not the same as a CLI login session. Use only the endpoint and authentication method supported by your plan and adapter; do not copy login tokens into a generic API client. The historical adapters below have fixed routes, not interchangeable subscription access.</p>
+          <h3>Thinking settings and credentials</h3>
+          <p>Thinking options are provider- and model-specific. A missing field may mean the provider's default, not thinking off. Record both the requested setting and what the provider reports in its responses before comparing runs.</p>
+          <p>Use a key that the provider issues for programmatic API access, with an endpoint and authentication method that the provider documents for it. A command-line tool's login session is not an API key; do not copy login tokens into a generic API client.</p>
         </section>
         <section id="first-run">
           <h2>First run</h2>
-          <p>This two-dimensional objective uses the same <code>fun</code> and <code>x0</code> for every harness. Only the controller changes. Running it with a real provider can incur charges.</p>
+          <p>This two-dimensional objective uses the same <code>fun</code> and <code>x0</code> for every harness. Only the harness changes. Running it with a real provider can incur charges.</p>
           <pre data-language="python" aria-label="Built-in harness example" tabindex="0"><code>import numpy as np
 from nexteval import OpenAICompatClient, minimize
 
@@ -86,49 +85,43 @@ print(result.status, result.message, result.trace_path)</code></pre>
 python optimize.py --problem rosenbrock --provider openai --maxfev 100</code></pre>
           <p>For the Anthropic-compatible connection, use <code>--provider anthropic</code>. No fixed final value is promised: the model's choices and stopping decision can vary. Complete arguments and return fields are in the <a href="../api/">Solver Python API reference</a>.</p>
         </section>
-        <section id="codex">
-          <h2>Codex sessions</h2>
-          <p><strong>Research integration, not a bundled Solver adapter.</strong> A Codex task runner keeps a complete CLI conversation connected to the same numerical gateway. The public Solver supports <code>runner=...</code>, but does not export a general-purpose <code>CodexRunner</code>.</p>
-          <p>The accessible-to-collaborators research adapter guide documents <code>benchmarks.codex_qwen.CodexQwenRunner</code>. It requires access to the private research repository, <code>codex</code> on PATH, and <code>zstd</code> if the CLI compresses requests. The recorded compatibility environment used Python 3.12, Codex CLI 0.153.4 and Solver 60f4bb0. Compatibility with Solver cb58fd7 is not yet live-validated.</p>
-          <p>This adapter fixes Qwen 3.8 Flash on the DashScope coding endpoint and reads <code>DASHSCOPE_API_KEY</code>. Its <code>reasoning_effort</code> accepts <code>none</code>, <code>low</code> or <code>medium</code>; <code>none</code> requests thinking off. It creates a private temporary Codex home, rather than automatically using your normal ChatGPT login.</p>
-          <pre data-language="python" aria-label="Research Codex integration pattern" tabindex="0"><code># Requires the pinned research checkout on PYTHONPATH.
-# Integration pattern; not a current-version live verification.
-from pathlib import Path
-from benchmarks.codex_qwen import CodexQwenRunner
-from optimize import run
+        <section id="external"><span id="codex"></span><span id="claude-code"></span>
+          <h2>External agent sessions</h2>
+          <p><strong>Not bundled with the Solver.</strong> NextEval Solver 1.0.0 does not include runners for agent command-line tools such as Codex or Claude Code. To let such an agent drive a complete session, supply your own runner with <code>runner=...</code>. The agent then works with the same numerical tools, budget and evaluation records as the built-in harness.</p>
+          <dl class="api-definitions"><div><dt><code>run(task, gateway)</code></dt><dd>Required. <code>task</code> is a serializable description of the problem: dimension, <code>x0</code>, budgets, instructions and the tool definitions in <code>task["tools"]</code>. Return a mapping such as <code>{"stop": "completed"}</code> when the session ends.</dd></div><div><dt><code>gateway.call(name, arguments)</code></dt><dd>Runs one tool and returns a JSON-serializable result. The Solver validates each call, runs the objective evaluations it requires, records them and enforces the budget. <code>gateway.done</code> becomes true when the session has ended.</dd></div><div><dt><code>gateway.begin_turn()</code></dt><dd>Optional. Call it before forwarding the tool calls of each agent reply. At most one sampling action then runs per reply; further sampling actions in the same reply are deferred without spending budget.</dd></div><div><dt><code>describe()</code></dt><dd>Optional. Returns metadata about the runner, such as a <code>harness_id</code>.</dd></div></dl>
+          <p>This scripted runner shows the contract without a model or credentials. Save it next to <code>optimize.py</code> and run it:</p>
+          <pre data-language="python" aria-label="Scripted runner example" tabindex="0"><code>from optimize import run
 
-runner = CodexQwenRunner(
-    Path("local-runs/new-episode/codex"),
-    reasoning_effort="none",
-    max_requests=60,
-    max_resumes=2,
-)
-result = run(problem="sphere", runner=runner, maxfev=80)</code></pre>
-          <p>Use a new artifact directory and runner for each episode. Same-session continuation must retain the gateway, budget and ledger; it is not permission to restart optimization with a fresh budget.</p>
-          <p>For OpenAI models, Codex itself supports ChatGPT sign-in and API-key authentication; see <a href="https://learn.chatgpt.com/docs/auth">official Codex authentication</a>. That does not make the fixed Qwen adapter a GPT adapter. The archived GPT runner is experiment-specific, including model registration, reasoning and Windows paths; no generic install-and-run recipe is claimed here.</p>
-        </section>
-        <section id="claude-code">
-          <h2>Claude Code sessions</h2>
-          <p><strong>Research integration, not a bundled Solver adapter.</strong> The historical complete-session route uses the Claude Agent SDK and exposes NextEval's task tools over MCP. It is different from a one-shot subprocess invoked once per solver decision.</p>
-          <p>The private research frozen ClaudeCodeRunner fixes the Volcano coding endpoint and accepts only its registered DeepSeek V4 Flash/Pro models. It reads <code>ANTHROPIC_AUTH_TOKEN</code>. The archived requirements include <code>claude-agent-sdk==0.2.152</code>, <code>httpx2==2.12.0</code> and Solver 60f4bb0. Keep this historical environment separate from the current installation.</p>
-          <pre data-language="python" aria-label="Research Claude Code integration pattern" tabindex="0"><code># Requires the reviewed research adapter and its dependencies.
-# Integration pattern; not a current-version live verification.
-from pathlib import Path
-from claude_runner import ClaudeCodeRunner
-from optimize import run
 
-runner = ClaudeCodeRunner(
-    Path("local-runs/new-episode/claude-code"),
-    model="deepseek-v4-flash",
-    timeout_s=1800,
-)
-result = run(problem="sphere", runner=runner, maxfev=80)</code></pre>
-          <p>This adapter requests thinking off and uses a compatibility proxy to send the explicit disabled field. Check <code>runner_report</code>, model receipts and <code>thinking_disabled_effective</code>; process exit zero alone is insufficient. This is not a general Claude model or Claude subscription example, and it has not been live-validated against cb58fd7 here.</p>
-          <p>Authentication must also comply with the provider's supported SDK route. Anthropic's <a href="https://code.claude.com/docs/en/agent-sdk/overview">Agent SDK documentation</a> does not generally permit third-party products to offer claude.ai login or rate limits without prior approval. Do not assume a personal CLI login can be reused by an SDK application.</p>
+class ScriptedRunner:
+    """Stands in for an agent: two poll points, then finalize."""
+
+    def describe(self):
+        return {"harness_id": "scripted-example"}
+
+    def run(self, task, gateway):
+        # An agent harness exposes task["tools"] to the agent and forwards
+        # each tool call it makes through gateway.call(name, arguments).
+        gateway.call("execute_action", {
+            "tool": "poll_set",
+            "parameters": {"basis": "maximal_positive", "count": 2},
+            "purpose": "geometry",
+            "rationale": "scripted example",
+        })
+        gateway.call("finalize", {"reason": "scripted example complete"})
+        return {"stop": "completed"}
+
+
+result = run(problem="sphere", runner=ScriptedRunner(), maxfev=80)
+print(result.nfev, result.fun, result.model_request_count)</code></pre>
+          <p>The first printed value is 3: the starting point and the two poll points. For a real agent, replace the scripted calls with a loop that starts the agent, exposes <code>task["tools"]</code> to it (for example as function tools or through an MCP server), forwards each tool call through <code>gateway.call</code>, and returns when the agent calls <code>finalize</code> or <code>gateway.done</code> is true.</p>
+          <p>The agent tool then owns its model selection, authentication and thinking settings. The built-in model meter does not see its requests, so <code>result.model_request_count</code> is <code>None</code>; set request and token limits in the agent's own configuration. Check what the agent reports about these settings: a zero exit code alone does not show that it ran as configured.</p>
+          <p>Use a new runner and run directory for each episode. Continuing a session must keep the same gateway and budget; it does not permit restarting the optimization with a fresh budget.</p>
+          <p>Authenticate the agent tool only in ways its provider supports for your use. Codex supports ChatGPT sign-in and API-key authentication; see the <a href="https://learn.chatgpt.com/docs/auth">official Codex authentication</a> page. Anthropic's <a href="https://code.claude.com/docs/en/agent-sdk/overview">Agent SDK documentation</a> does not generally permit third-party products to offer Claude.ai login or rate limits without prior approval. Do not assume that a personal command-line login can be reused by an application.</p>
         </section>
         <section id="limits">
           <h2>Budgets and limits</h2>
-          <dl class="api-definitions"><div><dt><code>maxfev</code></dt><dd>Actual objective calls, including the initial point and failed calls. Cached values and read-only tools consume no new evaluations.</dd></div><div><dt><code>model_call_limit</code><br><code>model_token_limit</code></dt><dd>Separate limits on requests through the built-in model meter. External runner internals may not be visible; configure and audit their own request/token limits.</dd></div><div><dt><code>runner_options</code></dt><dd>Built-in harness settings, such as per-request <code>max_tokens</code>, compaction and retries. Do not pass this option with an explicitly supplied runner.</dd></div><div><dt><code>task_max_tool_calls</code></dt><dd>A separate gateway-call ceiling. One numerical tool call may perform several objective evaluations; a read may perform none.</dd></div><div><dt><code>wall_time_limit_s</code></dt><dd>A cooperative deadline, not a forced kill of a blocked objective or external process. Use a process supervisor when a hard deadline is required.</dd></div></dl>
+          <dl class="api-definitions"><div><dt><code>maxfev</code></dt><dd>Actual objective calls, including the initial point and failed calls. Cached values and read-only tools consume no new evaluations.</dd></div><div><dt><code>model_call_limit</code><br><code>model_token_limit</code></dt><dd>Separate limits on requests through the built-in model meter. Requests made inside an external runner are not visible to this meter; set that runner's own request and token limits.</dd></div><div><dt><code>runner_options</code></dt><dd>Built-in harness settings, such as per-request <code>max_tokens</code>, compaction and retries. Do not pass this option with an explicitly supplied runner.</dd></div><div><dt><code>task_max_tool_calls</code></dt><dd>A separate gateway-call ceiling. One numerical tool call may perform several objective evaluations; a read may perform none.</dd></div><div><dt><code>wall_time_limit_s</code></dt><dd>A cooperative deadline, not a forced kill of a blocked objective or external process. Use a process supervisor when a hard deadline is required.</dd></div></dl>
           <p>A finite evaluation budget does not guarantee that it will all be used. Agent finalization, invalid evaluations, transport failures or other resource limits may end the session first. Compare completion quality as well as the final objective.</p>
         </section>
         <section id="results">
@@ -138,17 +131,17 @@ result = run(problem="sphere", runner=runner, maxfev=80)</code></pre>
   manifest.json
   summary.json
   events.jsonl</code></pre>
-          <p><code>trace="trajectory"</code> enables this persistent Solver Trace, and <code>result.trace_path</code> gives the actual directory. <code>trace="summary"</code> omits the event stream; <code>trace="off"</code> disables persistent evidence. Diagnostic <code>log_level</code> is separate from trace capture.</p>
-          <p>The kernel owns evaluation records. An external agent transcript or Harbor/ATIF trajectory is a separate artifact, not a replacement for the ledger. Keep raw traces private until reviewed for sensitive objective/model content.</p>
+          <p><code>trace="trajectory"</code> enables this persistent Solver Trace, and <code>result.trace_path</code> gives the actual directory. <code>trace="summary"</code> omits the event stream; <code>trace="off"</code> disables the persistent trace. Diagnostic <code>log_level</code> is separate from trace capture.</p>
+          <p>The Solver owns the evaluation records. An external agent's own transcript is a separate artifact, not a replacement for them. Before sharing raw traces, check them for sensitive objective or model content.</p>
         </section>
         <section id="errors">
           <h2>Troubleshooting</h2>
-          <dl class="api-definitions"><div><dt>Missing configuration</dt><dd>Check the environment variable names for the client you constructed. <code>model="env"</code> is Anthropic-compatible, not provider autodetection.</dd></div><div><dt>Authentication / quota</dt><dd>Check endpoint, account access and credential validity locally. A revoked login is not exhausted quota. Do not print tokens or repeatedly retry a revoked credential.</dd></div><div><dt>No usable tool call</dt><dd>Confirm tool-calling support and compatible request fields. Token truncation, thinking defaults and transport mismatches can stop a session before the evaluation budget is spent.</dd></div><div><dt>External runner import</dt><dd>Codex/Claude Code research adapters are not exported by <code>nexteval</code>. Repository access, adapter dependencies and compatible CLI/SDK versions are separate prerequisites.</dd></div><div><dt>Invalid objective</dt><dd>Check that <code>fun(x)</code> returns a scalar and that <code>x0</code> is finite and one-dimensional. Failed objective calls still count.</dd></div></dl>
+          <dl class="api-definitions"><div><dt>Missing configuration</dt><dd>Check the environment variable names for the client you constructed. <code>model="env"</code> is Anthropic-compatible, not provider autodetection.</dd></div><div><dt>Authentication and usage limits</dt><dd>Check the endpoint, your access and the credential locally. A revoked credential is different from an exhausted usage limit. Do not print tokens or repeatedly retry a revoked credential.</dd></div><div><dt>No usable tool call</dt><dd>Confirm tool-calling support and compatible request fields. Token truncation, thinking defaults and transport mismatches can stop a session before the evaluation budget is spent.</dd></div><div><dt>External runner</dt><dd><code>nexteval</code> does not include Codex or Claude Code runners. Supply your own runner object; see <a href="#external">External agent sessions</a>.</dd></div><div><dt>Invalid objective</dt><dd>Check that <code>fun(x)</code> returns a scalar and that <code>x0</code> is finite and one-dimensional. Failed objective calls still count.</dd></div></dl>
         </section>
         <section id="validation">
           <h2>Validation status</h2>
-          <p>This guide distinguishes executable public-package examples from research integration patterns. Its validation receipt is maintained with the <a href="validation.md">guide checks</a>.</p>
-          <p>No paid provider run was started for this publication. Offline checks exercise installation, request serialization, tool responses, evaluation budgets and trace persistence using local scripted responses. They do not establish current account access, provider compatibility, model quality or external-runner readiness.</p>
+          <p>The downloadable example and the scripted runner example are checked offline against local scripted responses; the scope and results are in the <a href="validation.md">guide checks</a>.</p>
+          <p>No paid provider run was made for this guide. The offline checks cover installation, request serialization, tool responses, evaluation budgets and trace files. They do not show provider access, provider compatibility, model quality, or that any particular agent tool works as a runner.</p>
           <p>The guide/reference split follows the documentation structure used by <a href="https://www.optprof.com/stable/user/index.html">OptiProfiler</a> and <a href="https://www.cobyqa.com/stable/user/index.html">COBYQA</a>: installation and workflows here, signatures and return fields in the <a href="../api/">Solver Python API</a>.</p>
         </section>
       </div>
