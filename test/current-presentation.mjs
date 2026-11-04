@@ -2,19 +2,22 @@ import '../scripts/site/build-site.mjs';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
+import {createHash} from 'node:crypto';
 const {isDisplayed,displayedTask,displayedChart,consumptionView,releaseView,usageFigures}=await import('../_site/bench/results/presentation.mjs');
 const {paretoData,paretoFrontier}=await import('../_site/bench/results/usage.mjs');
 const {historyChartData}=await import('../_site/bench/results/model.mjs');
 const root=new URL('../_site/bench/results/',import.meta.url);
 const read=name=>JSON.parse(readFileSync(new URL(name,root)));
 const snapshot=read('data/results.json'),usage=read('data/website-usage.json');
-const removed=['claude-code--deepseek-v4-flash--low','codex--qwen3.8-flash--low--collaborator-macos',
- 'claude-code--qwen3.8-flash--medium','claude-code--mimo-v2.6-flash--off'];
+// Retired configurations, as SHA-256 of the participant id.
+const RETIRED_SHA256=new Set(['64ba4b3f65ce6c2f4cac781dab96410a11f66cbf0cd0b9c1500cc3476677f287','7996db994acb3091d5a1f79c95d9d92d4c3e589fdbd47ca150344522ce4735d6',
+ '7482a99d2b91796ac967d8e5ec3e9e431b0761e1e77aa48c46e24dce5004987f','eb7e94572de4acbeac798c59f9a8fa11de946e317c4d79f6428f2cb1876d5e94']);
+const retired=id=>RETIRED_SHA256.has(createHash('sha256').update(id).digest('hex'));
 const harness=id=>snapshot.participants.find(p=>p.participant_id===id).harness;
 test('retired Chinese configurations are not shipped; displayed groups stay 172',()=>{
  assert(snapshot.participants.every(isDisplayed));
- assert(!snapshot.participants.some(p=>removed.includes(p.participant_id)));
- assert(!snapshot.tasks.some(t=>t.members.some(id=>removed.includes(id))));
+ assert(!snapshot.participants.some(p=>retired(p.participant_id)));
+ assert(!snapshot.tasks.some(t=>t.members.some(retired)));
  assert.equal(snapshot.tasks.reduce((n,t)=>n+displayedTask(snapshot,t).scores.filter(p=>!['scipy','reference'].includes(harness(p.participant_id))).length,0),172);
  assert(isDisplayed({model:'qwen3.8-max',effort:'high',harness:'codex'}));
  assert(!isDisplayed({model:'qwen3.8-max',effort:'medium',harness:'codex'}));
@@ -129,7 +132,7 @@ test('the leaderboard ships without case studies, draft answers, hidden configur
  assert(!('checks' in view)&&!('cards' in view)&&!('limitations' in view.faults));
  const shown=new Set(snapshot.participants.map(p=>p.participant_id));
  assert(view.agents.every(a=>shown.has(a.id))&&view.agents.length===shown.size-1);
- const text=JSON.stringify(view);for(const id of removed)assert(!text.includes(id),id);
+ assert(!JSON.stringify(view).split(/[^A-Za-z0-9._-]+/).some(retired),'retired configuration in the leaderboard view');
  assert(readFileSync(new URL('app.mjs',root),'utf8').includes('<section id="logos"><h2>Provider logos</h2>'));
  for(const f of ['app.mjs','frontier.mjs','plan.mjs','logos.mjs','data/website-usage.json','data/results.json','data/pair/scores.json','data/leaderboard/view.json'])
   assert.equal(notPublic(readFileSync(new URL(f,root),'utf8')),null,f);
