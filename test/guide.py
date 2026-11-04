@@ -1,11 +1,16 @@
 """Offline guide checks. HTTP requests are restricted to a loopback fixture."""
 from __future__ import annotations
 
+from contextlib import redirect_stdout
+import html
 import importlib.util
+import io
 import json
 import os
 from pathlib import Path
+import re
 import socket
+import sys
 import tempfile
 import threading
 import unittest
@@ -140,6 +145,18 @@ class GuideTests(unittest.TestCase):
         self.check_trace(result, 3)
         self.assertEqual(self.server.requests, [])
         self.assertIsNone(result.model_request_count)
+
+    def test_guide_scripted_runner_example(self):
+        page = (ROOT / "solver/guide/index.html").read_text()
+        block = re.search(r'aria-label="Scripted runner example" tabindex="0"><code>(.*?)</code></pre>', page, re.S)
+        self.addCleanup(os.chdir, os.getcwd())
+        os.chdir(self.temp.name)
+        output = io.StringIO()
+        with patch.dict(os.environ, {}, clear=True), patch.dict(sys.modules, {"optimize": example}), redirect_stdout(output):
+            exec(compile(html.unescape(block.group(1)), "guide-scripted-runner", "exec"), {"__name__": "__guide__"})
+        nfev, _, requests = output.getvalue().split()
+        self.assertEqual((nfev, requests), ("3", "None"))
+        self.assertEqual(self.server.requests, [])
 
     def test_env_means_anthropic(self):
         fun, x0 = example.make_problem()
