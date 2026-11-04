@@ -117,3 +117,19 @@ test('a legacy #ranking or #tasks link redirects to the matrix and still loads t
  assert(/\n\s*redirectLegacy\(\);\n\s*import\('\.\/results\/app\.mjs\?v=[^']+'\);/.test(shell));
  assert(!shell.includes('if (!redirectLegacy())'));
 });
+test('the leaderboard ships without case studies, draft answers or hidden configurations',()=>{
+ const shell=readFileSync(new URL('../index.html',root),'utf8');
+ assert(shell.includes('href="results/frontier.css?v=')&&shell.includes("import('./results/app.mjs?v="));
+ const ui=readFileSync(new URL('frontier.mjs',root),'utf8'),css=readFileSync(new URL('frontier.css',root),'utf8');
+ for(const word of ['cards','Case stud','fx-cases','Draft','[Link','Can I run it'])assert(!ui.includes(word),word);
+ assert(!ui.includes('agentURL(a)'),'leaderboard links use participant ids');
+ assert(!css.includes('fx-card'));
+ const view=read('data/leaderboard/view.json');
+ assert(!('checks' in view)&&!('cards' in view)&&!('limitations' in view.faults));
+ const shown=new Set(snapshot.participants.map(p=>p.participant_id));
+ assert(view.agents.every(a=>shown.has(a.id))&&view.agents.length===shown.size-1);
+ const text=JSON.stringify(view);for(const id of [...removed,'codex--qwen3.8-flash--low--collaborator-macos','collaborator'])assert(!text.includes(id),id);
+ assert(readFileSync(new URL('app.mjs',root),'utf8').includes('<section id="logos"><h2>Provider logos</h2>'));
+ const shipped=['app.mjs','frontier.mjs','plan.mjs','logos.mjs','data/website-usage.json','data/results.json','data/pair/scores.json','data/leaderboard/view.json'].map(f=>readFileSync(new URL(f,root),'utf8')).join('\n');
+ for(const word of [/volcengine/i,/\bark\b/i,/coding[- _]?plan/i,/\bSYU\b/i,/harbor/i,/executor/i,/attested/i,/\(owner\)/,/campaign/i,/collaborator/i])assert(!word.test(shipped),String(word));
+});

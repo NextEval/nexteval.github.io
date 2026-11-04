@@ -3,11 +3,13 @@ import { readFile, readdir } from 'node:fs/promises';
 import { resolve, relative, join } from 'node:path';
 import { pathToFileURL, fileURLToPath } from 'node:url';
 
-export const SITE_CODE = Object.freeze(['app.mjs', 'chart.mjs', 'icons.mjs', 'identities.mjs', 'index.html', 'logratio.mjs', 'model.mjs',
-  'pair.css', 'pareto.mjs', 'plan.mjs', 'presentation.mjs', 'profile-figures.mjs', 'releases.mjs', 'results.css', 'scores.mjs', 'usage.mjs']);
+export const SITE_CODE = Object.freeze(['app.mjs', 'chart.mjs', 'frontier.css', 'frontier.mjs', 'icons.mjs', 'identities.mjs', 'index.html', 'logos.mjs',
+  'logratio.mjs', 'model.mjs', 'pair.css', 'pareto.mjs', 'plan.mjs', 'presentation.mjs', 'profile-figures.mjs', 'releases.mjs', 'results.css', 'scores.mjs', 'usage.mjs']);
 const PAIR_TOLERANCES = ['0.1', '0.001', '1e-06', '1e-09'];
 const FORBIDDEN_KEY = /^(evidence_refs|sources|limitations|reference|cohort|engine|archive_id|canonical_archive_id|attempt_id|instance_seed|source_agent_config_ids?|execution_environment|reviewed_terminal_evidence|runtime_status|runtime_status_counts|actual_timeout_s|actual_timeout_counts|initial_value|profile_initial_value|primary_protocol|registry_commit|selection_sha256|usage_sources|by_tolerance|notes|.*sha256.*|.*_sha)$/;
 const HASH_LIKE = /[0-9a-f]{32,}/i;
+// Internal names and process words that are not public wording (machines, clouds, plans, roles, intake terms).
+const NOT_PUBLIC = /volcengine|\bark\b|coding[- _]?plan|\bsyu\b|harbor|executor|attested|collaborator|campaign|backfill|hash[- ]bound|\bowner\b|\bmacos\b|\bfrps?\b|nodeguard|hostsock|shuoge|cunxin|\bPR ?\d+\b/i;
 
 function scan(value, file, path = '') {
   if (typeof value === 'string' && HASH_LIKE.test(value)) throw new Error(`Hash-like value in ${file} at ${path}`);
@@ -58,6 +60,12 @@ export async function checkSite(directory) {
     for (const task of snapshot.tasks) for (const tol of PAIR_TOLERANCES)
       if (!file[task.task_id]?.perf?.[tol]?.cobyqa || !file[task.task_id]?.data?.[tol]?.cobyqa || !file[task.task_id]?.logratio?.[tol]) throw new Error('Incomplete pair file: ' + id);
   }
+  // Leaderboard data: displayed agents only, pair scores equal to data/pair/scores.json, no internal checks or case studies.
+  const view = await load('data/leaderboard/view.json');
+  if (view.snapshot_id !== snapshot.snapshot_id || view.counts?.agents !== agents.length || 'checks' in view || 'cards' in view) throw new Error('Leaderboard data do not match the snapshot');
+  if (JSON.stringify(view.agents.map(a => a.id).sort()) !== JSON.stringify(agents)) throw new Error('Leaderboard agents differ from displayed configurations');
+  for (const a of view.agents) for (const f of ['P', 'N', 'R', 'X'])
+    if (a.pair[f] !== pair.agents.find(x => x.id === a.id).pair3[f]) throw new Error('Leaderboard score differs from the pair score: ' + a.id);
   let histories = 0;
   for (const task of snapshot.tasks) {
     const index = validateHistoryIndex(await load('data/' + task.history_file), task);
@@ -74,9 +82,13 @@ export async function checkSite(directory) {
   await walk(root);
   const extra = files.filter(f => !referenced.has(f.replaceAll('\\', '/')));
   if (extra.length) throw new Error('Unreferenced site file: ' + extra.slice(0, 5).join(', '));
+  for (const file of files) {
+    const hit = (await readFile(join(root, file), 'utf8')).match(NOT_PUBLIC);
+    if (hit) throw new Error(`Not public wording "${hit[0]}" in ${file}`);
+  }
   const missing = [...referenced].filter(f => !files.includes(f));
   if (missing.length) throw new Error('Missing site file: ' + missing.join(', '));
-  return { snapshot: snapshot.snapshot_id, tasks: snapshot.tasks.length, participants: snapshot.participants.length, histories, pair_agents: agents.length, files: files.length };
+  return { snapshot: snapshot.snapshot_id, tasks: snapshot.tasks.length, participants: snapshot.participants.length, histories, pair_agents: agents.length, leaderboard_agents: view.agents.length, files: files.length };
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
