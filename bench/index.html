@@ -2,21 +2,23 @@
 <html lang="en">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Compare agent performance across packaged derivative-free optimization tasks, with fixed OptiProfiler comparisons.">
+  <meta name="description" content="Compare coding agents on packaged derivative-free optimization tasks: each agent scored against COBYQA with OptiProfiler.">
   <title>NextEval Bench | Results</title>
   <link rel="icon" type="image/svg+xml" href="assets/brand/nexteval.svg">
   <link rel="stylesheet" href="../site.css?v=path-nav-1">
   <link rel="stylesheet" href="results/results.css?v=20261009-pareto1">
+  <link rel="stylesheet" href="results/pair.css?v=20261104-pair">
   <script src="vendor/lucide.min.js" defer></script>
   <script src="../navigation.js?v=1" defer></script>
   <script type="module">
     const redirectLegacy = () => {
-      const legacy = /^#(ranking|profiles|tasks)(\?|$)/.test(location.hash);
+      const legacy = /^#(ranking|tasks)(\?|$)/.test(location.hash);
       if (legacy) location.replace('#matrix');
       return legacy;
     };
     window.addEventListener('hashchange', redirectLegacy);
-    if (!redirectLegacy()) import('./results/app.mjs?v=20261030-slim');
+    redirectLegacy();
+    import('./results/app.mjs?v=20261104-pair');
   </script>
 </head>
 <body class="results-page">
