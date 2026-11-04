@@ -15,7 +15,7 @@ test('all model names resolve through the shared exact registry',()=>{
  for(const row of registry.models)for(const model of row.aliases)assert.equal(actual.labelFor({model,harness:'codex',display_name:'wrong',label:'wrong'}),row.display_name,'model presentation differs from registry');
 });
 test('harness is exactly the framework, not API or machine provenance',()=>{
- assert.equal(actual.harnessFor({harness:'codex',participant_id:'codex--qwen3.8-flash--low--collaborator-macos'}),'Codex');
+ assert.equal(actual.harnessFor({harness:'codex',participant_id:'codex--qwen3.8-flash--low--second-run'}),'Codex');
  assert.equal(actual.harnessFor({harness:'claude-code'}),'Claude Code');
 });
 test('the shipped identities module matches the registry for every shipped participant',async()=>{
