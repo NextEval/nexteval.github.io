@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 const {isDisplayed,displayedTask,displayedChart,consumptionView,releaseView,usageFigures}=await import('../_site/bench/results/presentation.mjs');
 const {paretoData,paretoFrontier}=await import('../_site/bench/results/usage.mjs');
-const {chartData,historyChartData}=await import('../_site/bench/results/model.mjs');
+const {historyChartData}=await import('../_site/bench/results/model.mjs');
 const root=new URL('../_site/bench/results/',import.meta.url);
 const read=name=>JSON.parse(readFileSync(new URL(name,root)));
 const snapshot=read('data/results.json'),usage=read('data/website-usage.json');
@@ -82,30 +82,38 @@ test('release-date plots cover every active group with sourced first-release dat
   assert(view.points.every(p=>isDisplayed(p.participant)&&p.release.sources.length>0));
  }
 });
-test('profiles and histories carry exactly the displayed curves',()=>{
- const task=snapshot.tasks[0],profiles=read('data/'+task.profiles_file),participants=snapshot.participants;
- const data=chartData(profiles,task,participants,'performance',profiles.tolerances[0].tolerance);
- assert.equal(displayedChart(data,participants).series.length,data.series.length);
- assert.equal(data.series.length,task.members.length);
+test('pairwise profiles and histories carry exactly the displayed curves',()=>{
+ const task=snapshot.tasks[0],participants=snapshot.participants,overlay=read('data/pair/overlay.json'),pair=read('data/pair/scores.json');
+ const agents=participants.filter(p=>p.participant_id!=='cobyqa').map(p=>p.participant_id).sort();
+ assert.equal(snapshot.score_definition.id,'cobyqa-pair-score/1');assert.equal(pair.definition.id,snapshot.score_definition.id);
+ for(const t of snapshot.tasks)for(const kind of ['perf','data'])for(const tol of ['0.1','0.001','1e-06','1e-09'])
+  assert.deepEqual(Object.keys(overlay.tasks[t.task_id][kind][tol].curves).sort(),agents);
+ assert.equal(task.profiles_file,undefined);
  const index=read('data/'+task.history_file),history=read('data/'+index.problems[0].history_file);
  const h=historyChartData(history,participants,0);
  assert.equal(displayedChart(h,participants).series.length,h.series.length);assert.equal(h.series.length,task.members.length);
 });
 const CAPTION='Usage for some configurations is estimated.';
 test('the shipped app applies tier policy and includes estimates with one caption, no per-point marking',()=>{
- const source=readFileSync(new URL('app.mjs',root),'utf8');
- for(const fragment of ['plannedParticipants()).filter(isDisplayed)','displayedChart(chartData(',
-  'displayedChart(historyChartData(','consumptionView(snapshot,usage,task,metric,family,true)','releaseView(snapshot,releases',
-  'usageFigures(usage,point,task)'])assert(source.includes(fragment),fragment);
- const start=source.indexOf('async function pareto('),rest=source.slice(start+1);
+ const source=readFileSync(new URL('app.mjs',root),'utf8'),flat=source.replace(/\s+/g,'');
+ for(const fragment of ['plannedParticipants()).filter(isDisplayed)','displayedChart(historyChartData(','consumptionView(snapshot,usage,task,metric,family,true)',
+  'consumptionView(snapshot,usage,t,metric,family,true)','releaseView(snapshot,releases','usageFigures(usage,point,task)'])assert(flat.includes(fragment),fragment);
+ assert(!/chartData\(profiles|profiles_file|relativeScore|p<sup>4<\/sup>/.test(source),'no joint profiles or joint display score');
+ const start=source.indexOf('function pareto('),rest=source.slice(start+1);
  const view=source.slice(start,start+1+rest.search(/\n(async )?function /));
  assert(view.length>1000 && view.includes('new ParetoChart('));
  assert.equal(source.split(CAPTION).length,2,'exactly one usage caption');
  assert.equal(view.split(CAPTION).length,2,'the caption is on the Pareto view');
- const other=source.replace(CAPTION,'').replace('point.estimate?.sources','');
- for(const pattern of [/estimat/i,/scenario/i,/hollow/i,/ measured \+/,/MEASURED/])assert(!pattern.test(other),String(pattern));
+ const paretoText=view.replace(CAPTION,'').replace('point.estimate?.sources','').replace('estimated: all.some(p => p.estimated)','');
+ for(const pattern of [/estimat/i,/\u2248/,/scenario/i,/hollow/i,/ measured \+/,/MEASURED/])assert(!pattern.test(paretoText),String(pattern));
+ for(const pattern of [/scenario/i,/hollow/i,/ measured \+/,/MEASURED/])assert(!pattern.test(source),String(pattern));
  assert(readFileSync(new URL('index.html',root),'utf8').includes("location.replace('../'"));
  const pareto=readFileSync(new URL('pareto.mjs',root),'utf8');
  for(const pattern of [/estimat/i,/scenario/i,/dasharray/])assert(!pattern.test(pareto),String(pattern));
  assert(pareto.includes("r:efficient ? 6 : 3.5"));
+});
+test('a legacy #ranking or #tasks link redirects to the matrix and still loads the app',()=>{
+ const shell=readFileSync(new URL('../index.html',root),'utf8');
+ assert(/\n\s*redirectLegacy\(\);\n\s*import\('\.\/results\/app\.mjs\?v=[^']+'\);/.test(shell));
+ assert(!shell.includes('if (!redirectLegacy())'));
 });

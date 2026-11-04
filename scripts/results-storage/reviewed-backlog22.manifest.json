@@ -1,9 +1,9 @@
 {
   "artifact": {
-    "bytes": 176961825,
-    "file_count": 1921,
-    "sha256": "c121192d7db307f2dc55a7456cb241799fef2154a758780c3c5d88197c5dc1d7",
-    "unpacked_bytes": 551205314
+    "bytes": 177314809,
+    "file_count": 1970,
+    "sha256": "9eb5015bf5fdbb36f63273b3bceeedeb15a2190959d48fc0a57808343b488ea2",
+    "unpacked_bytes": 552650438
   },
   "derivation": {
     "clean_reconstruction_sha256": "50fab3401de7652e235d7e7f3639fc9b4e128b2429ad33daa3c6d5ff75f3c73c",
@@ -148,12 +148,55 @@
     "full_ten_repeat_archive_preserved": true,
     "groups": 183,
     "owner_selection": true,
+    "pair_score_release": {
+      "added_files": 49,
+      "changed_files": [
+        "dist/results/check.mjs",
+        "dist/results/data/results.json"
+      ],
+      "comparisons": [],
+      "date": "2026-11-04",
+      "estimate_rows": 27,
+      "exact_cost_groups": 156,
+      "exact_token_groups": 156,
+      "fable_harbor_groups": [],
+      "integration_source_sha256": "b0b47280eb61eba4fdc649400cc388cdfe939070619cdfb2509b8544c0321b38",
+      "notes": [
+        "Scoring change (owner decision, 2026-11-04): the website shows one score per agent and task, the pair score versus COBYQA (definition cobyqa-pair-score/1). Each agent is compared with COBYQA alone in a two-member OptiProfiler 1.3.4 comparison; the score is (1 + s_agent - s_COBYQA) / 2, where s is the history-based performance-profile area normalized per tolerance and averaged over the 10 tolerances 1e-1 to 1e-10, so 0.5 means level with COBYQA. A pair score depends only on the histories of the agent and COBYQA. It replaces the joint comparison score and its p^4 display transform on the website.",
+        "Histories, usage, prices and the 183 scored groups are those of primary183 (web-primary183-fable-randomnan-20261104); its joint comparison scores and profiles stay in this full view unchanged. New are data/pair/ (pair scores, display curves at 4 tolerances and log-ratio profiles for every agent of the full view), the results.json field pair_scores with the definition and file checksums, and a check.mjs that validates them. The pair data were computed on macOS arm64 with OptiProfiler 1.3.4 and numpy 2.5.3; all 732 log-ratio profiles equal those of OptiProfiler.",
+        "Rank changes per task against the primary183 joint ranking of the 43 displayed agents: Spearman 0.982 (Perturbed), 0.950 (Noisy), 0.980 (Rotated), 0.964 (RandomNaN); 9 of the top 10 stay in the top 10 on every task; rank 1 is unchanged except on Perturbed, where GPT-6 Astra high and GPT-6.1 Sol high swap (both 0.694).",
+        "The full view is kept as a draft release, as for primary181 to primary183; the website serves a slim projection."
+      ],
+      "pair_scores": {
+        "agents": 47,
+        "check_mjs_sha256": "660349305227dbf44604860b82cfd019b5aa55971bc9662330360f5308382e01",
+        "checks": {
+          "log_ratio_combinations": 732,
+          "log_ratio_identical_to_optiprofiler": 732
+        },
+        "definition_id": "cobyqa-pair-score/1",
+        "files": 49,
+        "runtime": {
+          "numpy": "2.5.3",
+          "optiprofiler": "1.3.4",
+          "platform": "macOS-26.5.1-arm64-arm-64bit",
+          "python": "3.12.7",
+          "scipy": "1.18.1"
+        }
+      },
+      "pr38_measured_token_groups": 0,
+      "pr39_returned_groups": [],
+      "pricing_sha256": "8e45a334afb1563dad443024aa067d19ed6b44a9d214b90157a7beb877b92791",
+      "pricing_snapshot_id": "public-standard-20261030-r2",
+      "release_draft": true,
+      "removed_files": 0
+    },
     "primary_expected": 276,
     "primary_protocol": "fixed-original-seed-prefix/3",
     "primary_usage": "156 exact-token/156 exact-cost groups; every other group has a labelled estimate; exact fields remain null",
     "registry_commit": "f47cfae52c5ef7f69f6d987c1e7bd85f0a909459",
     "registry_repository": "NextEval/nexteval-bench-data",
-    "results_sha256": "159dbd909fbaeb229a917f07038f3951176302d85ac81d048389d874b3bc9900",
+    "results_sha256": "0e54a765b68ed24e16da4168564e7d51307620d96a4a52b13faef969e2e9534e",
     "roundb_completion": {
       "added_files": 376,
       "changed_files": [
@@ -4209,8 +4252,8 @@
       "sha256": "c0ca5926486aeab299d402e5e231c2fd1c1fdd4fc4a2b323de2992e6fba2c7ed"
     },
     "dist/results/check.mjs": {
-      "bytes": 7581,
-      "sha256": "dc5f1ca21b7be55b88648fa72754eae015e6d356b05d118eb8d999d1e576912a"
+      "bytes": 9121,
+      "sha256": "660349305227dbf44604860b82cfd019b5aa55971bc9662330360f5308382e01"
     },
     "dist/results/data/evidence/parent-709a4ad77263c5e1f37d0c23951c8ca12cb46e32498328c47f86c3fabe79db36.json": {
       "bytes": 5729,
@@ -7956,6 +7999,202 @@
       "bytes": 5768,
       "sha256": "5200015b78b4c604a40754cbd9526cb5ddf7c007d9addcc88e97cf947d6f0195"
     },
+    "dist/results/data/pair/agents/claude-code--claude-fable-5-1--high.json": {
+      "bytes": 16835,
+      "sha256": "773f5dcbb5b1faa331ed758741bee1e6c4988c85aef08a000b1d5b961514dc05"
+    },
+    "dist/results/data/pair/agents/claude-code--claude-fable-5-1--medium.json": {
+      "bytes": 17083,
+      "sha256": "418ea25e8bf5f48e7e913bcf50c891a97aa6b8d7bcda1ad6a83caed9796fb88b"
+    },
+    "dist/results/data/pair/agents/claude-code--claude-haiku-5-5--high.json": {
+      "bytes": 17238,
+      "sha256": "332b009483b74929a05b4714cbf9a3744b672f5d197af0bbe8db205a41f4ea96"
+    },
+    "dist/results/data/pair/agents/claude-code--claude-haiku-5-5--medium.json": {
+      "bytes": 17004,
+      "sha256": "008922fc7154805b8327bd9b9c86879f2203d715ad0fa52d6dba0ff263451acd"
+    },
+    "dist/results/data/pair/agents/claude-code--claude-opus-5-5--high.json": {
+      "bytes": 17283,
+      "sha256": "217b79f97740cd63d12759f6859c370d68e9027becf606ffcf96f70d32bc11c1"
+    },
+    "dist/results/data/pair/agents/claude-code--claude-opus-5-5--medium.json": {
+      "bytes": 16938,
+      "sha256": "baffac569bd21dfb079d7c13783593cd04cfe7bd8c89849892f09c4a456c55ba"
+    },
+    "dist/results/data/pair/agents/claude-code--claude-sonnet-5--high.json": {
+      "bytes": 16729,
+      "sha256": "c681acbab41bca60900daedd2be272002a3ecfc5089100358bd948336277e89a"
+    },
+    "dist/results/data/pair/agents/claude-code--claude-sonnet-5--medium.json": {
+      "bytes": 16894,
+      "sha256": "c3b0aa2d7d5a6c2872e1e46b393b298e8c82020fd5865422ae1997525b085ed0"
+    },
+    "dist/results/data/pair/agents/claude-code--deepseek-v4-flash--high.json": {
+      "bytes": 16464,
+      "sha256": "b24c2523cf1f30ea7e217a1ee306c3e768ad6ce7bc99c6567d7f7310b9e77add"
+    },
+    "dist/results/data/pair/agents/claude-code--deepseek-v4-flash--low.json": {
+      "bytes": 16556,
+      "sha256": "d57c65e29631330a4fd67d756c78e44a7f013bda6fa4ea006e20404135b3d733"
+    },
+    "dist/results/data/pair/agents/claude-code--deepseek-v4-pro--high.json": {
+      "bytes": 16752,
+      "sha256": "a012fac2c36417d41f4610817d7cc31289f6eacc4bf38f7723f3f45a265a96f2"
+    },
+    "dist/results/data/pair/agents/claude-code--deepseek-v4.1-flash--high.json": {
+      "bytes": 16511,
+      "sha256": "b5cb9df120b275f86932393bcd870a7fd284db2d7c63ecc29906e9a88c9df8c3"
+    },
+    "dist/results/data/pair/agents/claude-code--glm-5.3--high.json": {
+      "bytes": 17638,
+      "sha256": "edd7b5febda0a3f77b190ba3eb8b0897f99e611a18774474232683f52d337313"
+    },
+    "dist/results/data/pair/agents/claude-code--glm-5.3-flash--high.json": {
+      "bytes": 16508,
+      "sha256": "51363e2fc5acba56f77df55d22ff09a4c0f090b4ab7f06244a7c6f3d33f124f6"
+    },
+    "dist/results/data/pair/agents/claude-code--kimi-k3--high.json": {
+      "bytes": 16601,
+      "sha256": "483c2b06990eee88280820de0bb5174e498b56e2bc52f0ac47fc7af952f04011"
+    },
+    "dist/results/data/pair/agents/claude-code--mimo-v2.6-flash--off.json": {
+      "bytes": 15847,
+      "sha256": "b86b19ec48952004ad1e375122de98def8d8dfe41981d7b3d8623f32299b348f"
+    },
+    "dist/results/data/pair/agents/claude-code--mimo-v2.6-flash--on.json": {
+      "bytes": 15597,
+      "sha256": "1f62bcb5be6b378c989f39a97c7e26661f8b4ef1a9726dfe21dd8b6e83c6c27a"
+    },
+    "dist/results/data/pair/agents/claude-code--mimo-v2.6-pro--on.json": {
+      "bytes": 16552,
+      "sha256": "6442a4480bc0e20cdaa04fd08259507ed5484314be8436258066fd3f6fdf1661"
+    },
+    "dist/results/data/pair/agents/claude-code--qwen3.8-flash--high.json": {
+      "bytes": 17276,
+      "sha256": "55e83e6c177a7687ce2223ecfdc52a32a962a28143db695e0df7add35c7821d8"
+    },
+    "dist/results/data/pair/agents/claude-code--qwen3.8-flash--medium.json": {
+      "bytes": 8122,
+      "sha256": "ffc2447cf3ed12b83a8040ecacd1fe06690e43228fd5bc4dec40c8df6e1427b8"
+    },
+    "dist/results/data/pair/agents/claude-code--qwen3.8-max--high.json": {
+      "bytes": 16991,
+      "sha256": "0fa6a96ca8d7ae371ac55a5e9a745a4e6bf5d75818cb545f45210001fb7c102f"
+    },
+    "dist/results/data/pair/agents/codex--deepseek-v4-pro--high.json": {
+      "bytes": 16719,
+      "sha256": "62f41954a5b6f2216a8c082a6a25a521917b39686e058c43770a2248d5e3327d"
+    },
+    "dist/results/data/pair/agents/codex--deepseek-v4.1-flash--high.json": {
+      "bytes": 16682,
+      "sha256": "7cb1f3972d73030d984ce6e9a24c493a0bd7f3c309b781338d6a4245be707786"
+    },
+    "dist/results/data/pair/agents/codex--glm-5.3--high.json": {
+      "bytes": 16883,
+      "sha256": "cfde2e07de96181d15ace36f2712190219b35598edabd0f3a7805a70e2b461fe"
+    },
+    "dist/results/data/pair/agents/codex--glm-5.3-flash--high.json": {
+      "bytes": 16383,
+      "sha256": "8f73f020c34fca33d488efb6a6e8e6c97ced5f3afebaa7280b0bbc63440d487a"
+    },
+    "dist/results/data/pair/agents/codex--gpt-5.5--high.json": {
+      "bytes": 16467,
+      "sha256": "83537e6172955cfb084979f2861a80d5a2e4e2f7fb7db3b4b995bfff38641c50"
+    },
+    "dist/results/data/pair/agents/codex--gpt-5.5--medium.json": {
+      "bytes": 15841,
+      "sha256": "4732837c632ff8750d31ff086b7ba42df3a5eda999c3a0284e890c220226bb88"
+    },
+    "dist/results/data/pair/agents/codex--gpt-5.6-luna--high.json": {
+      "bytes": 15835,
+      "sha256": "6e393419679feec83c251ac0f56376b198958b6f8a9b4311223ab00f0484f6ac"
+    },
+    "dist/results/data/pair/agents/codex--gpt-5.6-luna--medium.json": {
+      "bytes": 15857,
+      "sha256": "3208f7ac155d8ecd34389be0e94955a1b75c228a1b43765527c0c7d134eb49db"
+    },
+    "dist/results/data/pair/agents/codex--gpt-5.6-sol--high.json": {
+      "bytes": 17218,
+      "sha256": "72f859027fa9ebbc457c87c884eee479906f68abbf54b909fcb11625a448e0b9"
+    },
+    "dist/results/data/pair/agents/codex--gpt-5.6-sol--medium.json": {
+      "bytes": 17053,
+      "sha256": "041572bcb1bdcfac127c6746cf101281afa4dab9a69d3772a9a47e6303600e36"
+    },
+    "dist/results/data/pair/agents/codex--gpt-5.6-terra--high.json": {
+      "bytes": 16698,
+      "sha256": "d87ecf9c4f83576fb451724d5e90c8d603809c7ade33e851fdadbbff273a56e0"
+    },
+    "dist/results/data/pair/agents/codex--gpt-5.6-terra--medium.json": {
+      "bytes": 16766,
+      "sha256": "de6a15bd717d7f13661f63ed1308ac93826e33c61455d575b3a71b2ba522520e"
+    },
+    "dist/results/data/pair/agents/codex--gpt-6-astra--high.json": {
+      "bytes": 16443,
+      "sha256": "756cf12c87062fb2ce0240425972ac113b2dd22e073d56c290536b5bf4274954"
+    },
+    "dist/results/data/pair/agents/codex--gpt-6-astra--medium.json": {
+      "bytes": 16598,
+      "sha256": "3410bd26ccea949ab6cbda0ff6033962120797869c53eae8e37a8faaf1607a5f"
+    },
+    "dist/results/data/pair/agents/codex--gpt-6-luna--high.json": {
+      "bytes": 16471,
+      "sha256": "236b64d2e6100bf9a0e9e90644715ada76d37f877282aa93aa26100c9f0a9467"
+    },
+    "dist/results/data/pair/agents/codex--gpt-6-luna--medium.json": {
+      "bytes": 15999,
+      "sha256": "d83b5b0efe8ec4d0d1e337af62ac13659c8e3162170219249f1eadc74f1da0c2"
+    },
+    "dist/results/data/pair/agents/codex--gpt-6-sol--high.json": {
+      "bytes": 16778,
+      "sha256": "dd004caa7f9d61e7b0869a77208fabcb92d8f9c65fb3fdabcbe3a0f9467d4dc1"
+    },
+    "dist/results/data/pair/agents/codex--gpt-6-sol--medium.json": {
+      "bytes": 16559,
+      "sha256": "c4b2f897bc16bde602a43c268e712abf957a8cfd9a463c10579e49b23229c4a9"
+    },
+    "dist/results/data/pair/agents/codex--gpt-6.1-sol--high.json": {
+      "bytes": 16449,
+      "sha256": "63f3690935055ee7035399db7b692a7ee2e0ad5444ff9f1ccc8165cce5b064fb"
+    },
+    "dist/results/data/pair/agents/codex--gpt-6.1-sol--medium.json": {
+      "bytes": 16483,
+      "sha256": "2887350cea5f2fb7aebd321bdcd7627617040d4c18b3d2f6584da1a1c16b375e"
+    },
+    "dist/results/data/pair/agents/codex--kimi-k3--high.json": {
+      "bytes": 17079,
+      "sha256": "dd9037a088cd26fdd5a7a01b2abc647e57fbb6a751d1e94968eeb64eaafeb5ee"
+    },
+    "dist/results/data/pair/agents/codex--mimo-v2.6-flash--on.json": {
+      "bytes": 15969,
+      "sha256": "7c88156e54f88854cdc206b335936c257c676c623cab2c723cc3eff6e4152055"
+    },
+    "dist/results/data/pair/agents/codex--mimo-v2.6-pro--on.json": {
+      "bytes": 16758,
+      "sha256": "669da148fbe0300e89dfb0d50ec98223fd3110f957517770120563d23ea2ad4e"
+    },
+    "dist/results/data/pair/agents/codex--qwen3.8-flash--high.json": {
+      "bytes": 17319,
+      "sha256": "bf57d53d003ecef5defed8f9e95cab1b33ab1fb28f0cb907d5f90700feb51725"
+    },
+    "dist/results/data/pair/agents/codex--qwen3.8-flash--low--collaborator-macos.json": {
+      "bytes": 4786,
+      "sha256": "300b7f7dd4a898dbeb1f1c87b97a9a5675b2766a3cc0fc911c1dbed4163cd6d1"
+    },
+    "dist/results/data/pair/agents/codex--qwen3.8-max--high.json": {
+      "bytes": 17475,
+      "sha256": "599434edd5d21947ae14f64997193d1995d18bfa26f875087e984975df71d7cb"
+    },
+    "dist/results/data/pair/overlay.json": {
+      "bytes": 654451,
+      "sha256": "86a9ecec0f4c8e213213b6d26b530e9a8d0704cf49190bee4a094ea0a9527f90"
+    },
+    "dist/results/data/pair/scores.json": {
+      "bytes": 15410,
+      "sha256": "e3b16a12aeceb17f304d0bee1b3a5ba21966edbc381e16620c06db4375389a6f"
+    },
     "dist/results/data/pricing-snapshot.json": {
       "bytes": 29578,
       "sha256": "8e45a334afb1563dad443024aa067d19ed6b44a9d214b90157a7beb877b92791"
@@ -7977,8 +8216,8 @@
       "sha256": "c9be417ed3c52ad89ecacf0cbbec4fb79b80119448f0cba6a47b88ee818fd674"
     },
     "dist/results/data/results.json": {
-      "bytes": 853968,
-      "sha256": "159dbd909fbaeb229a917f07038f3951176302d85ac81d048389d874b3bc9900"
+      "bytes": 864704,
+      "sha256": "0e54a765b68ed24e16da4168564e7d51307620d96a4a52b13faef969e2e9534e"
     },
     "dist/results/data/website-usage.json": {
       "bytes": 163368,
@@ -8055,17 +8294,17 @@
   },
   "materialization_ready": true,
   "public_distribution": {
-    "asset_id": 707470033,
-    "bytes": 176961825,
+    "asset_id": 708485363,
+    "bytes": 177314809,
     "hf_private_unchanged": true,
-    "name": "public-web-results-c121192d7db307f2dc55a7456cb241799fef2154a758780c3c5d88197c5dc1d7.tar.gz",
+    "name": "public-web-results-9eb5015bf5fdbb36f63273b3bceeedeb15a2190959d48fc0a57808343b488ea2.tar.gz",
     "provider": "github-release-public-view",
-    "release_id": 433327736,
+    "release_id": 433580530,
     "repository": "NextEval/nexteval.github.io",
     "sensitivity": "approved-public-web-view",
-    "sha256": "c121192d7db307f2dc55a7456cb241799fef2154a758780c3c5d88197c5dc1d7",
-    "tag": "web-primary183-fable-randomnan-20261104",
-    "url": "https://github.com/NextEval/nexteval.github.io/releases/download/web-primary183-fable-randomnan-20261104/public-web-results-c121192d7db307f2dc55a7456cb241799fef2154a758780c3c5d88197c5dc1d7.tar.gz"
+    "sha256": "9eb5015bf5fdbb36f63273b3bceeedeb15a2190959d48fc0a57808343b488ea2",
+    "tag": "web-primary184-pair-score-20261104",
+    "url": "https://github.com/NextEval/nexteval.github.io/releases/download/web-primary184-pair-score-20261104/public-web-results-9eb5015bf5fdbb36f63273b3bceeedeb15a2190959d48fc0a57808343b488ea2.tar.gz"
   },
   "publication_gate": "Website/Pages PR CI merge and independent render acceptance pending",
   "publication_ready": false,
@@ -8077,10 +8316,10 @@
     "scope": "Original reviewed UI and archived histories; owner-selected PR37 numerical primary comparison"
   },
   "storage": {
-    "path": "releases/web-primary183-fable-randomnan-20261104/public-web-results-c121192d7db307f2dc55a7456cb241799fef2154a758780c3c5d88197c5dc1d7.tar.gz",
+    "path": "releases/web-primary184-pair-score-20261104/public-web-results-9eb5015bf5fdbb36f63273b3bceeedeb15a2190959d48fc0a57808343b488ea2.tar.gz",
     "private": true,
     "provider": "huggingface",
     "repo_id": "NextEval/nexteval-bench-data",
-    "revision": "c4e8020814a55591d57606d48f2f79f2840a7c4e"
+    "revision": "4e9dd44291f16bf4de95a11dabbef681ec4a9d01"
   }
 }
