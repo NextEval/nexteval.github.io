@@ -1,10 +1,10 @@
 {
  "schema": "nexteval.site-source/1",
  "source_repository": "NextEval/nexteval-bench-website",
- "source_commit": "543398bebb016ea494899ab153d03ebf11906b65",
- "tag": "site-primary184-pair-score-20261104",
+ "source_commit": "d14fac873fbe9be15125b4dce25292e0239c29de",
+ "tag": "site-primary184-leaderboard-20261105",
  "snapshot_id": "web-7bb4961b0e88ee6e36384f0a",
- "manifest_sha256": "49b01e9d3a113eff131210a8785e4da07e031fcf04c977d97d485468b45023ad",
+ "manifest_sha256": "17fa882493a3d75f820ee732a97281f9238b6cf9e1f30b2a3d8272a9aa264706",
  "displayed_groups": {
   "nexteval-u5-perturbed-noisy@1": 43,
   "nexteval-u5-perturbed-random-nan@1": 43,
@@ -13,25 +13,25 @@
  },
  "release": {
   "repository": "NextEval/nexteval.github.io",
-  "tag": "site-primary184-pair-score-20261104",
-  "name": "site-results-4943ed6cdc7b7ff5ca443bcc566d4c5ec2c0003e9decb56a57182aaae9259110.tar.gz",
-  "url": "https://github.com/NextEval/nexteval.github.io/releases/download/site-primary184-pair-score-20261104/site-results-4943ed6cdc7b7ff5ca443bcc566d4c5ec2c0003e9decb56a57182aaae9259110.tar.gz",
-  "sha256": "4943ed6cdc7b7ff5ca443bcc566d4c5ec2c0003e9decb56a57182aaae9259110",
-  "bytes": 46683333,
-  "release_id": 433595206,
-  "asset_id": 708541666
+  "tag": "site-primary184-leaderboard-20261105",
+  "name": "site-results-51b929647e265417facbca80260d738c4a9ab8216ffc107520fc680a7aa6a758.tar.gz",
+  "url": "https://github.com/NextEval/nexteval.github.io/releases/download/site-primary184-leaderboard-20261105/site-results-51b929647e265417facbca80260d738c4a9ab8216ffc107520fc680a7aa6a758.tar.gz",
+  "sha256": "51b929647e265417facbca80260d738c4a9ab8216ffc107520fc680a7aa6a758",
+  "bytes": 46761434,
+  "release_id": 434243284,
+  "asset_id": 710347295
  },
  "hf": {
   "repo_id": "NextEval/nexteval-bench-web",
   "private": true,
-  "revision": "1efc8a9707b95454f83e642d7332eed50e88286b",
-  "tag": "site-primary184-pair-score-20261104",
-  "path": "releases/site-primary184-pair-score-20261104/"
+  "revision": "bd9f53e84b0d14215529f80779ca90ee679a7868",
+  "tag": "site-primary184-leaderboard-20261105",
+  "path": "releases/site-primary184-leaderboard-20261105/"
  },
  "files": {
   "app.mjs": {
-   "bytes": 91917,
-   "sha256": "46fd90eee2661a75d4b574d9bf6dc2fcd0ed24f2978921daf96439a9aa8d3bbe"
+   "bytes": 93038,
+   "sha256": "680b6cfb2c8781ac0e21ee12fd2a2bbc8781e80acbd317ff68fa49a5a1fb9b5a"
   },
   "chart.mjs": {
    "bytes": 10552,
@@ -1525,6 +1525,10 @@
    "bytes": 308777,
    "sha256": "6110f831e3e2f3996f2465e05045eb0a54072d874204221aab07ecb3c4e894ef"
   },
+  "data/leaderboard/view.json": {
+   "bytes": 246058,
+   "sha256": "67b3b41c21087463ce092eb0beca7e5c92610636559016da0ae8472bec32c20a"
+  },
   "data/model-releases.json": {
    "bytes": 4576,
    "sha256": "16e738713c2843668263e272125c2cbb215da277246f6f830bdbd14f5be7a0c7"
@@ -1706,16 +1710,24 @@
    "sha256": "3b079571fce8b5ef3d73a5165f4bf922fb6ee3ae66d4cf27f0e11f8afee1cfd2"
   },
   "data/pair/scores.json": {
-   "bytes": 14175,
-   "sha256": "2379d9ed9def9ce1661c47436d8906bd25ad522e3bf2edd590efbfed878b0637"
+   "bytes": 14167,
+   "sha256": "c1538dfdf10d52325f4b2d46012cacd8054b29218a351154f0b46834bf0e379c"
   },
   "data/results.json": {
-   "bytes": 82020,
-   "sha256": "d13ca861f8816f17826218a6f3bc3bdafb44ad6bfb063918ff72de36faf38acd"
+   "bytes": 82012,
+   "sha256": "3aa3056889204b7c385c3eaff21dce1730ec6e8f7ebd9dcd13a101dd2ad3f936"
   },
   "data/website-usage.json": {
-   "bytes": 97816,
-   "sha256": "cab05855a94245b3f675feeb1d71ec18af5063d86caa363aa271a184309b2b65"
+   "bytes": 95604,
+   "sha256": "bf028ea459e96c85214647c6c99d5834da5e379979600b540edc50cb3de57253"
+  },
+  "frontier.css": {
+   "bytes": 10991,
+   "sha256": "19e6edb164b199e83f2824b28142411a7f38759e7965d24222c7cce4b8e14141"
+  },
+  "frontier.mjs": {
+   "bytes": 35511,
+   "sha256": "ea0d848ce87567ccc6a92b02210a409ef81bc44603d26e0caff4701a79bf7e6c"
   },
   "icons.mjs": {
    "bytes": 488,
@@ -1729,6 +1741,10 @@
    "bytes": 403,
    "sha256": "2155a232c37ba437809d4e23ade8507a532b914c474d6c8abf0d92d177182dab"
   },
+  "logos.mjs": {
+   "bytes": 8883,
+   "sha256": "b3001d56a70662f143f3e1fcf4d6a88e06242e87afef818d21db12edecfbc4ca"
+  },
   "logratio.mjs": {
    "bytes": 532,
    "sha256": "a21cc24dd8093b959336d35519ec4f2070a74b72b22cc101a5075ee019acb100"
@@ -1738,16 +1754,16 @@
    "sha256": "aaddfd4b28f9874bfd20f402a35c0eec6a3d847961677a7834bb9c3c020396ae"
   },
   "pair.css": {
-   "bytes": 14300,
-   "sha256": "957d6e3df4c1ee3f40c25405a0c5e03394a2e21db3fe8f2eae018454eb2816b2"
+   "bytes": 14288,
+   "sha256": "e1f1abf7d26d0c7ea53babca01589234a3c4afacebdaaabce1026353c9e8774c"
   },
   "pareto.mjs": {
    "bytes": 13959,
    "sha256": "ad27af37f6a8720e99f5d1999988e1f406b2ffbd3d07e405d71467c4e5f44c0d"
   },
   "plan.mjs": {
-   "bytes": 2569,
-   "sha256": "9f58948a73bce4ab667366ccc1493e6d50fc3f5d38e00ba6fdb56ee4a943ad54"
+   "bytes": 2368,
+   "sha256": "b541567ef9c8087419a61788a69b9e036d66a1a37fa5a3de4fdff47a578c776d"
   },
   "presentation.mjs": {
    "bytes": 5299,
