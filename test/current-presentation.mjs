@@ -14,11 +14,11 @@ const RETIRED_SHA256=new Set(['64ba4b3f65ce6c2f4cac781dab96410a11f66cbf0cd0b9c15
  '7482a99d2b91796ac967d8e5ec3e9e431b0761e1e77aa48c46e24dce5004987f','eb7e94572de4acbeac798c59f9a8fa11de946e317c4d79f6428f2cb1876d5e94']);
 const retired=id=>RETIRED_SHA256.has(createHash('sha256').update(id).digest('hex'));
 const harness=id=>snapshot.participants.find(p=>p.participant_id===id).harness;
-test('retired Chinese configurations are not shipped; displayed groups stay 172',()=>{
+test('retired Chinese configurations are not shipped; displayed groups stay 180',()=>{
  assert(snapshot.participants.every(isDisplayed));
  assert(!snapshot.participants.some(p=>retired(p.participant_id)));
  assert(!snapshot.tasks.some(t=>t.members.some(retired)));
- assert.equal(snapshot.tasks.reduce((n,t)=>n+displayedTask(snapshot,t).scores.filter(p=>!['scipy','reference'].includes(harness(p.participant_id))).length,0),172);
+ assert.equal(snapshot.tasks.reduce((n,t)=>n+displayedTask(snapshot,t).scores.filter(p=>!['scipy','reference'].includes(harness(p.participant_id))).length,0),180);
  assert(isDisplayed({model:'qwen3.8-max',effort:'high',harness:'codex'}));
  assert(!isDisplayed({model:'qwen3.8-max',effort:'medium',harness:'codex'}));
  assert(!isDisplayed({model:'mimo-v2.6-pro',effort:'off',harness:'codex'}));
@@ -42,7 +42,10 @@ test('dollar scenarios cover every active group from published list prices, insi
  const methods=new Set(['same_group_measured_cost_per_token','same_configuration_other_feature_cost_per_token']);
  for(const task of snapshot.tasks){
   const data=consumptionView(snapshot,usage,task,'cost','',true);
-  assert.equal(data.points.length,data.eligible);
+  // DeepSeek V4 Flash has no list price on the 2026-11-04 snapshot date: tokens only, no dollar point.
+  const noPrice=usage.groups.filter(g=>g.task_id===task.task_id&&g.accounting_status==='tokens_only'&&g.cost_known_runs===0).length;
+  assert.equal(noPrice,1);
+  assert.equal(data.points.length,data.eligible-noPrice);
   assert.deepEqual(data.frontier,paretoFrontier(data.points));
   assert(data.points.filter(p=>p.estimated).every(p=>Number.isFinite(p.x)&&p.x>0&&methods.has(p.estimate.method)));
  }
