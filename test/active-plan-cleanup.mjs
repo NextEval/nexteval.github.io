@@ -22,7 +22,7 @@ test('official medium/high and high Qwen Max model remain planned',()=>{
 });
 test('every displayed configuration is shipped; retired tiers are not',()=>{
  const harness=id=>data.participants.find(p=>p.participant_id===id).harness;
- assert.equal(data.tasks.reduce((n,t)=>n+t.scores.filter(s=>!['scipy','reference'].includes(harness(s.participant_id))).length,0),172);
+ assert.equal(data.tasks.reduce((n,t)=>n+t.scores.filter(s=>!['scipy','reference'].includes(harness(s.participant_id))).length,0),180);
  assert(data.participants.every(isDisplayed));
  for(const task of data.tasks){
   const rows=sortedParticipants(data,task.task_id,planned),ids=new Set(rows.map(p=>p.participant_id));
