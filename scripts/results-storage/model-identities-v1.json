@@ -1,6 +1,6 @@
 {
   "schema": "nexteval.model-identities/1",
-  "version": "2026-11-06",
+  "version": "2026-11-07",
   "policy": "Exact model identity aliases only. Routing prefixes are not model organizations. Original request IDs, participant IDs, provenance and scientific hashes remain unchanged.",
   "presentation_reference": "https://www.terminal-bench-science.ai/",
   "harnesses": {"codex": "Codex", "claude-code": "Claude Code", "scipy": "SciPy", "reference": "Numerical reference"},
@@ -27,8 +27,7 @@
     {"id":"mimo-v2.6-flash","display_name":"MiMo V2.6 Flash","family":"MiMo","organization":"Xiaomi","aliases":["mimo-v2.6-flash","openai/mimo-v2.6-flash","anthropic/mimo-v2.6-flash"]},
     {"id":"mimo-v2.6-pro","display_name":"MiMo V2.6 Pro","family":"MiMo","organization":"Xiaomi","aliases":["mimo-v2.6-pro","openai/mimo-v2.6-pro","anthropic/mimo-v2.6-pro"]},
     {"id":"kimi-k3","display_name":"Kimi K3","family":"Kimi","organization":"Moonshot AI","aliases":["kimi-k3","openai/kimi-k3","anthropic/kimi-k3"]},
-    {"id":"hy4-preview","display_name":"HY4 Preview","family":"Hunyuan","organization":"Tencent","aliases":["hy4-preview","openai/hy4-preview","anthropic/hy4-preview"]},
-    {"id":"hy4","display_name":"HY4","family":"Hunyuan","organization":"Tencent","aliases":["hy4","openai/hy4","anthropic/hy4"]}
+    {"id":"hy4","display_name":"Hy4","family":"Hy","organization":"Tencent","aliases":["hy4","openai/hy4","anthropic/hy4"]}
   ],
   "organization_sources": {"MiMo":"https://mimo.xiaomi.com/","Qwen":"https://www.alibabagroup.com/en-US/ai-governance/our-approach"}
 }

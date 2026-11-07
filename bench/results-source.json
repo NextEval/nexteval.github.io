@@ -1,10 +1,10 @@
 {
  "schema": "nexteval.site-source/1",
  "source_repository": "NextEval/nexteval-bench-website",
- "source_commit": "4dfcbe76385049dad2bbf852023a9121eabf8939",
- "tag": "site-primary192-hy4-20261106",
+ "source_commit": "f3350d8597aae5b719f92d143998e64150ad0daa",
+ "tag": "site-primary192-hy-naming-20261107",
  "snapshot_id": "web-ffdd187da8339d652019d0d2",
- "manifest_sha256": "0cc372675050bb85c6947d6edebe9bc54547978c8ea3553a4ac8e5144c49e1e1",
+ "manifest_sha256": "a19d845447421e05761b0b40dd7e3defd46ac6c20eb8580d581320abec30fdd6",
  "displayed_groups": {
   "nexteval-u5-perturbed-noisy@1": 45,
   "nexteval-u5-perturbed-random-nan@1": 45,
@@ -13,25 +13,25 @@
  },
  "release": {
   "repository": "NextEval/nexteval.github.io",
-  "tag": "site-primary192-hy4-20261106",
-  "name": "site-results-e506a63e8dce10363c327d201fb384c2e629d473061f8e1bbc50a92651dece7d.tar.gz",
-  "url": "https://github.com/NextEval/nexteval.github.io/releases/download/site-primary192-hy4-20261106/site-results-e506a63e8dce10363c327d201fb384c2e629d473061f8e1bbc50a92651dece7d.tar.gz",
-  "sha256": "e506a63e8dce10363c327d201fb384c2e629d473061f8e1bbc50a92651dece7d",
-  "bytes": 48608108,
-  "release_id": 436825501,
-  "asset_id": 718055118
+  "tag": "site-primary192-hy-naming-20261107",
+  "name": "site-results-589513373e9a2c690812d77e8c527253050dbd319b4d9e9f919e1b94409dee26.tar.gz",
+  "url": "https://github.com/NextEval/nexteval.github.io/releases/download/site-primary192-hy-naming-20261107/site-results-589513373e9a2c690812d77e8c527253050dbd319b4d9e9f919e1b94409dee26.tar.gz",
+  "sha256": "589513373e9a2c690812d77e8c527253050dbd319b4d9e9f919e1b94409dee26",
+  "bytes": 48608076,
+  "release_id": 437674857,
+  "asset_id": 721157300
  },
  "hf": {
   "repo_id": "NextEval/nexteval-bench-web",
   "private": true,
-  "revision": "940d00d4f054f7e5c7522bbb4902a281e9ce5f9d",
-  "tag": "site-primary192-hy4-20261106",
-  "path": "releases/site-primary192-hy4-20261106/"
+  "revision": "655451e38d10c287691ef99b5efdf2005e0fbebc",
+  "tag": "site-primary192-hy-naming-20261107",
+  "path": "releases/site-primary192-hy-naming-20261107/"
  },
  "files": {
   "app.mjs": {
-   "bytes": 93586,
-   "sha256": "71e22c5f32345c4102dba029b8a7c063d591409a906cb85302ee06b46ef08f6b"
+   "bytes": 93582,
+   "sha256": "fe067875e5fe20b251de21793e0b3e39752cd0b96b30f37c37cd22c2f664edde"
   },
   "chart.mjs": {
    "bytes": 10552,
@@ -1526,8 +1526,8 @@
    "sha256": "0ee1f24e833f513690a6b5d49a9c5c33f59dec0caddf7296d7bde3a773717c2a"
   },
   "data/leaderboard/view.json": {
-   "bytes": 252950,
-   "sha256": "b01d3f3773ae4671a7b4d44ea053400ff10a035398a9938fc1986ab69755e2f4"
+   "bytes": 252935,
+   "sha256": "0b8e7f284d4d506a95c852880b5c8f47c4659b583164dcc1991a6ee624c3c6a3"
   },
   "data/model-releases.json": {
    "bytes": 4972,
@@ -1734,24 +1734,24 @@
    "sha256": "19e6edb164b199e83f2824b28142411a7f38759e7965d24222c7cce4b8e14141"
   },
   "frontier.mjs": {
-   "bytes": 35560,
-   "sha256": "92c15f8918c62704d36f5cebf1ed45aba4962f7d26901f0171cf69ef1f5ff7be"
+   "bytes": 35558,
+   "sha256": "a6ae2f021d0d909ffa9f36361cc378d0b26f5b0a42d8ffffecd2b8256a4e1345"
   },
   "icons.mjs": {
    "bytes": 488,
    "sha256": "8cfd8776c2d608e8ddb785d493113b1a0d6fce371f31afd3d39bd04d64234dc2"
   },
   "identities.mjs": {
-   "bytes": 5593,
-   "sha256": "ea9cb9c3c9128c3aa82e5c7283a94fb45bddeb2144f55bac5cc4e9fb1616d6ab"
+   "bytes": 5423,
+   "sha256": "ef03e9633eaef000da1558c7642cd8ffcb7bdbfb4068f40d6df1e74b4939c9fa"
   },
   "index.html": {
    "bytes": 403,
    "sha256": "2155a232c37ba437809d4e23ade8507a532b914c474d6c8abf0d92d177182dab"
   },
   "logos.mjs": {
-   "bytes": 9551,
-   "sha256": "2e2d9068d3644ac5d10f754f95e3a32b900e6645503d6b5895c84cd95c5ecdd7"
+   "bytes": 9541,
+   "sha256": "f9172da5283114e81fd0dc33f51902f25f6dbff3bff64abfa5b3981d8d189be0"
   },
   "logratio.mjs": {
    "bytes": 532,
@@ -1770,12 +1770,12 @@
    "sha256": "ad27af37f6a8720e99f5d1999988e1f406b2ffbd3d07e405d71467c4e5f44c0d"
   },
   "plan.mjs": {
-   "bytes": 2484,
-   "sha256": "820cf777db9b593d59c6cdd383f363092cbc4ed6f536f2626a18abe420d48774"
+   "bytes": 2479,
+   "sha256": "a7bdea789d43c80412a7864e33184b9b1542e6a543c30dc5d051b1e69fa79292"
   },
   "presentation.mjs": {
-   "bytes": 5299,
-   "sha256": "b56720f46ec0b9159d6f13fbc36029a6b3318deba0ee0aec063f71a6c2b68b4c"
+   "bytes": 5294,
+   "sha256": "38a8b8ce5248461abd528c081cdd2d4763f2bfce8d698cf8013cf2d92f47423f"
   },
   "profile-figures.mjs": {
    "bytes": 5776,
