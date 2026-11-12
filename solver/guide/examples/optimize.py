@@ -1,4 +1,4 @@
-"""Small objectives for NextEval 1.0.0; running the CLI contacts a provider."""
+"""Small objectives for NextEval Solver 1.0; running the CLI contacts a model provider."""
 from __future__ import annotations
 
 import argparse
@@ -20,7 +20,6 @@ def make_problem(name="sphere"):
 def run(*, problem="sphere", provider="openai", maxfev=80, run_dir="runs", runner=None):
     fun, x0 = make_problem(problem)
     options = {
-        "execution_mode": "task",
         "maxfev": maxfev,
         "seed": 7,
         "trace": "trajectory",
@@ -33,7 +32,7 @@ def run(*, problem="sphere", provider="openai", maxfev=80, run_dir="runs", runne
         model = clients[provider]()
         options["model_call_limit"] = 60
         options["runner_options"] = {"max_tokens": 4096}
-    return minimize(fun, x0, model=model, runner=runner, toolset="core-v04", options=options)
+    return minimize(fun, x0, model=model, runner=runner, options=options)
 
 
 def main():

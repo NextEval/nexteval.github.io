@@ -2,6 +2,9 @@ import './terminology.mjs';
 import './current-presentation.mjs';
 import './primary-archive-entry.mjs';
 import './bootstrap-imports.mjs';
+import './style-tokens.mjs';
+import './site-pages.mjs';
+import './waffle.mjs';
 import { source, ALLOWED_FILES, ALLOWED_DIRS } from '../scripts/site/build-site.mjs';
 import { checkSite } from '../scripts/site/site-check.mjs';
 import { readFile, readdir } from 'node:fs/promises';
@@ -33,7 +36,7 @@ assert.deepEqual(await allFiles(join(site, 'bench/results')), Object.keys(source
 
 const published = await allFiles(site);
 for (const path of published) assert(ALLOWED_FILES.includes(path) || ALLOWED_DIRS.some(dir => path.startsWith(dir)) || path.startsWith('bench/results/'), 'Unexpected published file: ' + path);
-for (const removed of ['scripts/', 'test/', 'audit/', 'README.md', 'bench/results-source.json', 'bench/app.js', 'bench/identity.html',
+for (const removed of ['scripts/', 'test/', 'audit/', 'README.md', 'site-flags.json', 'site.js', 'bench/results-source.json', 'bench/app.js', 'bench/identity.html',
   'bench/assets/comparisons/', 'bench/assets/curves/', 'bench/assets/catalog/', 'bench/assets/provenance.json', 'bench/assets/gpt-performance.pdf',
   'bench/results/archive/', 'bench/results/usage-estimates.html', 'bench/results/check.mjs', 'bench/results/evidence.mjs',
   'bench/results/data/evidence/', 'bench/results/data/historical-assisted/', 'bench/results/data/pricing-snapshot.json'])

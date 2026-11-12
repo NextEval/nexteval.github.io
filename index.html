@@ -3,103 +3,68 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Next evaluation for solvers. Next evaluation of agents. NextEval brings agentic derivative-free optimization and agent evaluation together under a finite function-evaluation budget.">
+  <meta name="description" content="NextEval: derivative-free optimization with language-model agents under a fixed budget of function evaluations. NextEval Bench scores coding agents against COBYQA; NextEval Solver lets an agent choose the numerical methods.">
   <meta name="theme-color" content="#101516">
-  <title>NextEval — Solver and Bench</title>
+  <title>NextEval | Bench and Solver</title>
   <link rel="icon" type="image/svg+xml" href="site-assets/brand/nexteval-on-dark.svg">
-  <link rel="stylesheet" href="site.css?v=path-nav-1">
-  <link rel="stylesheet" href="slogan.css?v=2">
-  <script src="bench/vendor/lucide.min.js" defer></script>
-  <script src="navigation.js?v=1" defer></script>
+  <link rel="stylesheet" href="site.css?v=20261112-unified">
+  <link rel="stylesheet" href="slogan.css?v=3">
+  <script src="navigation.js?v=2" defer></script>
 </head>
-<body>
+<body class="site-page">
+  <a class="site-skip" href="#content">Skip to content</a>
   <header class="site-header">
-    <a class="site-brand" href="./" aria-label="NextEval home">
-      <img src="site-assets/brand/nexteval-on-dark.svg" alt="" width="30" height="30">
-      <span>NextEval</span>
-    </a>
-    <div class="header-path"><span class="path-divider" aria-hidden="true">/</span><details class="nav-switcher product-switcher"><summary>Overview <i data-lucide="chevron-down" aria-hidden="true"></i></summary><nav class="switcher-panel" aria-label="Products"><a href="./" aria-current="page">Overview</a><a href="solver/">Solver</a><a href="bench/">Bench</a><a class="menu-external" href="https://github.com/NextEval" target="_blank" rel="noopener">GitHub <i data-lucide="arrow-up-right" aria-hidden="true"></i></a></nav></details></div>
-    <a class="header-source" href="https://github.com/NextEval" target="_blank" rel="noopener">GitHub <i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
+    <a class="site-brand" href="./" aria-label="NextEval home"><img src="site-assets/brand/nexteval-on-dark.svg" alt="" width="30" height="30"><span>NextEval</span></a>
+    <div class="header-path"><span class="path-divider" aria-hidden="true">/</span><details class="nav-switcher product-switcher"><summary>Overview <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><nav class="switcher-panel" aria-label="Products"><a href="./" aria-current="page">Overview</a><a href="bench/">Bench</a><a href="solver/">Solver</a><a class="menu-external" href="https://github.com/NextEval" target="_blank" rel="noopener">GitHub <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a></nav></details></div>
+    <a class="header-source" href="https://github.com/NextEval" target="_blank" rel="noopener">GitHub <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
   </header>
-  <main>
-    <section class="hero brand-hero">
-      <div class="hero-field" aria-hidden="true">
-        <img src="site-assets/brand/decision-field.png" alt="" width="1672" height="941" fetchpriority="high">
+  <main class="page" id="content" tabindex="-1">
+    <div class="page-heading">
+      <div>
+        <p class="page-kicker evaluation-slogan" aria-label="Next evaluation for solvers; next evaluation of agents"><i aria-hidden="true"></i><span class="slogan-word">Next evaluation</span><span class="slogan-meaning slogan-solver">for <strong>solvers</strong></span><span class="slogan-sep" aria-hidden="true">/</span><span class="slogan-meaning slogan-bench">of <strong>agents</strong></span></p>
+        <h1>NextEval</h1>
+        <p>NextEval is an open research project on derivative-free optimization with language-model agents under a fixed budget of function evaluations: a benchmark that scores coding agents against COBYQA, and a solver in which an agent chooses the numerical methods.</p>
       </div>
-      <div class="hero-content shell">
-        <div class="hero-copy">
-          <h1 class="brand-title">NextEval</h1>
-          <h2 class="evaluation-slogan" aria-label="Next evaluation for solvers; next evaluation of agents">
-            <span class="slogan-next">NEXT</span>
-            <span class="slogan-word">EVALUATION</span>
-            <span class="slogan-meanings">
-              <span class="slogan-meaning slogan-solver"><span class="slogan-preposition">for</span><strong>solvers</strong></span>
-              <span class="slogan-meaning slogan-bench"><span class="slogan-preposition">of</span><strong>agents</strong></span>
-            </span>
-          </h2>
-        </div>
-        <div class="hero-summary">
-          <p class="hero-lede">An agentic optimizer that chooses the next function evaluation. A benchmark that tests how agents turn evaluations into progress.</p>
-          <div class="hero-actions">
-            <a class="button button-primary" href="solver/">Explore Solver <span aria-hidden="true">↗</span></a>
-            <a class="button button-quiet" href="bench/">Open Bench <span aria-hidden="true">↗</span></a>
-          </div>
-          <p class="hero-footnote">Opaque objectives · finite evaluation budgets · recorded evaluation histories</p>
-        </div>
-      </div>
-    </section>
-    <section class="statement shell">
-      <p class="section-index">01 / THE IDEA</p>
-      <div class="statement-grid">
-        <h2>Functions to optimize<br><span>Agents to evaluate</span></h2>
-        <p>For the Solver, evaluation means querying a function at the next chosen point. For the Bench, it means testing an agent's ability to make those choices. Derivative-free optimization becomes a test of sequential decision-making under a finite evaluation budget.</p>
-      </div>
-    </section>
-    <section class="duality shell" aria-label="NextEval Solver and NextEval Bench">
-      <a class="product-panel product-solver" href="solver/">
-        <div class="panel-top"><span class="panel-number">01</span><span class="panel-route">/solver</span></div>
-        <div class="panel-symbol" aria-hidden="true">↗</div>
-        <h2>NextEval <strong>Solver</strong></h2>
-        <p>An agentic derivative-free optimizer for opaque objectives. The agent chooses tools and the next query; the environment owns validation, accounting, history, and state.</p>
-        <span class="panel-link">Read the solver overview <span aria-hidden="true">→</span></span>
+    </div>
+
+    <section class="card-grid" aria-label="Products">
+      <a class="card card-entry" data-product="bench" href="bench/">
+        <span class="card-top"><span>/bench</span><span>Results</span></span>
+        <h2><svg class="card-mark" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>NextEval Bench</h2>
+        <p>A benchmark that scores coding agents on derivative-free optimization problems against the COBYQA solver.</p>
+        <span class="card-more">Open the leaderboard <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
       </a>
-      <a class="product-panel product-bench" href="bench/">
-        <div class="panel-top"><span class="panel-number">02</span><span class="panel-route">/bench</span></div>
-        <div class="panel-symbol" aria-hidden="true">◫</div>
-        <h2>NextEval <strong>Bench</strong></h2>
-        <p>A benchmark for evaluating agents through derivative-free optimization. Compare harnesses and models against numerical baselines and inspect their evaluation histories.</p>
-        <span class="panel-link">Enter the benchmark <span aria-hidden="true">→</span></span>
+      <a class="card card-entry" data-product="solver" href="solver/">
+        <span class="card-top"><span>/solver</span><!--@if SOLVER_RELEASED--><span>Release 1.0.0</span><!--@else--><span>Release: coming soon</span><!--@endif--></span>
+        <h2><svg class="card-mark" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><path d="M9 17c2 0 2.8-1 2.8-2.8V10c0-2 1-3.3 3.2-3"/><path d="M9 11.2h5.7"/></svg>NextEval Solver 1.0</h2>
+        <p>A derivative-free optimizer in which a language-model agent chooses numerical-method campaigns, with a textbook autopilot as the fixed-policy fallback.</p>
+        <span class="card-more">Read about the solver <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
       </a>
     </section>
-    <section class="pipeline shell">
-      <div class="pipeline-heading">
-        <p class="section-index">02 / THE RELATION</p>
-        <h2>From solver runs<br><span>to benchmark results</span></h2>
-      </div>
-      <div class="pipeline-track">
-        <div class="pipeline-step"><span>01</span><strong>Solve</strong><p>A solver run produces a history of objective evaluations.</p></div>
-        <div class="pipeline-rule" aria-hidden="true"></div>
-        <div class="pipeline-step"><span>02</span><strong>Record</strong><p>Keep each run's configuration with its evaluation history.</p></div>
-        <div class="pipeline-rule" aria-hidden="true"></div>
-        <div class="pipeline-step"><span>03</span><strong>Select</strong><p>Fix the task set and participant configurations for a comparison.</p></div>
-        <div class="pipeline-rule" aria-hidden="true"></div>
-        <div class="pipeline-step"><span>04</span><strong>Compare</strong><p>Bench turns those histories into scores and performance profiles.</p></div>
-      </div>
+
+    <section class="section board-preview" id="bench-highlight" aria-labelledby="bench-highlight-title">
+      <div class="section-head"><h2 id="bench-highlight-title">Bench at a glance</h2><a class="section-link text-link" href="bench/#leaderboard">Full leaderboard</a></div>
+      <!--@bench-preview-->
+      <p class="section-note">Every agent, a harness driving a model, is compared with COBYQA on the same derivative-free problems. The current ranking is on the <a class="text-link" href="bench/#leaderboard">leaderboard</a>.</p>
+      <!--@end-->
     </section>
-    <section class="principles shell">
-      <p class="section-index">03 / THE BOUNDARY</p>
-      <div class="principle-grid">
-        <article><span class="principle-mark">A</span><h3>Opaque by default</h3><p>The solver receives an objective, not its identity, implementation, or known optimum.</p></article>
-        <article><span class="principle-mark">B</span><h3>Budget is the clock</h3><p>Progress is measured in real function evaluations, not wall-clock speed.</p></article>
-        <article><span class="principle-mark">C</span><h3>Same comparison for everyone</h3><p>Every configuration in a task is scored against the same targets and the same COBYQA reference.</p></article>
-      </div>
+
+    <section class="section" id="links" aria-labelledby="links-title">
+      <div class="section-head"><h2 id="links-title">Code and results</h2></div>
+      <dl class="def-list">
+        <div><dt>Code</dt><dd><a href="https://github.com/NextEval" target="_blank" rel="noopener">github.com/NextEval</a>, the NextEval organization on GitHub.</dd></div>
+        <div><dt>Results</dt><dd>The published results, with the evaluation history of every problem and repeat, are in <a href="bench/#matrix">NextEval Bench</a>; how they are scored is in its <a href="bench/#method">methodology</a>.</dd></div>
+        <!--@if SOLVER_RELEASED-->
+        <div><dt>Solver</dt><dd><a href="https://github.com/NextEval/nexteval-solver" target="_blank" rel="noopener">NextEval/nexteval-solver</a>, the repository of NextEval Solver 1.0, and its <a href="solver/guide/">User Guide</a>.</dd></div>
+        <!--@endif-->
+        <div><dt>Website</dt><dd><a href="https://github.com/NextEval/nexteval.github.io" target="_blank" rel="noopener">NextEval/nexteval.github.io</a>, the source of these pages.</dd></div>
+      </dl>
     </section>
-    <section class="closing shell">
-      <div><p class="eyebrow">NEXTEVAL / OPEN RESEARCH</p><h2>The next point<br><em>A new test for agents</em></h2></div>
-      <div class="closing-links"><a class="button button-primary" href="solver/">Start with Solver <span aria-hidden="true">↗</span></a><a class="button button-quiet" href="bench/">Inspect results <span aria-hidden="true">↗</span></a></div>
-    </section>
+
+    <footer class="page-footer">
+      <span>NextEval / &copy; 2026</span>
+      <nav aria-label="Footer"><a href="bench/">Bench</a><a href="solver/">Solver</a><a href="https://github.com/NextEval" target="_blank" rel="noopener">GitHub</a><a href="https://github.com/NextEval/nexteval.github.io" target="_blank" rel="noopener">Website source</a></nav>
+    </footer>
   </main>
-  <footer class="site-footer shell"><span>© 2026 NextEval</span><span>Next evaluation · for solvers / of agents</span><a href="https://github.com/NextEval/nexteval.github.io" target="_blank" rel="noopener">Source <span aria-hidden="true">↗</span></a></footer>
-  <script src="site.js"></script>
 </body>
 </html>

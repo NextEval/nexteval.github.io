@@ -3,106 +3,254 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Next evaluation for solvers. NextEval Solver uses a persistent agent to choose numerical actions and function evaluations for derivative-free optimization.">
+  <meta name="description" content="NextEval Solver 1.0: a derivative-free optimizer in which a language-model agent chooses numerical-method campaigns in a shared decision space, with a textbook autopilot as the fixed-policy fallback.">
   <meta name="theme-color" content="#101516">
-  <title>NextEval Solver</title>
+  <title>NextEval Solver 1.0</title>
   <link rel="icon" type="image/svg+xml" href="../site-assets/brand/nexteval-on-dark.svg">
-  <link rel="stylesheet" href="../site.css?v=session-flow-1">
-  <link rel="stylesheet" href="../slogan.css?v=2">
-  <script src="../bench/vendor/lucide.min.js" defer></script>
+  <link rel="stylesheet" href="../site.css?v=20261112-unified">
+  <link rel="stylesheet" href="../slogan.css?v=3">
   <script src="../navigation.js?v=1" defer></script>
+  <script src="docs.js?v=2" defer></script>
 </head>
-<body class="solver-page">
+<body class="site-page">
+  <a class="site-skip" href="#content">Skip to content</a>
   <header class="site-header" data-product="solver">
     <a class="site-brand" href="../" aria-label="NextEval home"><img src="../site-assets/brand/nexteval-on-dark.svg" alt="" width="30" height="30"><span>NextEval</span></a>
-    <div class="header-path"><span class="path-divider" aria-hidden="true">/</span><details class="nav-switcher product-switcher"><summary>Solver <i data-lucide="chevron-down" aria-hidden="true"></i></summary><nav class="switcher-panel" aria-label="Products"><a href="../">Overview</a><a href="./" aria-current="location">Solver</a><a href="../bench/">Bench</a><a class="menu-external" href="https://github.com/NextEval" target="_blank" rel="noopener">GitHub <i data-lucide="arrow-up-right" aria-hidden="true"></i></a></nav></details><span class="path-divider" aria-hidden="true">/</span><details class="nav-switcher context-switcher"><summary><span data-current-view>Overview</span><i data-lucide="chevron-down" aria-hidden="true"></i></summary><nav class="switcher-panel" aria-label="Solver navigation"><a href="./" aria-current="page">Overview</a><a href="guide/">User Guide</a><a href="api/">Python API</a></nav></details></div>
-    <a class="header-source" href="https://github.com/NextEval" target="_blank" rel="noopener">GitHub <i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
+    <div class="header-path"><span class="path-divider" aria-hidden="true">/</span><details class="nav-switcher product-switcher"><summary>Solver <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><nav class="switcher-panel" aria-label="Products"><a href="../">Overview</a><a href="../bench/">Bench</a><a href="./" aria-current="location">Solver</a><a class="menu-external" href="https://github.com/NextEval" target="_blank" rel="noopener">GitHub <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a></nav></details><span class="path-divider" aria-hidden="true">/</span><details class="nav-switcher context-switcher"><summary><span data-current-view>Overview</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><nav class="switcher-panel" aria-label="Solver navigation"><a href="./" aria-current="page">Overview</a><a href="guide/">User Guide</a><a href="api/">Python API</a></nav></details></div>
+    <a class="header-source" href="https://github.com/NextEval" target="_blank" rel="noopener">GitHub <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
   </header>
-  <main>
-    <section class="solver-hero shell">
-      <div class="solver-hero-copy">
-        <p class="eyebrow"><span class="eyebrow-dot"></span>AGENTIC DERIVATIVE-FREE OPTIMIZATION</p>
-        <h1 class="solver-title">NextEval <em>Solver</em></h1>
-        <h2 class="evaluation-slogan evaluation-slogan--compact evaluation-slogan--solver" aria-label="Next evaluation for solvers; next evaluation of agents">
-          <span class="slogan-next">NEXT</span>
-          <span class="slogan-word">EVALUATION</span>
-          <span class="slogan-meanings">
-            <span class="slogan-meaning slogan-solver"><span class="slogan-preposition">for</span><strong>solvers</strong></span>
-            <span class="slogan-meaning slogan-bench"><span class="slogan-preposition">of</span><strong>agents</strong></span>
-          </span>
-        </h2>
-        <p class="hero-lede">An agent-based solver for budget-limited derivative-free optimization. Give it an opaque objective and a starting point; it adapts its numerical strategy through one continuous session.</p>
-        <div class="hero-actions"><a class="button button-primary" href="guide/">User Guide <span aria-hidden="true">↗</span></a><a class="button button-quiet" href="api/">Python API reference <span aria-hidden="true">↗</span></a></div>
+  <main class="page" id="content" tabindex="-1">
+    <div class="page-heading">
+      <div>
+        <p class="page-kicker evaluation-slogan evaluation-slogan--solver" aria-label="Next evaluation for solvers; next evaluation of agents"><i aria-hidden="true"></i><span class="slogan-word">Next evaluation</span><span class="slogan-meaning slogan-solver">for <strong>solvers</strong></span><span class="slogan-sep" aria-hidden="true">/</span><span class="slogan-meaning slogan-bench">of <strong>agents</strong></span></p>
+        <h1>NextEval Solver 1.0</h1>
+        <p>A derivative-free optimizer in which a language-model agent chooses numerical-method campaigns in a shared decision space, with a textbook autopilot as the fixed-policy fallback.</p>
       </div>
-      <div class="solver-console">
-        <div class="console-head"><span><i class="status-light"></i>nexteval / session</span><span>opaque objective</span></div>
-        <pre data-language="python"><code><span class="code-muted">import</span> numpy <span class="code-muted">as</span> np
+      <!--@if SOLVER_RELEASED--><span class="page-edition">Release <b>1.0.0</b></span><!--@else--><span class="page-edition">Release: coming soon</span><!--@endif-->
+    </div>
+    <nav class="page-tabs" aria-label="Solver pages">
+      <a href="./" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><path d="M9 17c2 0 2.8-1 2.8-2.8V10c0-2 1-3.3 3.2-3"/><path d="M9 11.2h5.7"/></svg>Overview</a>
+      <a href="guide/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>User Guide</a>
+      <a href="api/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5c0 1.1.9 2 2 2h1"/><path d="M16 21h1a2 2 0 0 0 2-2v-5c0-1.1.9-2 2-2a2 2 0 0 1-2-2V5a2 2 0 0 0-2-2h-1"/></svg>Python API</a>
+    </nav>
+    <div class="page-toolbar">
+      <ul class="page-scope"><li><code>solve(fun, x0, options)</code></li><li>Opaque scalar objective</li><li>Unconstrained</li><li>Budget counted in function evaluations</li><li>Runtime dependency: NumPy</li></ul>
+    </div>
+
+    <section class="section" id="what" aria-labelledby="what-title">
+      <div class="section-head"><h2 id="what-title">What it is</h2></div>
+      <div class="prose">
+        <p>NextEval Solver minimizes a scalar objective on R<sup>n</sup> from function values alone: <code>solve(fun, x0, options=None)</code>. A language-model agent selects numerical methods, reads evidence, continues or switches methods, and decides when to finish. A trusted environment owns objective access, validation, function-evaluation accounting, the immutable history, and method state.</p>
+        <p><strong>Shared decision space.</strong> The solver has one toolset. The agent and the autopilot act on the same tools with the same parameters: bounded campaigns of numerical methods, single sampling actions, reads that perform no function evaluations, and the agent's own analysis code. Every actual objective call goes through one transaction and one ledger.</p>
+        <p><strong>Textbook autopilot.</strong> The autopilot is a fixed policy over that space and calls no model: trust-region slices of 2n+1 evaluations with textbook defaults (initial radius 1.0, 2n+1 interpolation points), a reset at the initial radius after a floor, a stall, or two method calls that spent nothing, and <code>finalize</code> after six such calls in a row. By default it is the fallback: when the agent session raises, reports an error or a timeout, or stops without <code>finalize</code> while budget remains, the autopilot spends the rest from the current ledger in the same run.</p>
+        <p>The solver treats <code>fun</code> as an opaque oracle. It does not inspect source code, problem names, known optima, or verifiers, and it does not support bounds, constraints or derivatives. Dimensions and evaluation budgets are configurable; the default budget is 200 function evaluations.</p>
+      </div>
+      <figure class="figure" aria-labelledby="arch-caption">
+        <svg class="figure-wide" viewBox="0 0 1100 404" role="img" aria-label="Architecture: an agent session and the textbook autopilot act on the same shared decision space; the trusted environment validates every action, calls the objective and records every evaluation.">
+          <defs>
+            <marker id="arch-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" class="arch-head"/></marker>
+            <marker id="arch-arrow-agent" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" class="arch-head agent"/></marker>
+            <marker id="arch-arrow-fallback" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" class="arch-head fallback"/></marker>
+          </defs>
+          <text x="2" y="16" class="arch-label">WHO DECIDES</text>
+          <text x="352" y="16" class="arch-label">SHARED DECISION SPACE</text>
+          <text x="742" y="16" class="arch-label">TRUSTED ENVIRONMENT</text>
+
+          <rect x="1" y="30" width="262" height="150" class="arch-box"/>
+          <text x="18" y="58" class="arch-title">Agent session</text>
+          <text x="18" y="82" class="arch-text">A language model chooses the next</text>
+          <text x="18" y="100" class="arch-text">tool call, reads the result, and</text>
+          <text x="18" y="118" class="arch-text">decides when to finish.</text>
+          <text x="18" y="146" class="arch-label">built-in runner / Codex adapter /</text>
+          <text x="18" y="164" class="arch-label">Claude Code adapter</text>
+
+          <rect x="1" y="232" width="262" height="140" class="arch-box"/>
+          <text x="18" y="260" class="arch-title">Textbook autopilot</text>
+          <text x="18" y="284" class="arch-text">A fixed policy, no model. Completes</text>
+          <text x="18" y="302" class="arch-text">the run when the agent session fails</text>
+          <text x="18" y="320" class="arch-text">or stops without finalize.</text>
+          <text x="18" y="348" class="arch-label">fallback, same tools</text>
+
+          <rect x="351" y="30" width="300" height="342" class="arch-box"/>
+          <text x="368" y="58" class="arch-title">Reads</text>
+          <text x="368" y="78" class="arch-text">situation, state, history, diagnostics,</text>
+          <text x="368" y="96" class="arch-text">model preview: no evaluations</text>
+          <line x1="351" x2="651" y1="112" y2="112" class="arch-zone"/>
+          <text x="368" y="136" class="arch-title">Method campaigns</text>
+          <text x="368" y="156" class="arch-text">trust region, line search, poll sweep,</text>
+          <text x="368" y="174" class="arch-text">coordinate search, Newton jump,</text>
+          <text x="368" y="192" class="arch-text">geometry rebuild, global surrogate</text>
+          <line x1="351" x2="651" y1="208" y2="208" class="arch-zone"/>
+          <text x="368" y="232" class="arch-title">Single actions</text>
+          <text x="368" y="252" class="arch-text">one catalog step or explicit points</text>
+          <line x1="351" x2="651" y1="268" y2="268" class="arch-zone"/>
+          <text x="368" y="292" class="arch-title">Own analysis</text>
+          <text x="368" y="312" class="arch-text">the agent's code on a read-only history</text>
+          <line x1="351" x2="651" y1="328" y2="328" class="arch-zone"/>
+          <text x="368" y="354" class="arch-title">finalize</text>
+
+          <rect x="741" y="30" width="358" height="342" class="arch-zone"/>
+          <rect x="759" y="48" width="322" height="64" class="arch-box"/>
+          <text x="776" y="74" class="arch-title">Validation and budget</text>
+          <text x="776" y="96" class="arch-text">schema, preconditions, evaluation ceiling</text>
+          <rect x="759" y="128" width="322" height="64" class="arch-box"/>
+          <text x="776" y="154" class="arch-title">Objective fun(x)</text>
+          <text x="776" y="176" class="arch-text">called only here, one transaction per call</text>
+          <rect x="759" y="208" width="322" height="64" class="arch-box"/>
+          <text x="776" y="234" class="arch-title">Evaluation ledger</text>
+          <text x="776" y="256" class="arch-text">every call recorded in order, failures included</text>
+          <rect x="759" y="288" width="322" height="64" class="arch-box"/>
+          <text x="776" y="314" class="arch-title">Method state and result</text>
+          <text x="776" y="336" class="arch-text">returns the best valid recorded point</text>
+
+          <path d="M263 105H343" class="arch-flow agent" marker-end="url(#arch-arrow-agent)"/>
+          <text x="303" y="97" text-anchor="middle" class="arch-label">calls</text>
+          <path d="M263 302H343" class="arch-flow fallback" marker-end="url(#arch-arrow-fallback)"/>
+          <text x="303" y="294" text-anchor="middle" class="arch-label">calls</text>
+          <path d="M132 180V224" class="arch-flow fallback" marker-end="url(#arch-arrow-fallback)"/>
+          <path d="M651 160H733" class="arch-flow" marker-end="url(#arch-arrow)"/>
+          <text x="692" y="152" text-anchor="middle" class="arch-label">actions</text>
+          <path d="M741 240H659" class="arch-flow" marker-end="url(#arch-arrow)"/>
+          <text x="696" y="232" text-anchor="middle" class="arch-label">results</text>
+          <text x="1" y="398" class="arch-label">Solid teal: the agent's calls. Dashed gold: the fallback takes over the remaining budget on the same ledger.</text>
+        </svg>
+        <svg class="figure-narrow" viewBox="0 0 360 730" role="img" aria-label="Architecture: an agent session and the textbook autopilot act on the same shared decision space; the trusted environment validates every action, calls the objective and records every evaluation.">
+          <defs>
+            <marker id="arch-n-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" class="arch-head"/></marker>
+            <marker id="arch-n-arrow-agent" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" class="arch-head agent"/></marker>
+            <marker id="arch-n-arrow-fallback" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" class="arch-head fallback"/></marker>
+          </defs>
+          <text x="1" y="12" class="arch-label">WHO DECIDES</text>
+          <rect x="1" y="22" width="172" height="120" class="arch-box"/>
+          <text x="12" y="46" class="arch-title">Agent session</text>
+          <text x="12" y="68" class="arch-text">A language model</text>
+          <text x="12" y="85" class="arch-text">chooses each tool call.</text>
+          <text x="12" y="112" class="arch-label">built-in runner or</text>
+          <text x="12" y="128" class="arch-label">an adapter</text>
+          <rect x="187" y="22" width="172" height="120" class="arch-box"/>
+          <text x="198" y="46" class="arch-title">Textbook autopilot</text>
+          <text x="198" y="68" class="arch-text">A fixed policy,</text>
+          <text x="198" y="85" class="arch-text">no model.</text>
+          <text x="198" y="112" class="arch-label">fallback,</text>
+          <text x="198" y="128" class="arch-label">same tools</text>
+          <path d="M87 142V182" class="arch-flow agent" marker-end="url(#arch-n-arrow-agent)"/>
+          <path d="M273 142V182" class="arch-flow fallback" marker-end="url(#arch-n-arrow-fallback)"/>
+          <text x="180" y="167" text-anchor="middle" class="arch-label">calls</text>
+          <rect x="1" y="190" width="358" height="246" class="arch-box"/>
+          <text x="12" y="212" class="arch-label">SHARED DECISION SPACE</text>
+          <text x="12" y="238" class="arch-title">Reads</text>
+          <text x="12" y="256" class="arch-text">state, history, diagnostics: no evaluations</text>
+          <text x="12" y="284" class="arch-title">Method campaigns</text>
+          <text x="12" y="302" class="arch-text">trust region, line search, poll sweep, coordinate</text>
+          <text x="12" y="319" class="arch-text">search, Newton jump, geometry, global surrogate</text>
+          <text x="12" y="347" class="arch-title">Single actions</text>
+          <text x="12" y="365" class="arch-text">one catalog step or explicit points</text>
+          <text x="12" y="393" class="arch-title">Own analysis, finalize</text>
+          <text x="12" y="411" class="arch-text">the agent's code on a read-only history</text>
+          <path d="M120 436V466" class="arch-flow" marker-end="url(#arch-n-arrow)"/>
+          <text x="112" y="456" text-anchor="end" class="arch-label">actions</text>
+          <path d="M240 474V444" class="arch-flow" marker-end="url(#arch-n-arrow)"/>
+          <text x="248" y="456" class="arch-label">results</text>
+          <rect x="1" y="474" width="358" height="250" class="arch-zone"/>
+          <text x="12" y="494" class="arch-label">TRUSTED ENVIRONMENT</text>
+          <rect x="12" y="504" width="336" height="48" class="arch-box"/>
+          <text x="23" y="524" class="arch-title">Validation and budget</text>
+          <text x="23" y="542" class="arch-text">schema, preconditions, evaluation ceiling</text>
+          <rect x="12" y="558" width="336" height="48" class="arch-box"/>
+          <text x="23" y="578" class="arch-title">Objective fun(x)</text>
+          <text x="23" y="596" class="arch-text">called only here, one transaction per call</text>
+          <rect x="12" y="612" width="336" height="48" class="arch-box"/>
+          <text x="23" y="632" class="arch-title">Evaluation ledger</text>
+          <text x="23" y="650" class="arch-text">every call recorded in order</text>
+          <rect x="12" y="666" width="336" height="48" class="arch-box"/>
+          <text x="23" y="686" class="arch-title">Method state and result</text>
+          <text x="23" y="704" class="arch-text">returns the best valid recorded point</text>
+        </svg>
+        <figcaption id="arch-caption">The agent and the autopilot differ only in who decides. Both reach the objective through the same tools, and the environment performs and meters every function evaluation. When the agent session fails or stops without <code>finalize</code>, the autopilot takes over the remaining budget on the same ledger.</figcaption>
+      </figure>
+    </section>
+
+    <section class="section" id="quick-start" aria-labelledby="quick-start-title">
+      <div class="section-head"><h2 id="quick-start-title">Quick start</h2><a class="section-link text-link" href="guide/">User Guide</a></div>
+      <div class="prose">
+        <!--@if SOLVER_RELEASED-->
+        <p class="release-line"><span class="badge badge-accent">v1.0.0</span>Python 3.10 or later. The distribution is <code>nexteval-solver</code>; the import name is <code>nexteval</code>. <a href="https://github.com/NextEval/nexteval-solver" target="_blank" rel="noopener">Repository on GitHub</a></p>
+        <div class="code-block"><pre aria-label="Install command" tabindex="0"><code>python -m pip install nexteval-solver</code></pre></div>
+        <!--@else-->
+        <p class="release-line"><span class="badge">Release: coming soon</span>The package and its repository are not public yet. The install command and the repository link appear here with the release.</p>
+        <!--@endif-->
+        <p>Configure a model provider (the <a href="guide/#provider">User Guide</a> lists the environment variables), then minimize a function from Python:</p>
+        <div class="code-block"><pre data-language="python" aria-label="Quick start" tabindex="0"><code><span class="code-muted">import</span> numpy <span class="code-muted">as</span> np
 <span class="code-muted">from</span> nexteval <span class="code-muted">import</span> solve
 
 result = solve(
     <span class="code-key">lambda</span> x: float(x @ x),
-    np.array([<span class="code-number">2.0</span>, <span class="code-number">-1.0</span>, <span class="code-number">0.5</span>]),
-    options={
-        <span class="code-string">"execution_mode"</span>: <span class="code-string">"task"</span>,
-        <span class="code-string">"model"</span>: <span class="code-string">"env"</span>,
-        <span class="code-string">"maxfev"</span>: <span class="code-number">80</span>,
-        <span class="code-string">"trace"</span>: <span class="code-string">"trajectory"</span>,
-    },
-)</code></pre>
-        <div class="console-foot"><span>Requires a configured model.</span><a href="guide/#provider">Model provider setup <span aria-hidden="true">↗</span></a></div>
+    np.array([2.0, -1.0, 0.5]),
+    options={<span class="code-string">"model"</span>: <span class="code-string">"env"</span>, <span class="code-string">"maxfev"</span>: 80, <span class="code-string">"seed"</span>: 7, <span class="code-string">"trace"</span>: <span class="code-string">"off"</span>},
+)
+print(result.fun, result.nfev, result.status)
+print(result.runner_report[<span class="code-string">"fallback"</span>])  <span class="code-muted"># whether the autopilot completed the run</span></code></pre></div>
+        <p><code>maxfev</code> is the ceiling on actual objective calls, including the initial point and failed calls. A missing model configuration is an error before the objective is evaluated.</p>
       </div>
     </section>
-    <section class="solver-intro shell">
-      <p class="section-index">01 / WHAT IT IS</p>
-      <div class="solver-intro-grid"><h2>A trusted numerical<br><span>environment for an agent</span></h2><p>The model selects numerical tools and sampling actions. The kernel validates every action, owns the objective ledger, and preserves the best valid observation. Reads cost no function evaluations; every real objective call is accounted for.</p></div>
+
+    <section class="section" id="tools" aria-labelledby="tools-title">
+      <div class="section-head"><h2 id="tools-title">The tool surface</h2></div>
+      <p class="section-note">One runner owns the whole solve and talks to the environment only through these tools. There is no tool for recording: the environment appends every ledger and trace record itself.</p>
+      <div class="table-scroll" style="margin-top:14px"><table class="data-table" style="min-width:760px"><caption>Tools of the shared decision space</caption>
+        <thead><tr><th scope="col">Group</th><th scope="col">Tools</th><th scope="col">What they do</th><th scope="col">Function evaluations</th></tr></thead>
+        <tbody>
+          <tr><th scope="row" class="nowrap">Reads</th><td><code>get_situation</code>, <code>get_state</code>, <code>read_history</code>, <code>read_diagnostic</code>, <code>preview_model</code>, <code>read_manual</code>, <code>search_knowledge</code></td><td>Budget, incumbent, progress, model credibility, history and diagnostics; a model fit and its predicted step; tool manuals.</td><td class="nowrap">None</td></tr>
+          <tr><th scope="row" class="nowrap">Memory</th><td><code>read_memory</code>, <code>memory_write</code>, <code>memory_delete</code></td><td>Short notes the agent keeps for the rest of the solve.</td><td class="nowrap">None</td></tr>
+          <tr><th scope="row" class="nowrap">Method campaigns</th><td><code>run_trust_region</code>, <code>run_line_search</code>, <code>run_poll_sweep</code>, <code>run_coordinate_search</code>, <code>newton_jump</code>, <code>run_geometry_rebuild</code>, <code>run_global_surrogate</code></td><td>A bounded run of one method inside the environment, reported step by step: trust region with minimum-Frobenius-norm quadratic models, line search, positive-basis polling, coordinate search, Newton steps, geometry repair, a global polynomial surrogate.</td><td>One per step, capped per call and by the remaining budget</td></tr>
+          <tr><th scope="row" class="nowrap">Own analysis</th><td><code>run_analysis</code></td><td>The agent's own Python on a read-only copy of every evaluation; the candidate points it returns are evaluated in order.</td><td>None for the analysis; one per candidate</td></tr>
+          <tr><th scope="row" class="nowrap">Single actions</th><td><code>execute_action</code></td><td>One step from the catalog, such as <code>model_step</code>, <code>geometry_repair</code>, <code>direction_step</code>, <code>poll_set</code> or <code>explicit_points</code>, for a hand-chosen move.</td><td>One point or one batch</td></tr>
+          <tr><th scope="row" class="nowrap">Episode control</th><td><code>finalize</code></td><td>Ends the task deliberately. The result is the best valid recorded point; a method's own stop never ends the task.</td><td class="nowrap">None</td></tr>
+        </tbody></table></div>
     </section>
-    <section class="solver-loop shell" id="session" aria-labelledby="session-heading">
-      <div class="loop-copy">
-        <p class="section-index">02 / THE SESSION</p>
-        <h2 id="session-heading">New observations<br><span>The same session</span></h2>
-        <p>A task-mode run keeps the conversation and numerical state together. The agent can revisit earlier observations and change methods without starting a new task.</p>
-        <p class="session-ending">The cycle continues until the task completes or a stopping limit is reached. The result retains the best valid observation found along the way.</p>
-        <a class="session-trace-link" href="guide/#results">Results and traces <i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
+
+    <section class="section" id="runners" aria-labelledby="runners-title">
+      <div class="section-head"><h2 id="runners-title">Runners</h2><a class="section-link text-link" href="guide/#runners">Runner setup</a></div>
+      <p class="section-note">A runner connects a model to the tools for one complete solve. The three runners share one prompt builder, one tool catalog and one session lifecycle.</p>
+      <div class="card-grid three" style="margin-top:14px">
+        <article class="card"><span class="card-top"><span>Default</span><code>NativeToolRunner</code></span><h3>Built-in runner</h3><p><code>solve</code> and <code>minimize</code> use it, wrapped in <code>FallbackRunner</code>. It talks to a tool-calling model through the provider clients for Anthropic-compatible, OpenAI-compatible and Azure OpenAI endpoints, which need only the standard library.</p></article>
+        <article class="card"><span class="card-top"><span>Adapter</span><code>CodexTaskRunner</code></span><h3>Codex adapter</h3><p>Runs a whole solve in one Codex app-server thread. Codex keeps the conversation and its context; the solver keeps the objective, ledger, method state and tools. It needs a separately installed Codex CLI.</p></article>
+        <article class="card"><span class="card-top"><span>Adapter</span><code>ClaudeCodeTaskRunner</code></span><h3>Claude Code adapter</h3><p>Runs a whole solve through the Claude Agent SDK with the same tools. It is an optional extra of the package and uses the existing Claude Code authentication unless an endpoint is configured.</p></article>
       </div>
-      <figure class="session-flow" aria-label="Agent and numerical environment in one continuous session" aria-describedby="session-caption">
-        <div class="session-flow-heading"><i data-lucide="repeat-2" aria-hidden="true"></i><span>ONE CONTINUOUS SESSION</span></div>
-        <ol class="session-cycle">
-          <li class="session-step session-read">
-            <span class="session-actor">01 / AGENT</span>
-            <i data-lucide="scan-search" class="session-step-icon" aria-hidden="true"></i>
-            <strong>Read the state</strong><span>History, progress, geometry</span>
-            <i data-lucide="arrow-right" class="session-arrow" aria-hidden="true"></i>
-          </li>
-          <li class="session-step session-choose">
-            <span class="session-actor">02 / AGENT</span>
-            <i data-lucide="git-branch" class="session-step-icon" aria-hidden="true"></i>
-            <strong>Choose an action</strong><span>Continue or switch methods</span>
-            <i data-lucide="arrow-down" class="session-arrow" aria-hidden="true"></i>
-          </li>
-          <li class="session-step session-execute">
-            <span class="session-actor">03 / ENVIRONMENT</span>
-            <i data-lucide="square-function" class="session-step-icon" aria-hidden="true"></i>
-            <strong>Execute the action</strong><span>Tools + protected objective</span>
-            <i data-lucide="arrow-left" class="session-arrow" aria-hidden="true"></i>
-          </li>
-          <li class="session-step session-record">
-            <span class="session-actor">04 / ENVIRONMENT</span>
-            <i data-lucide="notebook-pen" class="session-step-icon" aria-hidden="true"></i>
-            <strong>Record the outcome</strong><span>Observations + updated state</span>
-            <i data-lucide="arrow-up" class="session-arrow" aria-hidden="true"></i>
-          </li>
-        </ol>
-        <div class="session-memory"><span>Carried across turns</span><ul><li>Conversation</li><li>Method state</li><li>Evaluation ledger</li></ul></div>
-        <figcaption id="session-caption">One task, one evaluation budget</figcaption>
-      </figure>
+      <p class="callout">A runner passed as <code>minimize(..., runner=...)</code> is used exactly as given. Wrap it in <code>FallbackRunner</code> to have the autopilot complete a run whose session fails or stops without <code>finalize</code>.</p>
     </section>
-    <section class="solver-capabilities shell">
-      <p class="section-index">03 / THE CONTRACT</p>
-      <div class="capability-grid"><article><span>01</span><h3>Opaque oracle</h3><p>No problem name, source code, known optimum, or verifier is handed to the agent.</p></article><article><span>02</span><h3>Numerical tools</h3><p>Trust-region models, polling, line search, coordinate search, Newton steps, and geometry repair are exposed through bounded calls.</p></article><article><span>03</span><h3>Harness boundary</h3><p>Provider clients and external harnesses can own authentication and transport without changing the kernel contract.</p></article><article><span>04</span><h3>Traceable result</h3><p>Evaluation history, model activity, tool calls, and termination state stay separate and auditable.</p></article></div>
+
+    <section class="section" id="configuration" aria-labelledby="configuration-title">
+      <div class="section-head"><h2 id="configuration-title">Configuration</h2><a class="section-link text-link" href="api/#options">All options</a></div>
+      <p class="section-note">The defaults of <code>solve()</code> and <code>minimize()</code> are one fixed configuration.</p>
+      <div class="table-scroll" style="margin-top:14px"><table class="data-table" style="min-width:720px"><caption>Default configuration of NextEval Solver 1.0</caption>
+        <thead><tr><th scope="col">Component</th><th scope="col">Default</th><th scope="col">Meaning</th></tr></thead>
+        <tbody>
+          <tr><th scope="row">Toolset</th><td class="nowrap"><code>nexteval.toolset/1</code></td><td>The shared decision space, the only toolset: the agent and the autopilot act on the same tools with the same parameters.</td></tr>
+          <tr><th scope="row">Prompt</th><td class="nowrap"><code>task-shared/1</code></td><td>Lists the tools and their costs, documents the autopilot as one reference strategy, and prescribes no plan.</td></tr>
+          <tr><th scope="row">Runner</th><td class="nowrap"><code>FallbackRunner(NativeToolRunner())</code></td><td>The built-in runner with the autopilot as fallback. The agent session ends 90 seconds before the wall-clock limit so the fallback has time left.</td></tr>
+          <tr><th scope="row">Fallback policy</th><td class="nowrap">Textbook autopilot</td><td>Trust-region slices of 2n+1 evaluations with the textbook defaults; reported as <code>textbook</code> in the runner report.</td></tr>
+          <tr><th scope="row">Tool surface</th><td class="nowrap"><code>task_tool_surface="full"</code></td><td>Every task tool; <code>run_analysis</code> predefines the helpers <code>fit_poly</code> and <code>suggest</code>.</td></tr>
+          <tr><th scope="row">Budget</th><td class="nowrap"><code>maxfev=200</code></td><td>Actual objective calls, including the initial point and failed calls; each method call is capped at 40 evaluations by <code>max_evals_per_method_call</code>.</td></tr>
+          <tr><th scope="row">Observation noise</th><td class="nowrap"><code>objective_noise="unknown"</code></td><td>What you declare about the objective's observations; it selects the evaluation cache and the statement every agent receives.</td></tr>
+          <tr><th scope="row">Trace</th><td class="nowrap">Off</td><td>The in-memory evaluation ledger is always kept; persistent trace files are written only on request.</td></tr>
+        </tbody></table></div>
     </section>
-    <section class="solver-duality shell"><div><p class="eyebrow">EVALUATION / OF AGENTS</p><h2>Optimize a function<br><em>Evaluate an agent</em></h2><p class="duality-copy">NextEval Bench compares how different agents use their observations and evaluation budgets to optimize.</p></div><a class="button button-primary" href="../bench/">Open NextEval Bench <span aria-hidden="true">↗</span></a></section>
+
+    <section class="section" id="reference" aria-labelledby="reference-title">
+      <div class="section-head"><h2 id="reference-title">API reference</h2><a class="section-link text-link" href="api/">Python API</a></div>
+      <dl class="def-list">
+        <div><dt><code>solve(fun, x0, options=None)</code></dt><dd>The entry point for an opaque scalar objective, with the default configuration. <a href="api/#solve">Reference</a></dd></div>
+        <div><dt><code>minimize(fun, x0, args=(), *, model, toolset, runner, options)</code></dt><dd>The composition entry point: supply a model client or a runner. <a href="api/#minimize">Reference</a></dd></div>
+        <div><dt><code>DFOResult</code></dt><dd>The best valid recorded point, the evaluation count, the termination status and the runner report. <a href="api/#result">Reference</a></dd></div>
+        <div><dt>NextEval Bench</dt><dd>How coding agents fare on derivative-free problems against COBYQA is measured separately, in <a href="../bench/">NextEval Bench</a>.</dd></div>
+      </dl>
+    </section>
+
+    <footer class="page-footer">
+      <span>NextEval Solver 1.0 / &copy; 2026</span>
+      <nav aria-label="Footer"><a href="../">Overview</a><a href="../bench/">Bench</a><a href="guide/">User Guide</a><a href="api/">Python API</a><a href="https://github.com/NextEval" target="_blank" rel="noopener">GitHub</a></nav>
+    </footer>
   </main>
-  <footer class="site-footer shell"><span>© 2026 NextEval Solver</span><span>Next evaluation · for solvers / of agents</span><a href="https://github.com/NextEval" target="_blank" rel="noopener">GitHub <span aria-hidden="true">↗</span></a></footer>
-  <script src="../site.js"></script>
 </body>
 </html>

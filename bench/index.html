@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="results/results.css?v=20261009-pareto1">
   <link rel="stylesheet" href="results/pair.css?v=20261104-pair">
   <link rel="stylesheet" href="results/frontier.css?v=20261107-hy">
+  <link rel="stylesheet" href="results/waffle.css?v=20261112-waffle">
   <script src="vendor/lucide.min.js" defer></script>
   <script src="../navigation.js?v=1" defer></script>
   <script type="module">
@@ -19,14 +20,14 @@
     };
     window.addEventListener('hashchange', redirectLegacy);
     redirectLegacy();
-    import('./results/app.mjs?v=20261107-hy');
+    import('./results/app.mjs?v=20261112-waffle');
   </script>
 </head>
 <body class="results-page">
   <a class="results-skip" href="#results-app">Skip to results</a>
   <header class="site-header" data-product="bench">
     <a class="site-brand" href="../" aria-label="NextEval home"><img src="assets/brand/nexteval-on-dark.svg" width="30" height="30" alt=""><span>NextEval</span></a>
-    <div class="header-path"><span class="path-divider" aria-hidden="true">/</span><details class="nav-switcher product-switcher"><summary>Bench <i data-lucide="chevron-down" aria-hidden="true"></i></summary><nav class="switcher-panel" aria-label="Products"><a href="../">Overview</a><a href="../solver/">Solver</a><a href="./" aria-current="location">Bench</a><a class="menu-external" href="https://github.com/NextEval" target="_blank" rel="noopener">GitHub <i data-lucide="arrow-up-right" aria-hidden="true"></i></a></nav></details><span class="path-divider" aria-hidden="true">/</span><details class="nav-switcher context-switcher"><summary><span data-current-view>Results</span><i data-lucide="chevron-down" aria-hidden="true"></i></summary><nav class="switcher-panel" aria-label="Bench"><a href="#matrix" aria-current="page">Results</a></nav></details></div>
+    <div class="header-path"><span class="path-divider" aria-hidden="true">/</span><details class="nav-switcher product-switcher"><summary>Bench <i data-lucide="chevron-down" aria-hidden="true"></i></summary><nav class="switcher-panel" aria-label="Products"><a href="../">Overview</a><a href="./" aria-current="location">Bench</a><a href="../solver/">Solver</a><a class="menu-external" href="https://github.com/NextEval" target="_blank" rel="noopener">GitHub <i data-lucide="arrow-up-right" aria-hidden="true"></i></a></nav></details><span class="path-divider" aria-hidden="true">/</span><details class="nav-switcher context-switcher"><summary><span data-current-view>Results</span><i data-lucide="chevron-down" aria-hidden="true"></i></summary><nav class="switcher-panel" aria-label="Bench"><a href="#matrix" aria-current="page">Results</a></nav></details></div>
     <a class="header-source" href="https://github.com/NextEval" target="_blank" rel="noopener">GitHub <i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
   </header>
   <main id="results-app" tabindex="-1"><p role="status">Loading results</p></main>

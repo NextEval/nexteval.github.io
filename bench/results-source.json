@@ -1,10 +1,10 @@
 {
  "schema": "nexteval.site-source/1",
  "source_repository": "NextEval/nexteval-bench-website",
- "source_commit": "f3350d8597aae5b719f92d143998e64150ad0daa",
- "tag": "site-primary192-hy-naming-20261107",
+ "source_commit": "fbc5647ee7c59033f30e0d1805d37b5327b6aa53",
+ "tag": "site-primary192-waffle-cost-totals-20261112",
  "snapshot_id": "web-ffdd187da8339d652019d0d2",
- "manifest_sha256": "a19d845447421e05761b0b40dd7e3defd46ac6c20eb8580d581320abec30fdd6",
+ "manifest_sha256": "ee1c0600d2f57e4a81e74eb542355bbff3232cc61ee195fba14029fecaecfae4",
  "displayed_groups": {
   "nexteval-u5-perturbed-noisy@1": 45,
   "nexteval-u5-perturbed-random-nan@1": 45,
@@ -13,25 +13,25 @@
  },
  "release": {
   "repository": "NextEval/nexteval.github.io",
-  "tag": "site-primary192-hy-naming-20261107",
-  "name": "site-results-589513373e9a2c690812d77e8c527253050dbd319b4d9e9f919e1b94409dee26.tar.gz",
-  "url": "https://github.com/NextEval/nexteval.github.io/releases/download/site-primary192-hy-naming-20261107/site-results-589513373e9a2c690812d77e8c527253050dbd319b4d9e9f919e1b94409dee26.tar.gz",
-  "sha256": "589513373e9a2c690812d77e8c527253050dbd319b4d9e9f919e1b94409dee26",
-  "bytes": 48608076,
-  "release_id": 437674857,
-  "asset_id": 721157300
+  "tag": "site-primary192-waffle-cost-totals-20261112",
+  "name": "site-results-2bd5bbcf9e1a6033c435af5fdea33efe6ad18871a337975c2344b6c5f6d94a7a.tar.gz",
+  "url": "https://github.com/NextEval/nexteval.github.io/releases/download/site-primary192-waffle-cost-totals-20261112/site-results-2bd5bbcf9e1a6033c435af5fdea33efe6ad18871a337975c2344b6c5f6d94a7a.tar.gz",
+  "sha256": "2bd5bbcf9e1a6033c435af5fdea33efe6ad18871a337975c2344b6c5f6d94a7a",
+  "bytes": 48664287,
+  "release_id": 442530421,
+  "asset_id": 738198437
  },
  "hf": {
   "repo_id": "NextEval/nexteval-bench-web",
   "private": true,
-  "revision": "655451e38d10c287691ef99b5efdf2005e0fbebc",
-  "tag": "site-primary192-hy-naming-20261107",
-  "path": "releases/site-primary192-hy-naming-20261107/"
+  "revision": "627737debef4836543f568225086cc17d67d18d0",
+  "tag": "site-primary192-waffle-cost-totals-20261112",
+  "path": "releases/site-primary192-waffle-cost-totals-20261112/"
  },
  "files": {
   "app.mjs": {
-   "bytes": 93582,
-   "sha256": "fe067875e5fe20b251de21793e0b3e39752cd0b96b30f37c37cd22c2f664edde"
+   "bytes": 94515,
+   "sha256": "61cb89a6fb622174697351c5121c0a8d02c6c60c69aaa3d7d46b58b8c9e07073"
   },
   "chart.mjs": {
    "bytes": 10552,
@@ -1525,9 +1525,13 @@
    "bytes": 441757,
    "sha256": "0ee1f24e833f513690a6b5d49a9c5c33f59dec0caddf7296d7bde3a773717c2a"
   },
+  "data/leaderboard/cases.json": {
+   "bytes": 109686,
+   "sha256": "6d69ae6a172c5c610efece990dd14cff0dd59906d6a032df87a34fc787c24831"
+  },
   "data/leaderboard/view.json": {
-   "bytes": 252935,
-   "sha256": "0b8e7f284d4d506a95c852880b5c8f47c4659b583164dcc1991a6ee624c3c6a3"
+   "bytes": 261194,
+   "sha256": "d63c1b229152abc5faff821041152f54ddac1607b721aa37c2ab3b8db73d1ae6"
   },
   "data/model-releases.json": {
    "bytes": 4972,
@@ -1734,8 +1738,8 @@
    "sha256": "19e6edb164b199e83f2824b28142411a7f38759e7965d24222c7cce4b8e14141"
   },
   "frontier.mjs": {
-   "bytes": 35558,
-   "sha256": "a6ae2f021d0d909ffa9f36361cc378d0b26f5b0a42d8ffffecd2b8256a4e1345"
+   "bytes": 35787,
+   "sha256": "e31242f95e979da1a3c27f98781ec5d955b944d24686f393f00d73fec83c1beb"
   },
   "icons.mjs": {
    "bytes": 488,
@@ -1796,6 +1800,14 @@
   "usage.mjs": {
    "bytes": 4305,
    "sha256": "72f6a4ca783cadc0d98f09c704363981142ebd616fc11bc3cfb7d4440dda349c"
+  },
+  "waffle.css": {
+   "bytes": 7563,
+   "sha256": "788569c63ac5d1ad23015e28efc32ec42a4306defd6d9690b8677d2739582810"
+  },
+  "waffle.mjs": {
+   "bytes": 31099,
+   "sha256": "4535bf945fd708c92b8db07c75e36f20bdff10c439601ec4ef592017a2f3bb4a"
   }
  }
 }
