@@ -5,7 +5,8 @@ import { pathToFileURL, fileURLToPath } from 'node:url';
 import { createHash } from 'node:crypto';
 
 export const SITE_CODE = Object.freeze(['app.mjs', 'chart.mjs', 'frontier.css', 'frontier.mjs', 'icons.mjs', 'identities.mjs', 'index.html', 'logos.mjs',
-  'logratio.mjs', 'model.mjs', 'pair.css', 'pareto.mjs', 'plan.mjs', 'presentation.mjs', 'profile-figures.mjs', 'releases.mjs', 'results.css', 'scores.mjs', 'usage.mjs']);
+  'logratio.mjs', 'model.mjs', 'pair.css', 'pareto.mjs', 'plan.mjs', 'presentation.mjs', 'profile-figures.mjs', 'releases.mjs', 'results.css', 'scores.mjs', 'usage.mjs',
+  'waffle.css', 'waffle.mjs']);
 const PAIR_TOLERANCES = ['0.1', '0.001', '1e-06', '1e-09'];
 const FORBIDDEN_KEY = /^(evidence_refs|sources|limitations|reference|cohort|engine|archive_id|canonical_archive_id|attempt_id|instance_seed|source_agent_config_ids?|execution_environment|reviewed_terminal_evidence|runtime_status|runtime_status_counts|actual_timeout_s|actual_timeout_counts|initial_value|profile_initial_value|primary_protocol|registry_commit|selection_sha256|usage_sources|by_tolerance|notes|.*sha256.*|.*_sha)$/;
 const HASH_LIKE = /[0-9a-f]{32,}/i;
@@ -33,13 +34,46 @@ function scan(value, file, path = '') {
   }
 }
 
+// Leaderboard cost: the full-evaluation totals equal the sum of the per-configuration usage figures of the four tasks
+// (measured, otherwise the labelled estimate). A configuration with an unavailable figure has no total; a sum over
+// some of its tasks never passes. usageFigures is the bundle's own (presentation.mjs).
+export function checkLeaderboardCost(view, snapshot, usage, usageFigures) {
+  const close = (a, b) => typeof a === 'number' && Math.abs(a - b) <= 1e-9 * Math.max(1, Math.abs(b));
+  const costs = [];
+  let estimatedAgents = 0;
+  for (const a of view.agents) {
+    const participant = snapshot.participants.find(p => p.participant_id === a.id);
+    let usd = 0, tokens = 0, estimated = false;
+    for (const task of snapshot.tasks) {
+      const group = usage.groups.find(g => g.participant_id === a.id && g.task_id === task.task_id);
+      if (!group) throw new Error('Leaderboard agent without a usage group: ' + a.id);
+      const figures = usageFigures(usage, { group, participant }, task);
+      usd = usd === null || figures.totalCost === null ? null : usd + figures.totalCost;
+      tokens = tokens === null || figures.totalTokens === null ? null : tokens + figures.totalTokens;
+      estimated ||= (figures.cost !== null && !Number.isFinite(group.mean_api_equivalent_cost_usd_per_run))
+        || (figures.tokens !== null && !Number.isFinite(group.mean_total_tokens_per_run));
+    }
+    if (usd === null ? a.cost_usd !== null : !close(a.cost_usd, usd)) throw new Error('Leaderboard cost differs from the usage figures: ' + a.id);
+    if (a.cost_tokens !== tokens) throw new Error('Leaderboard tokens differ from the usage figures: ' + a.id);
+    if (usd !== null) costs.push(usd);
+    estimatedAgents += estimated;
+  }
+  costs.sort((x, y) => x - y);
+  const middle = costs.length >> 1, median = costs.length % 2 ? costs[middle] : (costs[middle - 1] + costs[middle]) / 2;
+  const top = view.agents.find(a => a.id === view.cost?.top_agent);
+  if (!costs.length || !close(view.cost.median_usd, median) || !close(view.cost.min_usd, costs[0]) || !close(view.cost.max_usd, costs.at(-1))
+    || view.cost.agents_with_cost !== costs.length || view.cost.unavailable_agents !== view.agents.length - costs.length
+    || view.cost.estimated_agents !== estimatedAgents || !top || view.cost.top_agent_usd !== top.cost_usd) throw new Error('Leaderboard cost summary differs from the usage figures');
+  return { agents_with_cost: costs.length, estimated_agents: estimatedAgents, median_usd: median, min_usd: costs[0], max_usd: costs.at(-1) };
+}
+
 export async function checkSite(directory) {
   const root = resolve(directory);
   const base = pathToFileURL(root + '/');
   const { validateSnapshot, validateHistoryIndex, validateHistory, finiteScore } = await import(new URL('model.mjs', base));
   const { validateUsage } = await import(new URL('usage.mjs', base));
   const { validateReleases } = await import(new URL('releases.mjs', base));
-  const { isDisplayed } = await import(new URL('presentation.mjs', base));
+  const { isDisplayed, usageFigures } = await import(new URL('presentation.mjs', base));
   const referenced = new Set(SITE_CODE);
   const load = async file => {
     const data = JSON.parse(await readFile(join(root, file), 'utf8'));
@@ -48,7 +82,8 @@ export async function checkSite(directory) {
   };
   const snapshot = validateSnapshot(await load('data/results.json'));
   if (!snapshot.participants.every(isDisplayed)) throw new Error('Retired configuration shipped');
-  validateUsage(await load('data/website-usage.json'));
+  const usage = await load('data/website-usage.json');
+  validateUsage(usage);
   validateReleases(await load('data/model-releases.json'));
   // Pair scores, pairwise profile curves and per-agent files: exactly the displayed agents, consistent with results.json.
   const pair = await load('data/pair/scores.json');
@@ -78,6 +113,22 @@ export async function checkSite(directory) {
   if (JSON.stringify(view.agents.map(a => a.id).sort()) !== JSON.stringify(agents)) throw new Error('Leaderboard agents differ from displayed configurations');
   for (const a of view.agents) for (const f of ['P', 'N', 'R', 'X'])
     if (a.pair[f] !== pair.agents.find(x => x.id === a.id).pair3[f]) throw new Error('Leaderboard score differs from the pair score: ' + a.id);
+  checkLeaderboardCost(view, snapshot, usage, usageFigures);
+  // Waffle data: the per-case counts of the displayed agents, decoded by the view's own module; their beat, loss, level
+  // and mixed counts equal the leaderboard's, and so does each problem-feature share of cases beaten.
+  const { decodeCases, caseCode, FEATS } = await import(new URL('waffle.mjs', base));
+  const cases = decodeCases(await load('data/leaderboard/cases.json'), view);
+  if (cases.agents.size !== agents.length || cases.problems.length !== view.counts.problems) throw new Error('Waffle data do not match the leaderboard');
+  for (const a of view.agents) for (const f of FEATS) {
+    const row = cases.agents.get(a.id)[f], n = { W: 0, L: 0, T: 0, M: 0 };
+    row.faster.forEach((u, i) => n[caseCode(u, row.slower[i])]++);
+    if (n.W !== a.counts.beat[f] || n.L !== a.counts.loss[f] || n.T !== a.counts.tie[f] || n.M !== a.counts.mixed[f]) throw new Error('Waffle counts differ from the leaderboard: ' + a.id);
+  }
+  for (const item of view.items) {
+    const p = cases.problems.find(x => x.problem === item.problem);
+    const beats = view.agents.reduce((s, a) => s + cases.agents.get(a.id)[item.feature].beats[p.index], 0);
+    if (p.dim !== item.dim || beats / item.runs !== item.share) throw new Error('Waffle share differs from the leaderboard: ' + item.problem);
+  }
   let histories = 0;
   for (const task of snapshot.tasks) {
     const index = validateHistoryIndex(await load('data/' + task.history_file), task);
@@ -100,7 +151,7 @@ export async function checkSite(directory) {
   }
   const missing = [...referenced].filter(f => !files.includes(f));
   if (missing.length) throw new Error('Missing site file: ' + missing.join(', '));
-  return { snapshot: snapshot.snapshot_id, tasks: snapshot.tasks.length, participants: snapshot.participants.length, histories, pair_agents: agents.length, leaderboard_agents: view.agents.length, files: files.length };
+  return { snapshot: snapshot.snapshot_id, tasks: snapshot.tasks.length, participants: snapshot.participants.length, histories, pair_agents: agents.length, leaderboard_agents: view.agents.length, waffle_agents: cases.agents.size, files: files.length };
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

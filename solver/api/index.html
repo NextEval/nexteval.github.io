@@ -3,122 +3,199 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="NextEval Solver's Python API: solve, minimize, options and results. Model provider connections are configured separately; Bench task protocols belong to NextEval Bench.">
+  <meta name="description" content="Python API of NextEval Solver 1.0: solve, minimize, options, the result object, provider clients and runners.">
   <meta name="theme-color" content="#101516">
-  <title>Python API | NextEval Solver</title>
+  <title>Python API | NextEval Solver 1.0</title>
   <link rel="icon" type="image/svg+xml" href="../../site-assets/brand/nexteval-on-dark.svg">
-  <link rel="stylesheet" href="../../site.css?v=path-nav-1">
-  <script src="../../bench/vendor/lucide.min.js" defer></script>
+  <link rel="stylesheet" href="../../site.css?v=20261112-unified">
+  <link rel="stylesheet" href="../../slogan.css?v=3">
   <script src="../../navigation.js?v=1" defer></script>
-  <script src="../docs.js" defer></script>
+  <script src="../docs.js?v=2" defer></script>
 </head>
-<body class="api-page">
+<body class="site-page">
+  <a class="site-skip" href="#content">Skip to content</a>
   <header class="site-header" data-product="solver">
     <a class="site-brand" href="../../" aria-label="NextEval home"><img src="../../site-assets/brand/nexteval-on-dark.svg" alt="" width="30" height="30"><span>NextEval</span></a>
-    <div class="header-path"><span class="path-divider" aria-hidden="true">/</span><details class="nav-switcher product-switcher"><summary>Solver <i data-lucide="chevron-down" aria-hidden="true"></i></summary><nav class="switcher-panel" aria-label="Products"><a href="../../">Overview</a><a href="../" aria-current="location">Solver</a><a href="../../bench/">Bench</a><a class="menu-external" href="https://github.com/NextEval" target="_blank" rel="noopener">GitHub <i data-lucide="arrow-up-right" aria-hidden="true"></i></a></nav></details><span class="path-divider" aria-hidden="true">/</span><details class="nav-switcher context-switcher"><summary><span data-current-view>Python API</span><i data-lucide="chevron-down" aria-hidden="true"></i></summary><nav class="switcher-panel" aria-label="Solver navigation"><a href="../">Overview</a><a href="../guide/">User Guide</a><a href="./" aria-current="page">Python API</a></nav></details></div>
-    <a class="header-source" href="https://github.com/NextEval" target="_blank" rel="noopener">GitHub <i data-lucide="arrow-up-right" aria-hidden="true"></i></a>
+    <div class="header-path"><span class="path-divider" aria-hidden="true">/</span><details class="nav-switcher product-switcher"><summary>Solver <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><nav class="switcher-panel" aria-label="Products"><a href="../../">Overview</a><a href="../../bench/">Bench</a><a href="../" aria-current="location">Solver</a><a class="menu-external" href="https://github.com/NextEval" target="_blank" rel="noopener">GitHub <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a></nav></details><span class="path-divider" aria-hidden="true">/</span><details class="nav-switcher context-switcher"><summary><span data-current-view>Python API</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></summary><nav class="switcher-panel" aria-label="Solver navigation"><a href="../">Overview</a><a href="../guide/">User Guide</a><a href="./" aria-current="page">Python API</a></nav></details></div>
+    <a class="header-source" href="https://github.com/NextEval" target="_blank" rel="noopener">GitHub <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10"/><path d="M7 17 17 7"/></svg></a>
   </header>
-  <main class="api-shell shell">
-    <header class="api-heading">
-      <p class="eyebrow">NEXTEVAL SOLVER / PYTHON</p>
-      <h1>Solver Python API</h1>
-      <p>Call <code>solve</code> or <code>minimize</code> from Python to optimize an objective. This is the Solver library interface, not a model provider API or a hosted Bench service.</p>
-    </header>
-    <div class="api-layout">
-      <nav class="api-toc" aria-label="Solver Python API sections">
-        <a href="#quick-start">Quick start</a>
-        <a href="#model">Model provider setup</a>
-        <a href="#solve">solve</a>
-        <a href="#options">Options</a>
-        <a href="#result">DFOResult</a>
-        <a href="#integration">Custom agents</a>
-      </nav>
-      <div class="api-body">
-        <section id="quick-start">
-          <h2>Quick start</h2>
-          <p>For installation, complete examples and harness choices, start with the <a href="../guide/">Solver User Guide</a>. This reference targets Solver 1.0.0 at cb58fd7; its runtime dependency is NumPy.</p>
-          <pre tabindex="0" aria-label="Install NextEval"><code>python -m pip install ./nexteval</code></pre>
-          <p>The package is not yet published on a public package index. Install it from the source directory or wheel file you were given; replace <code>./nexteval</code> with its path.</p>
-          <p>Configure a tool-calling model as described <a href="#model">below</a>, then run:</p>
-          <pre data-language="python" tabindex="0" aria-label="Python quick start"><code>import numpy as np
-from nexteval import solve
-
-result = solve(
-    lambda x: float(x @ x),
-    np.array([2.0, -1.0, 0.5]),
-    options={
-        "execution_mode": "task",
-        "model": "env",
-        "maxfev": 80,
-        "seed": 7,
-        "trace": "off",
-    },
-)
-
-print(result.x, result.fun, result.nfev)
-print(result.status, result.message)</code></pre>
+  <main class="page" id="content" tabindex="-1">
+    <div class="page-heading">
+      <div>
+        <p class="page-kicker"><i aria-hidden="true"></i>NextEval Solver 1.0</p>
+        <h1>Python API</h1>
+        <p>The library interface of the derivative-free solver: two entry points, the options, the result object, the provider clients and the runners. It is not a model provider API and not a hosted service.</p>
+      </div>
+      <!--@if SOLVER_RELEASED--><span class="page-edition">Release <b>1.0.0</b></span><!--@else--><span class="page-edition">Release: coming soon</span><!--@endif-->
+    </div>
+    <nav class="page-tabs" aria-label="Solver pages">
+      <a href="../"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><path d="M9 17c2 0 2.8-1 2.8-2.8V10c0-2 1-3.3 3.2-3"/><path d="M9 11.2h5.7"/></svg>Overview</a>
+      <a href="../guide/"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 7v14"/><path d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"/></svg>User Guide</a>
+      <a href="./" aria-current="page"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5c0 1.1.9 2 2 2h1"/><path d="M16 21h1a2 2 0 0 0 2-2v-5c0-1.1.9-2 2-2a2 2 0 0 1-2-2V5a2 2 0 0 0-2-2h-1"/></svg>Python API</a>
+    </nav>
+    <div class="docs-layout">
+      <nav class="docs-toc" aria-label="Python API sections"><strong>On this page</strong><a href="#import">Import</a><a href="#solve">solve</a><a href="#minimize">minimize</a><a href="#options">Options</a><a href="#result">DFOResult</a><a href="#clients">Provider clients</a><a href="#runners">Runners</a><a href="#helpers">Harness helpers</a></nav>
+      <div class="docs-body prose">
+        <section id="import">
+          <h2>Import</h2>
+          <!--@if SOLVER_RELEASED-->
+          <p class="release-line"><span class="badge badge-accent">v1.0.0</span>Install with <code>python -m pip install nexteval-solver</code>; the import name is <code>nexteval</code>. <a href="https://github.com/NextEval/nexteval-solver" target="_blank" rel="noopener">Repository on GitHub</a></p>
+          <!--@else-->
+          <p class="release-line"><span class="badge">Release: coming soon</span>The package is not public yet; this page describes the interface of the release. The import name is <code>nexteval</code>.</p>
+          <!--@endif-->
+          <div class="code-block"><pre data-language="python" aria-label="Public imports" tabindex="0"><code>from nexteval import solve, minimize, SolverOptions, DFOResult
+from nexteval import AnthropicCompatClient, OpenAICompatClient, AzureOpenAICompatClient, FakeTextModel
+from nexteval import NativeToolRunner, CodexTaskRunner, ClaudeCodeTaskRunner, FallbackRunner, AutopilotRunner</code></pre></div>
+          <p>Use only this root surface. Installation, provider setup and complete examples are in the <a href="../guide/">User Guide</a>.</p>
         </section>
-        <section id="model">
-          <h2>Model provider setup</h2>
-          <p>The model provider API supplies model responses to the agent. Its endpoint, credentials, and model ID are separate from the Solver Python API above. An external harness may manage this connection itself.</p>
-          <p>See the <a href="../guide/#provider">User Guide's provider setup</a> for explicit OpenAI-compatible and Anthropic-compatible clients, or <a href="../guide/#routes">model and harness</a> for external sessions.</p>
-          <p><code>model="env"</code> uses an Anthropic-compatible provider. Set your endpoint, model ID, and token in the local environment; the values below are placeholders.</p>
-          <pre tabindex="0" aria-label="Provider environment variables"><code>export ANTHROPIC_BASE_URL="https://your-compatible-endpoint/v1"
-export ANTHROPIC_MODEL="your-model-id"
-export ANTHROPIC_AUTH_TOKEN="your-token"</code></pre>
-          <p>The endpoint must support tool calls. Keep credentials out of code and trace files. This website does not receive your credentials or run the solver.</p>
-          <p>OpenAI-compatible and Azure providers use their own configurations. External harnesses may manage their own authentication.</p>
-        </section>
+
         <section id="solve">
           <h2>solve</h2>
-          <pre tabindex="0" aria-label="Solve signature"><code>solve(fun, x0, options=None) -&gt; DFOResult</code></pre>
-          <dl class="api-definitions">
-            <div><dt><code>fun</code></dt><dd>A callable accepting a one-dimensional NumPy array and returning a scalar objective value. The solver minimizes it as an opaque oracle.</dd></div>
+          <div class="code-block"><pre aria-label="solve signature" tabindex="0"><code>solve(fun, x0, options=None) -&gt; DFOResult</code></pre></div>
+          <p>The entry point for an opaque scalar objective. It runs one whole session with the default configuration: the built-in runner wrapped in <code>FallbackRunner</code>, on the shared decision space.</p>
+          <dl class="def-list">
+            <div><dt><code>fun</code></dt><dd>A callable that accepts a one-dimensional NumPy array and returns a scalar. The solver minimizes it as an opaque oracle.</dd></div>
             <div><dt><code>x0</code></dt><dd>A nonempty, finite, one-dimensional starting point.</dd></div>
-            <div><dt><code>options</code></dt><dd>A mapping or <code>SolverOptions</code>. The default execution mode is <code>task</code>; a model configuration is required.</dd></div>
+            <div><dt><code>options</code></dt><dd>A mapping or a <code>SolverOptions</code> object; see <a href="#options">Options</a>. A model configuration is required, and a missing one is an error before the objective is evaluated.</dd></div>
           </dl>
-          <p>Task mode preserves one runner session across model and tool turns. It is not a fresh agent launch per function evaluation.</p>
         </section>
+
+        <section id="minimize">
+          <h2>minimize</h2>
+          <div class="code-block"><pre aria-label="minimize signature" tabindex="0"><code>minimize(
+    fun, x0, args=(), *,
+    model=None, toolset=None, runner=None, options=None,
+) -&gt; DFOResult</code></pre></div>
+          <p>The composition entry point. Without <code>runner</code> it runs the same default as <code>solve</code>.</p>
+          <dl class="def-list">
+            <div><dt><code>args</code></dt><dd>Extra positional arguments passed to <code>fun</code> after <code>x</code>.</dd></div>
+            <div><dt><code>model</code></dt><dd>A provider client or specification for the built-in runner. Do not pass it together with an external runner.</dd></div>
+            <div><dt><code>toolset</code></dt><dd><code>"nexteval.toolset/1"</code>, the shared decision space. It is the default and the only toolset.</dd></div>
+            <div><dt><code>runner</code></dt><dd>An object with <code>run(task, gateway)</code> that owns the whole task. It is used exactly as given; wrap it in <code>FallbackRunner</code> for the default wiring. Conflicting selections fail before the objective is evaluated.</dd></div>
+          </dl>
+        </section>
+
         <section id="options">
-          <h2>Common options</h2>
-          <dl class="api-definitions">
-            <div><dt><code>maxfev</code></dt><dd>The total function-evaluation ceiling, including the initial point and failed objective calls. This is separate from the model-token budget.</dd></div>
-            <div><dt><code>model</code></dt><dd><code>"env"</code>, a provider specification, or a compatible model client.</dd></div>
-            <div><dt><code>execution_mode</code></dt><dd><code>"task"</code> for a whole-session runner; <code>"stepwise"</code> for a policy invoked at each decision boundary.</dd></div>
-            <div><dt><code>seed</code></dt><dd>The solver's random seed. It does not guarantee deterministic model-provider responses.</dd></div>
-            <div><dt><code>trace</code></dt><dd><code>"off"</code>, <code>"summary"</code>, <code>"trajectory"</code>, <code>"debug"</code>, or <code>"develop"</code>. Persistent tracing is opt-in.</dd></div>
-            <div><dt><code>runner_options</code></dt><dd>Settings for the built-in task runner, such as token limits, compaction, and retries.</dd></div>
-          </dl>
+          <h2>Options</h2>
+          <p><code>SolverOptions</code> is the configuration object accepted by both entry points; a plain mapping with the same names works as well. Unknown names are rejected. The values below are defaults, not limits.</p>
+          <h3>Budget and stopping</h3>
+          <div class="table-scroll" style="margin-top:12px"><table class="data-table option-table"><caption>Budget and stopping options</caption>
+            <thead><tr><th scope="col">Option</th><th scope="col">Default</th><th scope="col">Description</th></tr></thead>
+            <tbody>
+              <tr><th scope="row"><code>maxfev</code></th><td class="nowrap"><code>200</code></td><td>Maximum number of objective-function calls, including the initial point and failed calls.</td></tr>
+              <tr><th scope="row"><code>ftarget</code></th><td class="nowrap"><code>None</code></td><td>Stop successfully once the best finite value is at or below this target.</td></tr>
+              <tr><th scope="row"><code>max_evals_per_method_call</code></th><td class="nowrap"><code>40</code></td><td>Evaluation cap of one numerical method call.</td></tr>
+              <tr><th scope="row"><code>task_max_tool_calls</code></th><td class="nowrap"><code>200</code></td><td>Maximum tool calls in one session, reads included.</td></tr>
+              <tr><th scope="row"><code>max_read_result_chars</code></th><td class="nowrap"><code>None</code></td><td>Maximum cumulative characters of read results in one session; <code>None</code> resolves to <code>max(200000, 2000 * maxfev)</code>. Exhaustion refuses reads, never actions.</td></tr>
+              <tr><th scope="row"><code>wall_time_limit_s</code></th><td class="nowrap"><code>None</code></td><td>Cooperative wall-clock limit for one session, in seconds.</td></tr>
+              <tr><th scope="row"><code>model_call_limit</code></th><td class="nowrap"><code>None</code></td><td>Strict limit on model requests of the built-in runner.</td></tr>
+              <tr><th scope="row"><code>model_token_limit</code></th><td class="nowrap"><code>None</code></td><td>Strict token limit when the provider client reports usage.</td></tr>
+              <tr><th scope="row"><code>invalid_eval_limit</code></th><td class="nowrap"><code>None</code></td><td>Invalid objective calls (non-finite values, exceptions) that end the run; by default half of <code>maxfev</code>, at least 10.</td></tr>
+            </tbody></table></div>
+          <h3>Numerical</h3>
+          <div class="table-scroll" style="margin-top:12px"><table class="data-table option-table"><caption>Numerical options</caption>
+            <thead><tr><th scope="col">Option</th><th scope="col">Default</th><th scope="col">Description</th></tr></thead>
+            <tbody>
+              <tr><th scope="row"><code>rhobeg</code></th><td class="nowrap"><code>"auto"</code></td><td>Initial search radius; <code>"auto"</code> is 1.0, the textbook default.</td></tr>
+              <tr><th scope="row"><code>rhoend</code></th><td class="nowrap"><code>1e-06</code></td><td>Small-radius threshold of the numerical methods. Reaching it stops that method, not the task.</td></tr>
+              <tr><th scope="row"><code>rhoend_restarts</code></th><td class="nowrap"><code>0</code></td><td>Number of restarts at the initial radius that the environment itself performs after a method reaches <code>rhoend</code>.</td></tr>
+              <tr><th scope="row"><code>seed</code></th><td class="nowrap"><code>0</code></td><td>Seed of the solver's internal randomness. It does not make a model provider deterministic.</td></tr>
+              <tr><th scope="row"><code>initial_recovery_evals</code></th><td class="nowrap"><code>8</code></td><td>Extra evaluations allowed when the initial point is invalid.</td></tr>
+              <tr><th scope="row"><code>max_step_multiplier</code></th><td class="nowrap"><code>100.0</code></td><td>Upper bound on proposed step sizes relative to the current scale.</td></tr>
+              <tr><th scope="row"><code>radius_policy</code></th><td class="nowrap"><code>"auto"</code></td><td>Radius update rules; <code>"auto"</code> is the ratio test with a hold for explicit hypothesis points, the only policy.</td></tr>
+            </tbody></table></div>
+          <h3>Observations and caching</h3>
+          <div class="table-scroll" style="margin-top:12px"><table class="data-table option-table"><caption>Observation and caching options</caption>
+            <thead><tr><th scope="col">Option</th><th scope="col">Default</th><th scope="col">Description</th></tr></thead>
+            <tbody>
+              <tr><th scope="row"><code>objective_noise</code></th><td class="nowrap"><code>"unknown"</code></td><td>What you declare about observation noise: <code>"unknown"</code>, <code>"none"</code> or <code>"present"</code>. It selects the automatic evaluation cache and the statement every agent receives.</td></tr>
+              <tr><th scope="row"><code>cache_evaluations</code></th><td class="nowrap"><code>None</code></td><td>Answer a repeated point from the ledger. By default on for <code>"none"</code> and off otherwise; <code>True</code> is refused with <code>"present"</code>.</td></tr>
+              <tr><th scope="row"><code>cache_invalid_evaluations</code></th><td class="nowrap"><code>False</code></td><td>Also cache invalid or non-finite outcomes.</td></tr>
+            </tbody></table></div>
+          <h3>Model, runner and tools</h3>
+          <div class="table-scroll" style="margin-top:12px"><table class="data-table option-table"><caption>Model, runner and tool options</caption>
+            <thead><tr><th scope="col">Option</th><th scope="col">Default</th><th scope="col">Description</th></tr></thead>
+            <tbody>
+              <tr><th scope="row"><code>model</code></th><td class="nowrap"><code>None</code></td><td><code>"env"</code>, a provider specification, or a model client, for the built-in runner.</td></tr>
+              <tr><th scope="row"><code>runner_options</code></th><td class="nowrap"><code>None</code></td><td>Settings of the built-in runner, such as <code>max_tokens</code>, <code>temperature</code>, <code>max_turns</code>, compaction and retries. Refused together with a supplied runner.</td></tr>
+              <tr><th scope="row"><code>user_instructions</code></th><td class="nowrap"><code>None</code></td><td>Optional user guidance delivered with the task. It does not replace the system instructions or relax any limit. Do not put credentials here.</td></tr>
+              <tr><th scope="row"><code>toolset</code></th><td class="nowrap"><code>None</code></td><td>Resolves to <code>"nexteval.toolset/1"</code>, the only toolset.</td></tr>
+              <tr><th scope="row"><code>task_tool_surface</code></th><td class="nowrap"><code>"full"</code></td><td>Every task tool; the only surface.</td></tr>
+              <tr><th scope="row"><code>task_action_surface</code></th><td class="nowrap"><code>"generic"</code></td><td>Action surface exposed to the agent, such as <code>"generic"</code>.</td></tr>
+              <tr><th scope="row"><code>param_coercion</code></th><td class="nowrap"><code>"lossless"</code></td><td>Lossless tool-parameter coercion mode (<code>"lossless"</code> or <code>"strict"</code>).</td></tr>
+              <tr><th scope="row"><code>analysis_helpers</code></th><td class="nowrap"><code>True</code></td><td>Predefine <code>fit_poly</code> and <code>suggest</code> for <code>run_analysis</code> code.</td></tr>
+              <tr><th scope="row"><code>analysis_block_scipy</code></th><td class="nowrap"><code>False</code></td><td>Make SciPy unavailable to <code>run_analysis</code> code even when it is installed. The agent's instructions do not change.</td></tr>
+              <tr><th scope="row"><code>memory_max_entries</code></th><td class="nowrap"><code>16</code></td><td>Maximum notes the agent may keep for one task; <code>memory_max_chars</code> (4000) and <code>memory_max_entry_chars</code> (500) bound their size.</td></tr>
+              <tr><th scope="row"><code>include_tool_readiness</code></th><td class="nowrap"><code>False</code></td><td>Include tool-readiness diagnostics in state observations.</td></tr>
+            </tbody></table></div>
+          <h3>Tracing and output</h3>
+          <div class="table-scroll" style="margin-top:12px"><table class="data-table option-table"><caption>Tracing and output options</caption>
+            <thead><tr><th scope="col">Option</th><th scope="col">Default</th><th scope="col">Description</th></tr></thead>
+            <tbody>
+              <tr><th scope="row"><code>trace</code></th><td class="nowrap"><code>None</code></td><td><code>"off"</code>, <code>"summary"</code>, <code>"trajectory"</code>, <code>"debug"</code> or <code>"develop"</code>. Persistent tracing is opt-in.</td></tr>
+              <tr><th scope="row"><code>run_dir</code></th><td class="nowrap"><code>"runs"</code></td><td>Directory for trace files when tracing is enabled.</td></tr>
+              <tr><th scope="row"><code>return_evaluation_history</code></th><td class="nowrap"><code>False</code></td><td>Include the evaluation ledger in the result as <code>history</code>.</td></tr>
+              <tr><th scope="row"><code>log_level</code></th><td class="nowrap"><code>"off"</code></td><td>Printed diagnostic level; separate from trace capture.</td></tr>
+            </tbody></table></div>
         </section>
+
         <section id="result">
           <h2>DFOResult</h2>
           <p>A dictionary with attribute access, similar to SciPy's <code>OptimizeResult</code>.</p>
-          <dl class="api-definitions">
+          <dl class="def-list">
             <div><dt><code>x</code> / <code>fun</code></dt><dd>The best valid recorded point and its objective value.</dd></div>
-            <div><dt><code>nfev</code></dt><dd>The actual objective-call count recorded in the evaluation ledger.</dd></div>
-            <div><dt><code>status</code> / <code>message</code></dt><dd>The numeric termination status and its human-readable explanation.</dd></div>
-            <div><dt><code>success</code></dt><dd>The solver completion flag. It does not, by itself, establish a valid benchmark trial.</dd></div>
-            <div><dt><code>completion_quality</code></dt><dd>Completion and protocol quality. Inspect this together with <code>comparable_under_budget</code> before pooling results.</dd></div>
-            <div><dt><code>trace_path</code></dt><dd>The trace location when persistent tracing is enabled.</dd></div>
+            <div><dt><code>nfev</code></dt><dd>Actual objective calls recorded in the ledger; equal to <code>ledger_length</code>. Values answered from the cache consume nothing; exceptions and non-finite values stay recorded.</dd></div>
+            <div><dt><code>status</code> / <code>message</code></dt><dd>The numeric termination status and its explanation.</dd></div>
+            <div><dt><code>success</code></dt><dd>The completion flag. It does not, by itself, establish a valid trial for a comparison.</dd></div>
+            <div><dt><code>completion_quality</code></dt><dd>Complete, early stop, or degraded protocol. Read it together with <code>comparable_under_budget</code> before pooling results.</dd></div>
+            <div><dt><code>runner_report</code></dt><dd>The session's completion and transport report. Its <code>fallback</code> entry says whether the autopilot completed the run, why, and what it spent.</dd></div>
+            <div><dt><code>model_request_count</code><br><code>gateway_call_count</code><br><code>method_step_count</code></dt><dd>Counters with distinct scopes: model requests through the built-in meter, tool calls, and steps of numerical methods. A tool call is not one model request and not one evaluation.</dd></div>
+            <div><dt><code>history</code></dt><dd>The evaluation ledger, when <code>return_evaluation_history=True</code>: one record per objective call, in call order.</dd></div>
+            <div><dt><code>observation_policy</code></dt><dd>The requested and effective noise declaration and cache setting.</dd></div>
+            <div><dt><code>trace_path</code></dt><dd>The trace directory when persistent tracing is enabled.</dd></div>
           </dl>
         </section>
-        <section id="integration">
-          <h2>Custom agents</h2>
-          <p>Use the lower-level <code>minimize</code> entry point to supply a runner, policy, model, or toolset.</p>
-          <pre tabindex="0" aria-label="Minimize signature"><code>minimize(
-    fun, x0, args=(), *,
-    policy=None, advisor=None, model=None,
-    toolset=None, callback=None, runner=None,
-    options=None,
-) -&gt; DFOResult</code></pre>
-          <p>A <code>runner.run(task, gateway)</code> owns a complete task. A <code>policy.decide(observation, context)</code> owns a stepwise decision. Both use the same protected objective ledger and budget accounting.</p>
+
+        <section id="clients">
+          <h2>Provider clients</h2>
+          <p>The clients implement the transport to a tool-calling model with the standard library only. Live behaviour must be checked against the provider and model you use; connectivity alone does not show that tool calls work.</p>
+          <dl class="def-list">
+            <div><dt><code>AnthropicCompatClient</code></dt><dd>Messages route with tool use; configured by <code>ANTHROPIC_BASE_URL</code>, <code>ANTHROPIC_MODEL</code> and <code>ANTHROPIC_AUTH_TOKEN</code>. Selected by <code>model="env"</code>.</dd></div>
+            <div><dt><code>OpenAICompatClient</code></dt><dd>Chat Completions with tool calls and a Bearer token; configured by <code>NEXTEVAL_OPENAI_BASE_URL</code>, <code>NEXTEVAL_OPENAI_MODEL</code> and <code>NEXTEVAL_OPENAI_API_KEY</code>.</dd></div>
+            <div><dt><code>AzureOpenAICompatClient</code></dt><dd>Azure's deployment URL and <code>api-key</code> header; configured by the <code>AZURE_OPENAI_*</code> variables.</dd></div>
+            <div><dt><code>FakeTextModel</code></dt><dd>Replays scripted replies. For tests and examples only.</dd></div>
+            <div><dt><code>ProviderConfigurationError</code><br><code>ProviderRequestError</code></dt><dd>Raised for a missing or invalid provider configuration, and for a failed provider request.</dd></div>
+          </dl>
         </section>
-        <p>For benchmark results across packaged tasks, see <a href="../../bench/#matrix">NextEval Bench</a>.</p>
-        <p class="api-provenance">Reference checked against Solver cb58fd7.</p>
+
+        <section id="runners">
+          <h2>Runners</h2>
+          <dl class="def-list">
+            <div><dt><code>NativeToolRunner</code></dt><dd>The built-in runner, also exported as <code>ToolCallingTaskRunner</code>. Configure it through <code>runner_options</code>.</dd></div>
+            <div><dt><code>CodexTaskRunner</code></dt><dd>The Codex adapter: one Codex app-server thread for the whole solve. Main arguments: <code>model</code> (required), <code>effort</code>, <code>max_turns</code>, <code>timeout_s</code>, <code>base_url</code>, <code>env_from</code>, <code>model_provider</code> and <code>cli_path</code>.</dd></div>
+            <div><dt><code>ClaudeCodeTaskRunner</code></dt><dd>The Claude Code adapter over the Claude Agent SDK, an optional extra. Main arguments: <code>model</code>, <code>effort</code>, <code>max_turns</code>, <code>timeout_s</code>, <code>base_url</code> and <code>env_from</code>.</dd></div>
+            <div><dt><code>FallbackRunner(agent)</code></dt><dd>Wraps a runner so that the textbook autopilot spends the remaining budget, in the same run, when the agent session raises, reports an error or a timeout, or returns without <code>finalize</code>.</dd></div>
+            <div><dt><code>AutopilotRunner</code></dt><dd>The autopilot on its own: the fixed textbook policy, with no model. Pass it as <code>minimize(..., runner=AutopilotRunner())</code> to run the model-free reference; report it as a reference, not as an agent result.</dd></div>
+          </dl>
+          <p>A runner may define <code>preflight(settings)</code>, which is called before the initial evaluation so that an invalid configuration costs no objective call.</p>
+        </section>
+
+        <section id="helpers">
+          <h2>Harness helpers</h2>
+          <p>For other agent harnesses, the package exports the shared task inputs; all of them import without an optional SDK.</p>
+          <dl class="def-list">
+            <div><dt><code>build_task_messages</code></dt><dd>The system prompt and the task message that every runner sends.</dd></div>
+            <div><dt><code>portable_tool_specs</code></dt><dd>The tool definitions in a harness-neutral form.</dd></div>
+            <div><dt><code>check_tool_registration</code><br><code>tool_schema_fingerprint</code></dt><dd>A check that a harness registered exactly these tools, and the digest of their schemas.</dd></div>
+          </dl>
+          <p>Results across packaged benchmark tasks are a separate matter: see <a href="../../bench/#leaderboard">NextEval Bench</a>.</p>
+        </section>
       </div>
     </div>
+    <footer class="page-footer">
+      <span>NextEval Solver 1.0 / &copy; 2026</span>
+      <nav aria-label="Footer"><a href="../../">Overview</a><a href="../../bench/">Bench</a><a href="../">Solver</a><a href="../guide/">User Guide</a><a href="https://github.com/NextEval" target="_blank" rel="noopener">GitHub</a></nav>
+    </footer>
   </main>
-  <footer class="site-footer shell"><span>&copy; 2026 NextEval Solver</span><a href="../">Solver overview <span aria-hidden="true">&#8599;</span></a></footer>
-  <script src="../../site.js"></script>
 </body>
 </html>

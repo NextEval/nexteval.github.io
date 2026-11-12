@@ -1,11 +1,12 @@
 // Published pages may link only to NextEval repositories that anonymous visitors can open.
-import '../scripts/site/build-site.mjs';
+import { readFlags } from '../scripts/site/build-site.mjs';
 import assert from 'node:assert/strict';
 import { readdir, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const PUBLIC_REPOS = Object.freeze(['nexteval.github.io']);
+// The Solver repository becomes public with its release; SOLVER_RELEASED says whether pages may link to it.
+const PUBLIC_REPOS = Object.freeze(['nexteval.github.io', ...(readFlags().SOLVER_RELEASED ? ['nexteval-solver'] : [])]);
 const site = fileURLToPath(new URL('../_site/', import.meta.url));
 const pages = (await readdir(site, { recursive: true })).filter(path => path.endsWith('.html')).sort();
 assert(pages.length > 0, 'No built pages');

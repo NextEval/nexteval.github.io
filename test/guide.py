@@ -122,7 +122,7 @@ class GuideTests(unittest.TestCase):
                     self.assertLessEqual(result.fun, initial)
                     self.assertEqual(len(self.server.requests), 2)
                     self.assertEqual(result.invalid_action_count, 0)
-                    self.assertEqual(result.execution_mode, "task")
+                    self.assertFalse(result.runner_report["fallback"]["used"])
 
     def test_budget_is_enforced(self):
         result = example.run(maxfev=2, run_dir=self.temp.name)
@@ -156,6 +156,41 @@ class GuideTests(unittest.TestCase):
             exec(compile(html.unescape(block.group(1)), "guide-scripted-runner", "exec"), {"__name__": "__guide__"})
         nfev, _, requests = output.getvalue().split()
         self.assertEqual((nfev, requests), ("3", "None"))
+        self.assertEqual(self.server.requests, [])
+
+    def test_guide_offline_check_example(self):
+        page = (ROOT / "solver/guide/index.html").read_text()
+        block = re.search(r'aria-label="Offline check example" tabindex="0"><code>(.*?)</code></pre>', page, re.S)
+        output = io.StringIO()
+        with patch.dict(os.environ, {}, clear=True), redirect_stdout(output):
+            exec(compile(html.unescape(block.group(1)), "guide-offline-check", "exec"), {"__name__": "__guide__"})
+        nfev, value, reason = output.getvalue().split()
+        self.assertEqual(nfev, "40")
+        self.assertLess(float(value), 1e-6)
+        self.assertTrue(reason.startswith("agent-stop"))
+        self.assertEqual(self.server.requests, [])
+
+    def test_fallback_completes_a_supplied_runner(self):
+        class SilentRunner:
+            """Reads once and returns without finalize."""
+
+            def describe(self):
+                return {"harness_id": "silent-example"}
+
+            def run(self, task, gateway):
+                gateway.call("get_state", {})
+                return {"stop": "completed"}
+
+        fun, x0 = example.make_problem()
+        options = {"maxfev": 30, "trace": "off"}
+        with patch.dict(os.environ, {}, clear=True):
+            plain = nexteval.minimize(fun, x0, runner=SilentRunner(), options=options)
+            wrapped = nexteval.minimize(fun, x0, runner=nexteval.FallbackRunner(SilentRunner()), options=options)
+        self.assertEqual(plain.nfev, 1)
+        self.assertEqual(wrapped.nfev, 30)
+        self.assertTrue(wrapped.runner_report["fallback"]["used"])
+        self.assertEqual(wrapped.runner_report["fallback"]["policy"], "textbook")
+        self.assertLess(wrapped.fun, plain.fun)
         self.assertEqual(self.server.requests, [])
 
     def test_env_means_anthropic(self):
